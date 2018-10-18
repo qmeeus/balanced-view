@@ -8,3 +8,9 @@ Twitter published [here](https://about.twitter.com/en_us/values/elections-integr
 ## Planning
 - Exploratory analysis
 - Research Question
+
+## What is where?
+- [english.csv](https://drive.google.com/open?id=1163S0jWSjCsX-fEpVY3nv8KrVpzkdYb5)
+- [overleaf report](https://www.overleaf.com/6653165763qzdrmxshgtsn)
+- [stack channel](https://mai-1819.slack.com/messages/GDH4FFL69)
+- [data](https://about.twitter.com/en_us/values/elections-integrity.html#data)
