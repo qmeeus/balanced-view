@@ -1,3 +1,6 @@
+# Data
+data/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -50,6 +53,9 @@ coverage.xml
 # Translations
 *.mo
 *.pot
+
+# Pycharm stuff
+.idea
 
 # Django stuff:
 *.log
