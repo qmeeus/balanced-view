@@ -1,6 +1,6 @@
 flask
 pandas
 numpy
-sklearn
+scikit-learn
 scipy
 logzero

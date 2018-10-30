@@ -26,10 +26,19 @@ First build the container. From the project root, run this:<br/>
 `docker build -t ubuntu-flask --build-arg user_id=$(id -u) .`
 
 Launch the container in deamon mode: <br/>
-`docker run -d --name twitter -p 5000:5000 -v $(pwd):/home/patrick/app ubuntu-flask`
+`docker run -d --name twitter -p 5000:5000 -v $(pwd):/home/patrick/src ubuntu-flask`
 
 Navigate to [http://localhost:5000](http://localhost:5000)
 
 Check the logs:<br/>
 `docker logs -f twitter`
 
+## Training
+Launch bash inside the container:<br/>
+`docker run -it --name twitter -v (pwd):/home/patrick/src ubuntu-flask bash`
+
+Go to the right folder: <br/>
+`cd model`
+
+Train and save the model:<br/>
+`python keyword_detection.py --save`
