@@ -1,9 +1,6 @@
 flask
 pandas
 numpy
-matplotlib
-seaborn
-dask
 sklearn
 scipy
-
+logzero
