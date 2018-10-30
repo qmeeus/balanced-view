@@ -5,6 +5,7 @@ import time
 import pickle
 
 # from nltk import word_tokenize, pos_tag
+# from nltk.tokenize import TweetTokenizer
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
@@ -17,11 +18,15 @@ URL_RGX = r"((http|ftp|https):\/\/)?([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+
 
 
 class Config:
+
     filename = p.join(p.dirname(p.abspath(__file__)), "data/english.csv")
     model_file = p.join(p.dirname(p.abspath(__file__)), "outputs/model.pkl")
     nrows = 10000
     count_vect = {}
-    tfidf_vect = {"stop_words": "english"}
+    tfidf_vect = {
+        "strip_accents": "ascii",
+        "stop_words": "english",
+    }
 
 
 class Model:
