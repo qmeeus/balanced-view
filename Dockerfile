@@ -11,10 +11,10 @@ RUN useradd --uid $user_id --shell /bin/bash --create-home patrick
 USER patrick
 
 WORKDIR /home/patrick
-RUN mkdir /home/patrick/app
-WORKDIR /home/patrick/app
+RUN mkdir /home/patrick/src
+WORKDIR /home/patrick/src
 
-COPY --chown=patrick:users requirements.txt /home/patrick/app
+COPY --chown=patrick:users requirements.txt /home/patrick/src
 
 ENV PATH="/home/patrick/.local/bin/:$PATH"
 
