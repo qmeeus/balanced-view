@@ -5,7 +5,7 @@ from flask import (
 )
 
 bp = Blueprint('index', __name__, url_prefix='/')
-model = load_model("model/" + Config().model_file)
+model = load_model("model/" + Config().model_file)  # TODO: swtich this ugly line to stg more consistent
 
 
 @bp.route('/', methods=('GET', 'POST'))
