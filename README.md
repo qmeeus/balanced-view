@@ -11,6 +11,25 @@ Twitter published [here](https://about.twitter.com/en_us/values/elections-integr
 
 ## What is where?
 - [english.csv](https://drive.google.com/open?id=1163S0jWSjCsX-fEpVY3nv8KrVpzkdYb5)
-- [overleaf report](https://www.overleaf.com/6653165763qzdrmxshgtsn)
+- [overleaf report](https://www.overleaf.com/5771853674fkgchqmfmhqp)
 - [stack channel](https://mai-1819.slack.com/messages/GDH4FFL69)
 - [data](https://about.twitter.com/en_us/values/elections-integrity.html#data)
+
+## Requirements
+- docker
+- python >=3.5
+
+## Installation and running
+**NB: Tested on Linux, for Windows you probably need to replace `$(id -u)` 
+with any number >= 1000.**<br/><br/>
+First build the container. From the project root, run this:<br/>
+`docker build -t ubuntu-flask --build-arg user_id=$(id -u) .`
+
+Launch the container in deamon mode: <br/>
+`docker run -d --name twitter -p 5000:5000 -v $(pwd):/home/patrick/app ubuntu-flask`
+
+Navigate to [http://localhost:5000](http://localhost:5000)
+
+Check the logs:<br/>
+`docker logs -f twitter`
+

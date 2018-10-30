@@ -1,4 +1,4 @@
-import os
+import os.path as p
 import pandas as pd
 import numpy as np
 import time
@@ -17,10 +17,9 @@ URL_RGX = r"((http|ftp|https):\/\/)?([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+
 
 
 class Config:
-    filename = os.path.dirname(os.path.abspath(__file__)) + "/data/english.csv"
-    model_file = os.path.dirname(os.path.abspath(__file__)) + "/outputs/model.pkl"
-    nrows = 100
-
+    filename = p.join(p.dirname(p.abspath(__file__)), "data/english.csv")
+    model_file = p.join(p.dirname(p.abspath(__file__)), "outputs/model.pkl")
+    nrows = 10000
     count_vect = {}
     tfidf_vect = {"stop_words": "english"}
 
@@ -63,7 +62,7 @@ class Model:
                 .head(top))
 
     def save(self):
-        with open(self.config.filename, "wb") as f:
+        with open(self.config.model_file, "wb") as f:
             pickle.dump(self.pipeline, f)
 
     def load(self):
@@ -95,16 +94,6 @@ class Data:
         self.values = data
 
 
-def main():
-    config = Config()
-    model = Model(config)
-    data = Data(config)
-    model.train(data.values["tweet_text"])
-    model.save()
-    predictions = model.predict(data.values["tweet_text"].values[:10])
-    logger.info(predictions)
-
-
 # def download_nltk():
 #     import nltk
 #     nltk.download("punkt")
@@ -112,4 +101,20 @@ def main():
 
 
 if __name__ == '__main__':
-    main2()
+    import argparse
+    parser = argparse.ArgumentParser(description="Trainer for keyword detection")
+    parser.add_argument("--save", action="store_true", default=False, help="Save model")
+    parser.add_argument("--predict", action="store_true", default=False, help="Test model")
+    parser.add_argument("--n_predictions", type=int, default=2, help="Number of examples to test on")
+    args = parser.parse_args()
+
+    config = Config()
+    model = Model(config)
+    data = Data(config)
+    model.train(data.values["tweet_text"])
+    if args.save:
+        model.save()
+    if args.predict:
+        predictions = model.predict(np.random.choice(data.values["tweet_text"].values, args.n_predictions))
+        logger.info(predictions)
+
