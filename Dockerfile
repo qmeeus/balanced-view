@@ -17,9 +17,8 @@ WORKDIR /home/patrick/app
 COPY --chown=patrick:users requirements.txt /home/patrick/app
 
 ENV PATH="/home/patrick/.local/bin/:$PATH"
-RUN pip install -r requirements.txt --user
 
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt --user
 
 ENV FLASK_APP=app
 ENV FLASK_ENV=development

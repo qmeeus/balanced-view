@@ -1,18 +1,23 @@
 import pandas as pd
 import numpy as np
 import time
+import pickle
 
 # from nltk import word_tokenize, pos_tag
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
-from utils.logger import logger
+try:
+    from .utils.logger import logger
+except ImportError:
+    from utils.logger import logger
 
 URL_RGX = r"((http|ftp|https):\/\/)?([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?"
 
 
 class Config:
     filename = "data/english.csv"
+    model_file = "outputs/model.pkl"
     nrows = 100
 
     count_vect = {}
@@ -25,8 +30,19 @@ def main():
     data = preprocessing(data)
     model = build_model(config)
     train(model, data["tweet_text"])
+    save_model(model, config.model_file)
     predictions = predict(model, data["tweet_text"].values[:10])
     logger.info(predictions)
+
+
+def save_model(model, filename):
+    with open(filename, "wb") as f:
+        pickle.dump(model, f)
+
+
+def load_model(filename):
+    with open(filename, "rb") as f:
+        return pickle.load(f)
 
 
 def load_data(filename, nrows=None):
