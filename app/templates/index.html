@@ -2,12 +2,16 @@
 
 {% block body %}
 
-    <form method="post">
-        <textarea name="text" id="text" cols="50" rows="5" placeholder="Enter a text to fact check..."></textarea>
-        <br />
-        <label for="nkeywords">Number of keywords to keep: </label>
-        <input name="nkeywords" id="nkeywords" type="text" value=5 />
-        <input type="submit"/>
-    </form>
+    <div class="card bg-dark" style="width: 18rem;">
+        <div class="card-body">
+            <form method="post">
+                <div class="form-group">
+                    <h5 class="card-title">Fact Checking Tool</h5>
+                    <textarea class="form-control" name="text" id="text" cols="50" rows="5" placeholder="Enter a text to fact check..."></textarea>
+                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
 {% endblock %}

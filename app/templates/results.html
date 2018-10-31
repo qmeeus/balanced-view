@@ -4,6 +4,13 @@
 
 {% block body %}
 
-    {{ predictions.to_html() | safe }}
+    <table class="table table-dark">
+        <thead><tr><th>Keywords</th></tr></thead>
+        <tbody>
+            {% for keyword in predictions %}
+                <tr><td>{{ keyword }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}
