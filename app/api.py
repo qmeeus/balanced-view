@@ -23,9 +23,9 @@ def index():
             error = "Integer is requested"
 
         if error is None:
-            # TODO: logic send text to model -> get back results -> render
+            # TODO: logic send text to model -> get back results -> search NewsAPI -> render best results
             predictions = model.predict([text], n)
-            return predictions.to_html()  # redirect(url_for('results'))
+            return render_template('results.html', predictions=predictions)
 
         flash(error)
 

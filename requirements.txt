@@ -4,3 +4,4 @@ numpy
 scikit-learn
 scipy
 logzero
+newsapi-python

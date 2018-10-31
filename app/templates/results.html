@@ -1,1 +1,9 @@
 <!-- TODO: Format results -->
+
+{% extends 'base.html' %}
+
+{% block body %}
+
+    {{ predictions.to_html() | safe }}
+
+{% endblock %}
