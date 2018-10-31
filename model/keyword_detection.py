@@ -4,8 +4,6 @@ import numpy as np
 import time
 import pickle
 
-# from nltk import word_tokenize, pos_tag
-# from nltk.tokenize import TweetTokenizer
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
@@ -97,12 +95,6 @@ class Data:
 
         # data["pos_tags"] = data["tweet_text"].map(preprocessing)
         self.values = data
-
-
-# def download_nltk():
-#     import nltk
-#     nltk.download("punkt")
-#     nltk.download("averaged_perceptron_tagger")
 
 
 if __name__ == '__main__':

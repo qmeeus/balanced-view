@@ -1,30 +1,28 @@
 # from model.keyword_detection import load_model, Config, predict
 from model.keyword_detection import Config, Model
+from summa import keywords
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
 bp = Blueprint('index', __name__, url_prefix='/')
-model = Model(Config(), load_from_file=True)
+# model = Model(Config(), load_from_file=True)
 
 
 @bp.route('/', methods=('GET', 'POST'))
 def index():
     if request.method == 'POST':
-        text, n = request.form['text'], request.form['nkeywords']
+        text = request.form['text']
         error = None
 
         if not text:
             error = 'No text found.'
-        try:
-            n = int(n)
-        except:
-            error = "Integer is requested"
 
         if error is None:
             # TODO: logic send text to model -> get back results -> search NewsAPI -> render best results
-            predictions = model.predict([text], n)
+            # predictions = model.predict([text], n)
+            predictions = keywords.keywords(text, ratio=.8, split=True)
             return render_template('results.html', predictions=predictions)
 
         flash(error)
