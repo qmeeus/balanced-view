@@ -1,5 +1,5 @@
 # from model.keyword_detection import load_model, Config, predict
-from model.keyword_detection import Config, Model
+# from model.keyword_detection import Config, Model
 from summa import keywords
 
 from flask import (
@@ -12,6 +12,7 @@ bp = Blueprint('index', __name__, url_prefix='/')
 
 @bp.route('/', methods=('GET', 'POST'))
 def index():
+
     if request.method == 'POST':
         text = request.form['text']
         error = None
@@ -22,7 +23,7 @@ def index():
         if error is None:
             # TODO: logic send text to model -> get back results -> search NewsAPI -> render best results
             # predictions = model.predict([text], n)
-            predictions = keywords.keywords(text, ratio=.8, split=True)
+            predictions = keywords.keywords(text, ratio=1., split=True, scores=True)
             return render_template('results.html', predictions=predictions)
 
         flash(error)

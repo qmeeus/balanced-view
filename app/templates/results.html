@@ -5,10 +5,13 @@
 {% block body %}
 
     <table class="table table-dark">
-        <thead><tr><th>Keywords</th></tr></thead>
+        <thead><tr><th>Keyword</th><th>Score</th></tr></thead>
         <tbody>
-            {% for keyword in predictions %}
-                <tr><td>{{ keyword }}</td></tr>
+            {% for keyword, score in predictions %}
+                <tr>
+                    <td>{{ keyword }}</td>
+                    <td>{{ '%0.2f'|format(score|float) }}</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
