@@ -20,7 +20,8 @@ Twitter published [here](https://about.twitter.com/en_us/values/elections-integr
 - python >=3.5
 
 ## Installation and running
-**NB: Tested on Linux, for Windows you probably need to replace `$(id -u)` 
+**NB: Tested on Linux, should be similar on UNIX-like systems. For Windows 
+you probably need to replace `$(id -u)` 
 with any number >= 1000.**<br/><br/>
 First build the container. From the project root, run this:<br/>
 `docker build -t ubuntu-flask --build-arg user_id=$(id -u) .`

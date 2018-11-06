@@ -23,7 +23,7 @@ def index():
         if error is None:
             # TODO: logic send text to model -> get back results -> search NewsAPI -> render best results
             # predictions = model.predict([text], n)
-            predictions = keywords.keywords(text, ratio=1., split=True, scores=True)
+            predictions = keywords.keywords(text, words=5, split=True, scores=True)
             return render_template('results.html', predictions=predictions)
 
         flash(error)
