@@ -1,17 +1,21 @@
-# from summa import keywords
-# import requests
 import re
 from summa import keywords
 from newsapi import NewsApiClient
+
+SOURCES = {
+    'left': ['the-guardian-uk', 'independent', 'msnbc', 'politico'],
+    'centre': ['reuters', 'financial-times', 'bbc-news', 'the-wall-street-journal', 'cnn', 'bloomberg'],
+    'right': ['daily-mail', 'fox-news', 'the-telegraph']
+}
 
 
 def load_key():
     with open("apikey") as f:
         return f.read().strip()
 
-def load_sources(language="en"):
-    # return 'bbc-news,the-verge'
-    return "msnbc,cnn"
+def load_sources(influence='all', language="en"):
+    sources = [s for l in SOURCES for s in l] if influence == 'all' else SOURCES[influence]
+    return ",".join(sources)
 
 def fetch_articles(text, start_date=None, end_date=None, language=None):
 
