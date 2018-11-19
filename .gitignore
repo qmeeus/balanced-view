@@ -1,8 +1,6 @@
-# Data
 data/
-
-# Logs
 outputs/
+apikey
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
