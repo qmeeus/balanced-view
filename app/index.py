@@ -16,6 +16,7 @@ DATE_FORMAT_CHECK = re.compile(r"\d{4}-\d{2}-\d{2}")
 def index():
 
     if request.method == 'POST':
+        print(request.form.keys())
         text = request.form['text']
         # start_date = request.form['start_date']
         # end_date = request.form['end_date']
@@ -33,8 +34,8 @@ def index():
             # predictions = model.predict([text], n)
             predictions = keywords.keywords(text, words=5, split=True, scores=True)
             # results = fetch_articles(text, start_date, end_date)
-            # results = fetch_articles(text)
-            return render_template('results.html', predictions=predictions)  #, articles=results)
+            articles = fetch_articles(text)
+            return render_template('results.html', query=text, predictions=predictions, search_results=articles)
 
         flash(error)
 
