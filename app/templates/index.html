@@ -6,45 +6,40 @@
 
 {% block body %}
 
-    <div class="container">
-        <div class="row">
-            <div class="thumbnail">
-                <form method="post">
-                    <fieldset>
-                        <div class="form-group">
-                            <h3 class="title">Fact Checking Tool</h3>
-                            <textarea class="form-control" name="text" id="text" cols="50" rows="5" placeholder="Enter a text to fact check..."></textarea>
+    <div class="thumbnail">
+        <form method="post">
+            <fieldset>
+                <div class="form-group">
+                    <h3 class="title">Fact Checking Tool</h3>
+                    <textarea class="form-control" name="text" id="text" cols="50" rows="5" placeholder="Enter a text to fact check..."></textarea>
+                </div>
+            </fieldset>
+            <div class="row">
+                <fieldset class="col-sm-6">
+                    <div class="form-group">
+                        <label for="dtp_input2" class="control-label">Start Date</label>
+                        <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                            <input class="form-control" id="start_date" size="16" type="text" value="" readonly>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                         </div>
-                    </fieldset>
-                    <div class="row">
-                        <fieldset class="col-sm-6">
-                            <div class="form-group">
-                                <label for="dtp_input2" class="control-label">Start Date</label>
-                                <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                                    <input class="form-control" id="start_date" size="16" type="text" value="" readonly>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                                </div>
-                                <input type="hidden" id="dtp_input2" value="" /><br/>
-                            </div>
-                        </fieldset>
-                        <fieldset class="col-sm-6">
-                            <div class="form-group">
-                                <label for="dtp_input2" class="control-label">End Date</label>
-                                <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                                    <input class="form-control" id="end_date" size="16" type="text" value="" readonly>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                                </div>
-                                <input type="hidden" id="dtp_input2" value="" /><br/>
-                            </div>
-                        </fieldset>
+                        <input type="hidden" id="dtp_input2" value="" /><br/>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
-                </form>
+                </fieldset>
+                <fieldset class="col-sm-6">
+                    <div class="form-group">
+                        <label for="dtp_input2" class="control-label">End Date</label>
+                        <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                            <input class="form-control" id="end_date" size="16" type="text" value="" readonly>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        <input type="hidden" id="dtp_input2" value="" /><br/>
+                    </div>
+                </fieldset>
             </div>
-        </div>
-    </div>
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </form>
     </div>
 
 {% endblock %}

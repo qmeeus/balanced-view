@@ -4,16 +4,18 @@
 
 {% block body %}
 
-    <table class="table table-dark">
-        <thead><tr><th>Keyword</th><th>Score</th></tr></thead>
-        <tbody>
-            {% for keyword, score in predictions %}
-                <tr>
-                    <td>{{ keyword }}</td>
-                    <td>{{ '%0.2f'|format(score|float) }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="well">
+        <table class="table table-hover table-responsive" id="results-table">
+            <thead><tr><th>Keyword</th><th>Score</th></tr></thead>
+            <tbody>
+                {% for keyword, score in predictions %}
+                    <tr>
+                        <td>{{ keyword }}</td>
+                        <td>{{ '%0.2f'|format(score|float) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 {% endblock %}

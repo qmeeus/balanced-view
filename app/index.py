@@ -33,8 +33,8 @@ def index():
             # predictions = model.predict([text], n)
             predictions = keywords.keywords(text, words=5, split=True, scores=True)
             # results = fetch_articles(text, start_date, end_date)
-            results = fetch_articles(text)
-            return render_template('results.html', predictions=predictions, articles=results)
+            # results = fetch_articles(text)
+            return render_template('results.html', predictions=predictions)  #, articles=results)
 
         flash(error)
 

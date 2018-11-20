@@ -10,7 +10,8 @@ body { max-width: 960px; margin: 0 auto; background-color: transparent; }
     transform: translate(-50%,-50%);
 }
 .thumbnail {max-width: 600px; padding: 20px;}
-table {text-align: center; }
+#results-table {text-align: center;}
+.well {background-color: #708599;}
 h3.title {color: #192a3d; text-align: center; font-weight: bold;}
 label {color: #192a3d;}
 .btn {max-width: 200px; margin: 15px auto; float: none; }
