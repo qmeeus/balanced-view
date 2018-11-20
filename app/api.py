@@ -1,3 +1,4 @@
+import os
 import re
 from summa import keywords
 from newsapi import NewsApiClient
@@ -10,7 +11,8 @@ SOURCES = {
 
 
 def load_key():
-    with open("apikey") as f:
+    dirname = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(dirname, "apikey")) as f:
         return f.read().strip()
 
 def load_sources(influence='all', language="en"):

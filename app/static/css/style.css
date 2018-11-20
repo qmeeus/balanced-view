@@ -1,0 +1,16 @@
+html { font-family: sans-serif; padding: 1rem; background-color: #005651; }
+body { max-width: 960px; margin: 0 auto; background-color: transparent; }
+.container {
+    position:absolute;
+    top:50%;
+    left:50%;
+    padding:15px;
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+.thumbnail {max-width: 600px; padding: 20px;}
+table {text-align: center; }
+h3.title {color: #192a3d; text-align: center; font-weight: bold;}
+label {color: #192a3d;}
+.btn {max-width: 200px; margin: 15px auto; float: none; }
