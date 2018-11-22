@@ -4,12 +4,6 @@ import json
 from summa import keywords
 from newsapi import NewsApiClient
 
-SOURCES = {
-    'left': ['the-guardian-uk', 'independent', 'msnbc', 'politico'],
-    'centre': ['reuters', 'financial-times', 'bbc-news', 'the-wall-street-journal', 'cnn', 'bloomberg'],
-    'right': ['daily-mail', 'fox-news', 'the-telegraph']
-}
-
 
 def get_keywords(text, n_words, language='en', split=False, scores=False):
     try:
