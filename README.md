@@ -32,7 +32,7 @@ Launch the container in deamon mode: <br/>
 Navigate to [http://localhost:5000](http://localhost:5000)
 
 Check the logs:<br/>
-`docker logs -f twitter`
+`docker logs -f fact-checker`
 
 ## Debugging
 Execute a shell inside the container:<br/>
