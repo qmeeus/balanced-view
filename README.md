@@ -34,12 +34,6 @@ Navigate to [http://localhost:5000](http://localhost:5000)
 Check the logs:<br/>
 `docker logs -f twitter`
 
-## Training
-Launch bash inside the container:<br/>
-`docker run -it --name twitter -v (pwd):/home/patrick/src ubuntu-flask bash`
-
-Go to the right folder: <br/>
-`cd model`
-
-Train and save the model:<br/>
-`python keyword_detection.py --save`
+## Debugging
+Execute a shell inside the container:<br/>
+`docker exec -it python3-flask bash`
