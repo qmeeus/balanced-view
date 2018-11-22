@@ -22,6 +22,19 @@ class FactForm(FlaskForm):
     end_date = DateField('To', format='%Y-%m-%d')
 
 
+@bp.route('/', methods=['POST','GET'])
+def fact_checker():
+    form = FactForm()
+    if form.validate_on_submit():
+        text = form.text.data
+        start_date = form.start_date.data.strftime('%Y-%m-%d')
+        end_date = form.end_date.data.strftime("%Y-%m-%d")
+        predictions = get_keywords(text, n_words=5, split=True, scores=True)
+        articles = fetch_articles(text, start_date, end_date)
+        return render_template('results.html', query=text, predictions=predictions, search_results=articles)
+    return render_template('fact_checker.html', form=form)
+
+
 # @bp.route('/deprecated', methods=('GET', 'POST'))
 def index():
 
@@ -50,16 +63,3 @@ def index():
         flash(error)
 
     return render_template('index.html')
-
-
-@bp.route('/', methods=['POST','GET'])
-def fact_checker():
-    form = FactForm()
-    if form.validate_on_submit():
-        text = form.text.data
-        start_date = form.start_date.data.strftime('%Y-%m-%d')
-        end_date = form.end_date.data.strftime("%Y-%m-%d")
-        predictions = get_keywords(text, n_words=5, split=True, scores=True)
-        articles = fetch_articles(text, start_date, end_date)
-        return render_template('results.html', query=text, predictions=predictions, search_results=articles)
-    return render_template('fact_checker.html', form=form)
