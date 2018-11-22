@@ -36,4 +36,4 @@ Check the logs:<br/>
 
 ## Debugging
 Execute a shell inside the container:<br/>
-`docker exec -it python3-flask bash`
+`docker exec -it fact-checker bash`
