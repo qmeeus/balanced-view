@@ -1,28 +1,27 @@
-FROM ubuntu:latest
+#TODO: switch to alpine:python3
+# FROM ubuntu:latest
+FROM python:3.6-stretch
 
+COPY requirements.txt requirements.txt
 RUN apt-get update \
     && apt-get install -y python3-pip python3-dev \
-    && cd /usr/local/bin \
-    && ln -s /usr/bin/python3 python \
-    && pip3 install --upgrade pip
+    && pip3 install -r requirements.txt
 
-ARG user_id
-RUN useradd --uid $user_id --shell /bin/bash --create-home patrick
+# ARG user_id
+RUN useradd --shell /bin/bash --create-home patrick
 USER patrick
 
 WORKDIR /home/patrick
 RUN mkdir /home/patrick/src
 WORKDIR /home/patrick/src
 
-COPY --chown=patrick:users requirements.txt /home/patrick/src
-
 ENV PATH="/home/patrick/.local/bin/:$PATH"
-
-RUN pip3 install -r requirements.txt --user
+COPY --chown=patrick:users app /home/patrick/src/app
 
 ENV FLASK_APP=app
 ENV FLASK_ENV=development
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-CMD ["flask", "run", "--host=0.0.0.0"]
+COPY --chown=patrick:users entrypoint.sh /home/patrick/src/entrypoint.sh
+CMD [ "./entrypoint.sh" ]

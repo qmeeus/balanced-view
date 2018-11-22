@@ -1,3 +1,4 @@
 *
 !requirements.txt
-!docker-entrypoint.sh
+!app
+!entrypoint.sh
