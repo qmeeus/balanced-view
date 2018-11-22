@@ -12,6 +12,14 @@ body { max-width: 960px; margin: 0 auto; background-color: transparent; }
 .thumbnail {max-width: 600px; padding: 20px;}
 #results-table {text-align: center;}
 .well {background-color: #708599;}
+h2.missed {
+    color: snow;
+    position: absolute;
+    left:50%;
+    -ms-transform: translateX(-50%);
+    -webkit-transform: translate(-50%);
+    transform: translate(-50%);
+}
 h3.title {color: #192a3d; text-align: center; font-weight: bold;}
 h5.article-title {font-weight: bold;}
 label {color: #192a3d;}

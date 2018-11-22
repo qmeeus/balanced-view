@@ -5,11 +5,16 @@ from summa import keywords
 from newsapi import NewsApiClient
 
 
+def get_keywords(text, n_words, language='en', split=False, scores=False):
+    try:
+        return keywords.keywords(text, words=n_words, split=split, scores=scores)
+    except IndexError:
+        return [] if split else ""
+
 def fetch_articles(text, start_date=None, end_date=None, language=None, n_words=3):
 
     newsapi = NewsApiClient(api_key=load_key())
-    kws = keywords.keywords(text, words=n_words).replace("\n", " ")
-    print(kws)
+    kws = get_keywords(text, n_words, language).replace("\n", " ")
     return newsapi.get_everything(
         q=kws,
         sources=load_sources(language=language),
