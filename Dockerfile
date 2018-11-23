@@ -1,3 +1,5 @@
+#TODO: switch to alpine:python3
+# FROM ubuntu:latest
 FROM python:3.6-stretch
 
 COPY requirements.txt requirements.txt
@@ -5,8 +7,8 @@ RUN apt-get update \
     && apt-get install -y python3-pip python3-dev \
     && pip3 install -r requirements.txt
 
-ARG user_id
-RUN useradd --uid $user_id --shell /bin/bash --create-home patrick
+# ARG user_id
+RUN useradd --shell /bin/bash --create-home patrick
 USER patrick
 
 WORKDIR /home/patrick
