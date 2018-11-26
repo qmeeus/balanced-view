@@ -28,4 +28,4 @@ def fact_checker():
         predictions = get_keywords(text, n_words=5, split=True, scores=True)
         articles = fetch_articles(text, start_date, end_date)
         return render_template('index.html', form=form, query=text, predictions=predictions, search_results=articles)
-    return render_template('index.html', form=form, query=0, predictions=0, search_results=0)
+    return render_template('index.html', form=form)
