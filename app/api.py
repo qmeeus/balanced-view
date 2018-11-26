@@ -4,12 +4,6 @@ import json
 from summa import keywords
 from newsapi import NewsApiClient
 
-SOURCES = {
-    'left': ['the-guardian-uk', 'independent', 'msnbc', 'politico'],
-    'centre': ['reuters', 'financial-times', 'bbc-news', 'the-wall-street-journal', 'cnn', 'bloomberg'],
-    'right': ['daily-mail', 'fox-news', 'the-telegraph']
-}
-
 
 def get_keywords(text, n_words, language='en', split=False, scores=False):
     try:
@@ -20,7 +14,7 @@ def get_keywords(text, n_words, language='en', split=False, scores=False):
 def fetch_articles(text, start_date=None, end_date=None, language=None, n_words=3):
     newsapi = NewsApiClient(api_key=load_key())
     kws = get_keywords(text, n_words, language).replace("\n", " ")
-    articles = newsapi.get_everything(
+    return newsapi.get_everything(
         q=kws,
         sources=load_sources(language=language),
         # domains='bbc.co.uk,techcrunch.com',
@@ -30,24 +24,6 @@ def fetch_articles(text, start_date=None, end_date=None, language=None, n_words=
         sort_by='relevancy',
         # page=2
     )
-
-    return sort_articles(articles['articles'])
-
-
-def sort_articles(articles):
-    left_articles = []
-    centre_articles = []
-    right_articles = []
-    for i in articles:
-        if i['source']['id'] in SOURCES['left']:
-            left_articles.append(i)
-        elif i['source']['id'] in SOURCES['centre']:
-            centre_articles.append(i)
-        elif i['source']['id'] in SOURCES['right']:
-            right_articles.append(i)
-
-    return {'left': left_articles, 'centre': centre_articles, 'right': right_articles}
-
 
 def absolute_path(filename):
     return os.path.join(os.path.dirname(os.path.abspath(__file__)), filename)
