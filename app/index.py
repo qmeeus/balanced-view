@@ -11,8 +11,6 @@ from .api import fetch_articles, get_keywords
 
 
 bp = Blueprint('index', __name__, url_prefix='/')
-DATE_FORMAT_CHECK = re.compile(r"\d{4}-\d{2}-\d{2}")
-
 
 class FactForm(FlaskForm):
     text = TextAreaField('Text:', validators=[validators.required()])
