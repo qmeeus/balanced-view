@@ -1,5 +1,3 @@
-# from model.keyword_detection import load_model, Config, predict
-# from model.keyword_detection import Config, Model
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
