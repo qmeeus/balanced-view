@@ -4,12 +4,6 @@ import json
 from summa import keywords
 from newsapi import NewsApiClient
 
-SOURCES = {
-    'left': ['the-guardian-uk', 'independent', 'msnbc', 'politico'],
-    'centre': ['reuters', 'financial-times', 'bbc-news', 'the-wall-street-journal', 'cnn', 'bloomberg'],
-    'right': ['daily-mail', 'fox-news', 'the-telegraph']
-}
-
 
 def get_keywords(text, n_words, language='en', split=False, scores=False):
     try:
@@ -17,36 +11,34 @@ def get_keywords(text, n_words, language='en', split=False, scores=False):
     except IndexError:
         return [] if split else ""
 
+
 def fetch_articles(text, start_date=None, end_date=None, language=None, n_words=3):
     newsapi = NewsApiClient(api_key=load_key())
-    kws = get_keywords(text, n_words, language).replace("\n", " ")
-    articles = newsapi.get_everything(
-        q=kws,
-        sources=load_sources(language=language),
-        # domains='bbc.co.uk,techcrunch.com',
-        from_param=start_date or None,
-        to=end_date or None,
-        language=language or None,
-        sort_by='relevancy',
-        # page=2
-    )
+    kwds = get_keywords(text, n_words, language).replace("\n", " ")
+    print(kwds)
+    if kwds:
+        articles = newsapi.get_everything(
+            q=kwds,
+            sources=filter_sources(language=language),
+            # domains='bbc.co.uk,techcrunch.com',
+            from_param=start_date or None,
+            to=end_date or None,
+            language=language or None,
+            sort_by='relevancy')
+        print(articles)
+        if articles["totalResults"]:
+            return sort_articles(articles, load_sources())
+    return {"totalResults": 0}
 
-    return sort_articles(articles['articles'])
 
+def sort_articles(articles, sources_categories):
+    source_map = {source: key for key, sources in sources_categories.items() for source in sources}
+    sorted_sources = {key: [] for key in sources_categories.keys()}
+    for article in articles["articles"]:
+        if article["source"]["id"] in source_map:
+            sorted_sources[source_map[article["source"]["id"]]].append(article)
+    return sorted_sources
 
-def sort_articles(articles):
-    left_articles = []
-    centre_articles = []
-    right_articles = []
-    for i in articles:
-        if i['source']['id'] in SOURCES['left']:
-            left_articles.append(i)
-        elif i['source']['id'] in SOURCES['centre']:
-            centre_articles.append(i)
-        elif i['source']['id'] in SOURCES['right']:
-            right_articles.append(i)
-
-    return {'left': left_articles, 'centre': centre_articles, 'right': right_articles}
 
 
 def absolute_path(filename):
@@ -56,10 +48,13 @@ def load_key():
     with open(absolute_path("apikey")) as f:
         return f.read().strip()
 
-def load_sources(influence="all", language="en"):
+def load_sources():
     with open(absolute_path("api_sources.json")) as f:
-        sources = json.load(f)
-    
+        return json.load(f)
+
+
+def filter_sources(influence="all", language="en"):
+    sources = load_sources()
     if influence == "all":
         sources_list = [s for l in sources.values() for s in l]
     else:
@@ -69,15 +64,12 @@ def load_sources(influence="all", language="en"):
 
 
 if __name__ == "__main__":
+    from pprint import pprint
     # Test API
     text = """Democrat Stacey Abrams acknowledges that Republican Brian Kemp will be certified as 
     the next Georgia governor, but says she is not offering a speech of concession because that 
     would suggest the election process was just: "The state failed its voters" - @MSNBC"""
     articles = fetch_articles(text, "2018-11-01")
-    print(articles["status"] + "... " + str(articles["totalResults"]) + " results")
-    for article in articles["articles"]:
-        print(article["source"]["name"])
-        print(article["title"])
-        
-    with open(absolute_path('results.json'), 'w') as f:
-        json.dump(articles, f)
+    pprint(articles)
+    # with open(absolute_path('results.json'), 'w') as f:
+    #     json.dump(articles, f)
