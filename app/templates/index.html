@@ -1,111 +1,24 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<div class="py-5" style="">
-    <div class="container">
-        <form method="post" class="w-100" style="" action="#">
-            <div class="row">
-                <div class="col-md-12">
-                    <fieldset class="w-100">
-                        <div class="form-group w-100 form-row">
-                            {{ form.text(class="form-control", id="text", cols="50", rows="5", placeholder="Enter a text to fact check...") }}
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="row">
-                    <fieldset class="col-md-6">
-                        <div class="form-group">
-                            <label for="dtp_input2" class="control-label">Start Date</label>
-                            {{ form.start_date(class='datepicker form-control', size="16", value="") }}
-                            {{ form.hidden_tag() }}<br>
-                        </div>
-                    </fieldset>
-                    <fieldset class="col-md-6">
-                        <div class="form-group">
-                            <label for="dtp_input2" class="control-label">End Date</label>
-                            {{ form.end_date(class='datepicker form-control', size="16", value="") }}
-                            {{ form.hidden_tag() }}<br>
-                        </div>
-                    </fieldset>
-                </div>
-                <input type="submit" class="btn btn-block btn-secondary">
-            </div>
-        </form>
-    </div>
-</div>
 
+{% include 'form.html' %}
 
 <div class="py-5">
-
      <div class="container">
-              <div class="row ml-5 pl-5 w-100" >
-        <div class="col-md-3" style="">
-                <h5 class="text-center border-secondary border-bottom">Left</h5>
-                <div class="row ml-3 mr-1">
-                    {% if search_results["left"] %}
-                    {% for article in search_results["left"] %}
-                        <div class="thumbnail article">
-                            <h3>{{ article["source"]["name"] }}</h3>
-                            <h5 class="article-title">{{ article["title"] }}</h5>
-                            <a href="{{ article['url'] }}">
-                                <img class="article-image img-fluid float-left"  src="{{ article['urlToImage'] }}"></a>
-                            <div class="caption">
-                                <p class="description">{{ article["description"] }}</p>
-                                <p>{{ article["publishedAt"] }}</p>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {% else %}
-                    <h2 class="missed">Search yielded no results !</h2>
-                    {% endif %}
-                </div>
-            </div>
-        <div class="col-md-3" style="">
-                <h5 class="text-center border-secondary border-bottom">Centre</h5>
-                <div class="row ml-3 mr-1">
-                    {% if search_results["centre"] %}
-                    {% for article in search_results["centre"] %}
-                        <div class="thumbnail article">
-                            <h3>{{ article["source"]["name"] }}</h3>
-                            <h5 class="article-title">{{ article["title"] }}</h5>
-                            <a href="{{ article['url'] }}"><img class="article-image img-fluid float-left"  src="{{ article['urlToImage'] }}"></a>
-                            <div class="caption">
-                                <p class="description">{{ article["description"] }}</p>
-                                <p>{{ article["publishedAt"] }}</p>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {% else %}
-                    <h2 class="missed">Search yielded no results !</h2>
-                    {% endif %}
-                </div>
-            </div>
+        <div class="row ml-5 pl-5 w-100" >
 
-        <div class="col-md-3" style="">
-                <h5 class="text-center border-secondary border-bottom">Right</h5>
-                <div class="row ml-3 mr-1">
-                    {% if search_results["right"] %}
-                    {% for article in search_results["right"] %}
-                        <div class="thumbnail article">
-                            <h3>{{ article["source"]["name"] }}</h3>
-                            <h5 class="article-title">{{ article["title"] }}</h5>
-                            <a href="{{ article['url'] }}"><img class="article-image img-fluid float-left" src="{{ article['urlToImage'] }}"></a>
-                            <div class="caption">
-                                <p class="description">{{ article["description"] }}</p>
-                                <p>{{ article["publishedAt"] }}</p>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {% else %}
-                    <h2 class="missed">Search yielded no results !</h2>
-                    {% endif %}
-                </div>
-            </div>
+            {% if search_results %}
+
+                {% include "results.html" %}
+
+            {% else %}
+
+                <span></span>
+
+            {% endif %}
         </div>
-
     </div>
-
-
 </div>
 
 {% endblock %}

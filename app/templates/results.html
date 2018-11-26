@@ -1,0 +1,64 @@
+
+
+<div class="col-md-3" style="">
+    <h5 class="text-center border-secondary border-bottom">Left</h5>
+    <div class="row ml-3 mr-1">
+        {% if search_results["left"] %}
+            {% for article in search_results["left"] %}
+                <div class="thumbnail article">
+                    <h3>{{ article["source"]["name"] }}</h3>
+                    <h5 class="article-title">{{ article["title"] }}</h5>
+                    <a href="{{ article['url'] }}">
+                        <img class="article-image img-fluid float-left"  src="{{ article['urlToImage'] }}"></a>
+                    <div class="caption">
+                        <p class="description">{{ article["description"] }}</p>
+                        <p>{{ article["publishedAt"] }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h2 class="missed">Search yielded no results !</h2>
+        {% endif %}
+    </div>
+</div>
+<div class="col-md-3" style="">
+    <h5 class="text-center border-secondary border-bottom">Centre</h5>
+    <div class="row ml-3 mr-1">
+        {% if search_results["centre"] %}
+        {% for article in search_results["centre"] %}
+            <div class="thumbnail article">
+                <h3>{{ article["source"]["name"] }}</h3>
+                <h5 class="article-title">{{ article["title"] }}</h5>
+                <a href="{{ article['url'] }}"><img class="article-image img-fluid float-left"  src="{{ article['urlToImage'] }}"></a>
+                <div class="caption">
+                    <p class="description">{{ article["description"] }}</p>
+                    <p>{{ article["publishedAt"] }}</p>
+                </div>
+            </div>
+        {% endfor %}
+        {% else %}
+        <h2 class="missed">Search yielded no results !</h2>
+        {% endif %}
+    </div>
+</div>
+
+<div class="col-md-3" style="">
+    <h5 class="text-center border-secondary border-bottom">Right</h5>
+    <div class="row ml-3 mr-1">
+        {% if search_results["right"] %}
+        {% for article in search_results["right"] %}
+            <div class="thumbnail article">
+                <h3>{{ article["source"]["name"] }}</h3>
+                <h5 class="article-title">{{ article["title"] }}</h5>
+                <a href="{{ article['url'] }}"><img class="article-image img-fluid float-left" src="{{ article['urlToImage'] }}"></a>
+                <div class="caption">
+                    <p class="description">{{ article["description"] }}</p>
+                    <p>{{ article["publishedAt"] }}</p>
+                </div>
+            </div>
+        {% endfor %}
+        {% else %}
+        <h2 class="missed">Search yielded no results !</h2>
+        {% endif %}
+    </div>
+</div>
