@@ -7,24 +7,22 @@
 
     {% for political_leaning, results in search_results.items() %}
 
-        <div class="col-md-3" style="">
-            <h5 class="text-center border-secondary border-bottom">{{ political_leaning.title() }}</h5>
-            <div class="row ml-3 mr-1">
+        <div class="col-xs-12 col-md-4" style="">
+            <h5 class="text-center border-secondary border-bottom mt-1">{{ political_leaning.title() }}</h5>
 
-                {% for article in results %}
-                    <div class="thumbnail article">
-                        <h3>{{ article["source"]["name"] }}</h3>
-                        <h5 class="article-title">{{ article["title"] }}</h5>
-                        <a href="{{ article['url'] }}">
-                            <img class="article-image img-fluid float-left"  src="{{ article['urlToImage'] }}"></a>
-                        <div class="caption">
-                            <p class="description">{{ article["description"] }}</p>
-                            <p>{{ article["publishedAt"] }}</p>
-                        </div>
+            {% for article in results %}
+                <div class="thumbnail article">
+                    <h3>{{ article["source"]["name"] }}</h3>
+                    <h5 class="article-title">{{ article["title"] }}</h5>
+                    <a href="{{ article['url'] }}">
+                        <img class="article-image img-fluid float-left"  src="{{ article['urlToImage'] }}"></a>
+                    <div class="caption">
+                        <p class="description">{{ article["description"] }}</p>
+                        <p>{{ article["publishedAt"] }}</p>
                     </div>
-                {% endfor %}
+                </div>
+            {% endfor %}
 
-            </div>
         </div>
 
     {% endfor %}
