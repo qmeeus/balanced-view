@@ -15,7 +15,6 @@ def get_keywords(text, n_words, language='en', split=False, scores=False):
 def fetch_articles(text, start_date=None, end_date=None, language=None, n_words=3):
     newsapi = NewsApiClient(api_key=load_key())
     kwds = get_keywords(text, n_words, language).replace("\n", " ")
-    print(kwds)
     if kwds:
         articles = newsapi.get_everything(
             q=kwds,
@@ -25,7 +24,6 @@ def fetch_articles(text, start_date=None, end_date=None, language=None, n_words=
             to=end_date or None,
             language=language or None,
             sort_by='relevancy')
-        print(articles)
         if articles["totalResults"]:
             return sort_articles(articles, load_sources())
     return {"totalResults": 0}

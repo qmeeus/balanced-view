@@ -1,6 +1,7 @@
 flask
 WTForms
 Flask-WTF
+wtforms_components
 pandas
 numpy
 scikit-learn
