@@ -18,7 +18,7 @@
                         <img class="article-image img-fluid float-left"  src="{{ article['urlToImage'] }}"></a>
                     <div class="caption">
                         <p class="description">{{ article["description"] }}</p>
-                        <p>{{ article["publishedAt"] }}</p>
+                        <p>{{ article["publishedAt"].replace("T", " ").replace("Z", "") }}</p>
                     </div>
                 </div>
             {% endfor %}

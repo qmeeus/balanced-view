@@ -15,10 +15,22 @@ from .api import fetch_articles, get_keywords
 bp = Blueprint('index', __name__, url_prefix='/')
 
 class FactForm(FlaskForm):
+    _date_validators = [
+        DateRange(min=date.today() + relativedelta(months=-1), max=date.today(), 
+                  message="Dates must be at least one month ago and at most today")]
     text = TextAreaField('Text:', validators=[validators.required()])
-    start_date = DateField('From', format='%Y-%m-%d', 
-        validators=[DateRange(min=date.today() + relativedelta(months=-1), max=date.today())])
-    end_date = DateField('To', format='%Y-%m-%d', validators=[DateRange(max=date.today())])
+    start_date = DateField('From', format='%Y-%m-%d', validators=_date_validators)
+    end_date = DateField('To', format='%Y-%m-%d', validators=_date_validators)
+
+    def validate(self):
+        if not FlaskForm.validate(self):
+            return False
+        start_date = self.start_date.data
+        end_date = self.end_date.data
+        if end_date < start_date:
+            self.errors["dates"] = "End date must come after start date."
+            return False
+        return True
 
 
 @bp.route('/', methods=['POST','GET'])
