@@ -27,7 +27,7 @@ def get_keywords(text, min_results=2, max_results=3, min_score=.2, language='en'
         kwds = pd.DataFrame(
             keywords.keywords(text, ratio=1.0, split=True, scores=True), 
             columns=["keyword", "score"]).sort_values("score", ascending=False)
-        to_keep = min(max((kwds["score"] > min_score).sum(), min_results), max_results)
+        to_keep = max(min((kwds["score"] > min_score).sum(), min_results), max_results)
         return " ".join(kwds["keyword"].head(to_keep).values)
     except IndexError:
         return ""
