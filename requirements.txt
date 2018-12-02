@@ -6,6 +6,5 @@ pandas
 numpy
 scikit-learn
 scipy
-logzero
 newsapi-python
 git+https://github.com/qmeeus/textrank.git
