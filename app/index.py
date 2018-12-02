@@ -6,6 +6,7 @@ from wtforms import TextField, TextAreaField, validators, StringField, SubmitFie
 from wtforms.fields.html5 import DateField
 from wtforms_components import DateRange
 from datetime import date
+from dateutil.relativedelta import relativedelta
 
 from summa import keywords
 from .api import fetch_articles, get_keywords
@@ -15,7 +16,8 @@ bp = Blueprint('index', __name__, url_prefix='/')
 
 class FactForm(FlaskForm):
     text = TextAreaField('Text:', validators=[validators.required()])
-    start_date = DateField('From', format='%Y-%m-%d', validators=[DateRange(max=date.today())])
+    start_date = DateField('From', format='%Y-%m-%d', 
+        validators=[DateRange(min=date.today() + relativedelta(months=-1), max=date.today())])
     end_date = DateField('To', format='%Y-%m-%d', validators=[DateRange(max=date.today())])
 
 
