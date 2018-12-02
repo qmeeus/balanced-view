@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import pandas as pd
 from summa import keywords
 from newsapi import NewsApiClient
 
@@ -21,16 +22,20 @@ ERRORS = {
 }
 
 
-def get_keywords(text, n_words, language='en', split=False, scores=False):
+def get_keywords(text, min_results=2, max_results=3, min_score=.2, language='en'):
     try:
-        return keywords.keywords(text, words=n_words, split=split, scores=scores)
+        kwds = pd.DataFrame(
+            keywords.keywords(text, ratio=1.0, split=True, scores=True), 
+            columns=["keyword", "score"]).sort_values("score", ascending=False)
+        to_keep = min(max((kwds["score"] > min_score).sum(), min_results), max_results)
+        return " ".join(kwds["keyword"].head(to_keep).values)
     except IndexError:
-        return [] if split else ""
+        return ""
 
-
-def fetch_articles(text, start_date=None, end_date=None, language=None, n_words=3):
+def fetch_articles(text, start_date=None, end_date=None, language=None):
     newsapi = NewsApiClient(api_key=load_key())
-    kwds = get_keywords(text, n_words, language).replace("\n", " ")
+    kwds = get_keywords(text, language=language)
+    print("Keywords: {}".format(kwds))
     if kwds:
         articles = newsapi.get_everything(
             q=kwds,
@@ -56,13 +61,14 @@ def sort_articles(articles, sources_categories):
     return sorted_sources
 
 
-
 def absolute_path(filename):
     return os.path.join(os.path.dirname(os.path.abspath(__file__)), filename)
+
 
 def load_key():
     with open(absolute_path("apikey")) as f:
         return f.read().strip()
+
 
 def load_sources():
     with open(absolute_path("api_sources.json")) as f:
@@ -85,7 +91,7 @@ if __name__ == "__main__":
     text = """Democrat Stacey Abrams acknowledges that Republican Brian Kemp will be certified as 
     the next Georgia governor, but says she is not offering a speech of concession because that 
     would suggest the election process was just: "The state failed its voters" - @MSNBC"""
-    articles = fetch_articles(text, "2018-11-01")
+    articles = fetch_articles(text, "2018-11-02")
     pprint(articles)
     # with open(absolute_path('results.json'), 'w') as f:
     #     json.dump(articles, f)
