@@ -5,7 +5,7 @@ RUN apt-get update \
     && apt-get install -y python3-pip python3-dev \
     && pip3 install -r requirements.txt
 
-RUN useradd --shell /bin/bash --create-home patrick
+RUN useradd --uid 1001 --shell /bin/bash --create-home patrick
 USER patrick
 
 WORKDIR /home/patrick
