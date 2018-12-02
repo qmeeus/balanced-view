@@ -5,6 +5,22 @@ from summa import keywords
 from newsapi import NewsApiClient
 
 
+ERRORS = {
+    "news-api": {
+        "error": {
+            "text": "Search yielded no results!",
+            "reason": "We could not find related articles in any of the sources."
+        }
+    },
+    "keywords": {
+        "error": {
+            "text": "Keyword extraction failed!",
+            "reason": "One frequent explanation is that the text is too short."
+        }
+    }
+}
+
+
 def get_keywords(text, n_words, language='en', split=False, scores=False):
     try:
         return keywords.keywords(text, words=n_words, split=split, scores=scores)
@@ -26,7 +42,9 @@ def fetch_articles(text, start_date=None, end_date=None, language=None, n_words=
             sort_by='relevancy')
         if articles["totalResults"]:
             return sort_articles(articles, load_sources())
-    return {"totalResults": 0}
+        else:
+            return ERRORS["news-api"]
+    return ERRORS["keywords"]
 
 
 def sort_articles(articles, sources_categories):

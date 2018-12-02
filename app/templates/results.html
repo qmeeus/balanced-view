@@ -1,13 +1,13 @@
 
-{% if "totalResults" in search_results %}
+{% if "error" in search_results %}
 
-    <h2 class="missed">Search yielded no results !</h2>
+    <h2 class="col-*-12 w-100 text-center" title="{{ search_results["error"]["reason"] }}">{{ search_results["error"]["text"] }}</h2>
 
 {% else %}
 
     {% for political_leaning, results in search_results.items() %}
 
-        <div class="col-xs-12 col-md-4" style="">
+        <div class="col-xs-12 col-md-4">
             <h5 class="text-center border-secondary border-bottom mt-1">{{ political_leaning.title() }}</h5>
 
             {% for article in results %}
