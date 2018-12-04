@@ -19,8 +19,8 @@ class FactForm(FlaskForm):
         DateRange(min=date.today() + relativedelta(months=-1), max=date.today(), 
                   message="Dates must be at least one month ago and at most today")]
     text = TextAreaField('Text:', validators=[validators.required()])
-    start_date = DateField('From', format='%Y-%m-%d', validators=_date_validators)
-    end_date = DateField('To', format='%Y-%m-%d', validators=_date_validators)
+    start_date = DateField('From', format='%Y-%m-%d', validators=_date_validators, default=date.today())
+    end_date = DateField('To', format='%Y-%m-%d', validators=_date_validators, default=date.today())
 
     def validate(self):
         if not FlaskForm.validate(self):
