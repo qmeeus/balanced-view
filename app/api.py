@@ -4,6 +4,8 @@ import json
 import pandas as pd
 from summa import keywords
 from newsapi import NewsApiClient
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
 
 ERRORS = {
@@ -32,17 +34,21 @@ def get_keywords(text, min_results=2, max_results=3, min_score=.2, language='en'
     except IndexError:
         return ""
 
-def fetch_articles(text, start_date=None, end_date=None, language=None):
+def fetch_articles(text, language=None):
     newsapi = NewsApiClient(api_key=load_key())
     kwds = get_keywords(text, language=language)
     print("Keywords: {}".format(kwds))
+    start_date = (date.today()-relativedelta(weeks=2)).strftime('%Y-%m-%d')
+    print(start_date)
+    print(date.today())
+    end_date = date.today().strftime("%Y-%m-%d")
+    print(end_date)
     if kwds:
         articles = newsapi.get_everything(
             q=kwds,
             sources=filter_sources(language=language),
-            # domains='bbc.co.uk,techcrunch.com',
-            from_param=start_date or None,
-            to=end_date or None,
+            from_param=start_date,
+            to=end_date,
             language=language or None,
             sort_by='relevancy')
         if articles["totalResults"]:
