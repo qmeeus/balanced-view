@@ -12,10 +12,10 @@ bp = Blueprint('index', __name__, url_prefix='/')
 class FactForm(FlaskForm):
     text = TextAreaField('Text:', validators=[validators.required()])
 
+
     def validate(self):
-        text = self.text.data
-        if text != "Enter text to Fact Check...":
-            print("Enter text")
+        if not self.text.validate(self):
+            return False
         return True
 
 
@@ -23,7 +23,7 @@ class FactForm(FlaskForm):
 @bp.route('/', methods=['POST','GET'])
 def fact_checker():
     form = FactForm()
-    if form.validate():
+    if form.validate_on_submit():
         text = form.text.data
         articles = fetch_articles(text)
         print(form.errors)
