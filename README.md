@@ -24,10 +24,10 @@ Twitter published [here](https://about.twitter.com/en_us/values/elections-integr
 you probably need to replace `$(id -u)` 
 with any number >= 1000.**<br/><br/>
 First build the container. From the project root, run this:<br/>
-`docker build -t python3-flask --build-arg user_id=$(id -u) .`
+`docker build -t python3-flask -f Dockerfile.dev --build-arg user_id=$(id -u) .`
 
 Launch the container in deamon mode: <br/>
-`docker run -it --name fact-checker -p 5000:5000 -v $(pwd):/home/patrick/src python3-flask`
+`docker run -d --name fact-checker -p 5000:5000 -v $(pwd):/home/patrick/src python3-flask`
 
 Navigate to [http://localhost:5000](http://localhost:5000)
 
