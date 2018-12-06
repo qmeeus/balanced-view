@@ -8,7 +8,7 @@ This is a project for the class Knowledge and the Web of the Master in Artificia
 ## Installation and running
 **NB: Tested on Linux, should be similar on UNIX-like systems. For Windows 
 you probably need to replace `$(id -u)` 
-with any number >= 1000. Also, if like me you're using fish shell you probably want to remove the $ sign in front of the variables **<br/><br/>
+with any number >= 1000. Also, if like me you're using fish shell you probably want to remove the $ sign in front of the variables**<br/><br/>
 First build the container. From the project root, run this:<br/>
 `docker build -t python3-flask -f Dockerfile.dev --build-arg user_id=$(id -u) .`
 
