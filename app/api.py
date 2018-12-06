@@ -20,9 +20,16 @@ ERRORS = {
             "text": "Keyword extraction failed!",
             "reason": "One frequent explanation is that the text is too short."
         }
+    },
+    "api-error": {
+        "error": {
+            "text": "API error!",
+            "reason": "It is possible that the api key was not found or is expired, or the API received too many requests from us."
+        }
     }
 }
 
+DEFAULT_PERIOD = {"months": 1}
 
 def get_keywords(text, min_results=2, max_results=3, min_score=.2, language='en'):
     try:
@@ -34,27 +41,28 @@ def get_keywords(text, min_results=2, max_results=3, min_score=.2, language='en'
     except IndexError:
         return ""
 
-def fetch_articles(text, language=None):
+def fetch_articles(text, language=None, start_date=None, end_date=None):
+    fmt_date = lambda dt: dt.strftime('%Y-%m-%d')
     newsapi = NewsApiClient(api_key=load_key())
     kwds = get_keywords(text, language=language)
     print("Keywords: {}".format(kwds))
-    start_date = (date.today()-relativedelta(weeks=2)).strftime('%Y-%m-%d')
-    print(start_date)
-    print(date.today())
-    end_date = date.today().strftime("%Y-%m-%d")
-    print(end_date)
     if kwds:
-        articles = newsapi.get_everything(
-            q=kwds,
-            sources=filter_sources(language=language),
-            from_param=start_date,
-            to=end_date,
-            language=language or None,
-            sort_by='relevancy')
-        if articles["totalResults"]:
-            return sort_articles(articles, load_sources())
-        else:
-            return ERRORS["news-api"]
+        start_date = fmt_date(start_date or date.today() - relativedelta(**DEFAULT_PERIOD))
+        end_date = fmt_date(end_date or date.today())
+        try:
+            articles = newsapi.get_everything(
+                q=kwds,
+                sources=filter_sources(language=language),
+                from_param=start_date,
+                to=end_date,
+                language=language or None,
+                sort_by='relevancy')
+            if articles["totalResults"]:
+                return sort_articles(articles, load_sources())
+        except:
+            return ERRORS["api-error"]
+    else:
+        return ERRORS["news-api"]
     return ERRORS["keywords"]
 
 
