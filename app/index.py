@@ -2,7 +2,7 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 from flask_wtf import FlaskForm
-from wtforms import TextField, TextAreaField, validators, StringField, SubmitField
+from wtforms import TextAreaField, validators
 
 from .api import fetch_articles, get_keywords
 
@@ -12,12 +12,10 @@ bp = Blueprint('index', __name__, url_prefix='/')
 class FactForm(FlaskForm):
     text = TextAreaField('Text:', validators=[validators.required()])
 
-
     def validate(self):
         if not self.text.validate(self):
             return False
         return True
-
 
 
 @bp.route('/', methods=['POST','GET'])
