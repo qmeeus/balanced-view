@@ -2,7 +2,8 @@ import os
 import re
 import json
 import pandas as pd
-from summa import keywords
+from summa.keywords import keywords, graph
+
 from newsapi import NewsApiClient
 from datetime import date
 from dateutil.relativedelta import relativedelta
@@ -31,10 +32,14 @@ ERRORS = {
 
 DEFAULT_PERIOD = {"months": 1}
 
+
+def get_graph(text):
+    return graph(text)
+
 def get_keywords(text, min_results=2, max_results=3, min_score=.2, language='en'):
     try:
         kwds = pd.DataFrame(
-            keywords.keywords(text, ratio=1.0, split=True, scores=True), 
+            keywords(text, ratio=1.0, split=True, scores=True), 
             columns=["keyword", "score"]).sort_values("score", ascending=False)
         to_keep = max(min((kwds["score"] > min_score).sum(), min_results), max_results)
         return " ".join(kwds["keyword"].head(to_keep).values)
@@ -86,7 +91,8 @@ def load_key():
 
 def load_sources():
     with open(absolute_path("api_sources.json")) as f:
-        return json.load(f)
+        sources = json.load(f)
+    return {source_group["name"]: source_group["sources"] for source_group in sources}
 
 
 def filter_sources(influence="all", language="en"):
