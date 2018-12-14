@@ -1,8 +1,8 @@
+numpy
+pandas
 flask
 WTForms
 Flask-WTF
 wtforms_components
-pandas
-numpy
 newsapi-python
 git+https://github.com/qmeeus/textrank.git

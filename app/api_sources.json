@@ -1,21 +1,33 @@
-{
-    "left": [
-        "the-guardian-uk",
-        "independent",
-        "msnbc",
-        "politico"
-    ],
-    "centre": [
-        "reuters",
-        "financial-times",
-        "bbc-news",
-        "the-wall-street-journal",
-        "cnn",
-        "bloomberg"
-    ],
-    "right": [
-        "daily-mail",
-        "fox-news", 
-        "the-telegraph"
-    ]
-}
+[
+    {
+        "name": "left",
+        "sources": [
+            "the-guardian-uk",
+            "independent",
+            "msnbc",
+            "politico"
+        ]
+    },
+
+    {
+        "name": "centre",
+        "sources": [
+            "reuters",
+            "financial-times",
+            "bbc-news",
+            "the-wall-street-journal",
+            "cnn",
+            "bloomberg"
+        ]
+    },
+
+    {
+        "name": "right",
+        "sources": [
+            "daily-mail",
+            "fox-news", 
+            "the-telegraph"
+        ]
+    }
+
+]

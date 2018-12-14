@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Graph{% endblock %}
+
+{% block head %}
+
+    <script src="{{ url_for('static', filename='d3/d3.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+
+    <div id="content">
+        <svg width="1000" height="800">
+            <g class="links"></g>
+            <g class="nodes"></g>
+        </svg>
+    </div>
+
+    <script>
+        var data = {{ data | safe }};
+        draw(data);
+    </script>
+
+{% endblock %}
