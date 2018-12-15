@@ -5,11 +5,11 @@
         <a id="display-graph" href="#">Display Textrank Graph</a>
     </div>
 </div>
-<div class="modal" id="graph-container">
+<div class="modal" id="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <div id="content">
-            <svg width="800" height="600" id="svg">
+            <svg width="100%" height="600" id="svg">
                 <g class="links"></g>
                 <g class="nodes"></g>
             </svg>
@@ -25,7 +25,7 @@
 
 <script>
 
-    var modal = document.getElementById("graph-container");
+    var modal = document.getElementById("modal");
     var link = document.getElementById("display-graph");
     var span = document.getElementsByClassName("close")[0];
 

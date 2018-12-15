@@ -1,16 +1,21 @@
 
 function draw(data) {
 
-    const width = 800; 
-    const height = 600;
+    container_dims = document.getElementById("graph-container").getBoundingClientRect();
+    var width = container_dims.width;
+    var height = 600;
 
     var nodes = data.nodes;
-    var links = data.links; 
+    var links = data.links;
+
+    d3.select('svg')
+        .attr('width', width)
+        .attr('height', height);
 
     var simulation = d3.forceSimulation(nodes)
-        .force('charge', d3.forceManyBody().strength(-60))
+        .force('charge', d3.forceManyBody().strength(-70))
         .force('center', d3.forceCenter(width / 2, height / 2))
-        .force('link', d3.forceLink().links(links).distance(80))
+        .force('link', d3.forceLink().links(links).distance(50))
         .on('tick', ticked);
 
     var div = d3.select("#content").append("div")	
