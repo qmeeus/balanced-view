@@ -1,12 +1,11 @@
 
 function draw(data) {
-    
-    const width = 1000; 
-    const height = 800;
+
+    const width = 800; 
+    const height = 600;
 
     var nodes = data.nodes;
-    var links = data.links;
-    // var scores = data.scores;
+    var links = data.links; 
 
     var simulation = d3.forceSimulation(nodes)
         .force('charge', d3.forceManyBody().strength(-60))

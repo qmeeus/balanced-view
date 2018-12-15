@@ -2,6 +2,11 @@
 
 {% block title %}Index{% endblock %}
 
+{% block head %} 
+    <script src="{{ url_for('static', filename='js/d3.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 
     <nav class="navbar navbar-light bg-secondary">
@@ -19,21 +24,23 @@
 
 {% include 'form.html' %}
 
-    <div class="container">
-        <div class="row my-5 py-2 w-100" >
+    {% if search_results %}
 
-            {% if search_results %}
+        <div class="container my-2">
 
+            <div class="row w-100" >
+                {% include 'graph.html' %}
+            </div>
+            <div class="row my-5 py-2 w-100" >
                 {% include "results.html" %}
-
-            {% else %}
-
-                <span></span>
-
-            {% endif %}
-
+            </div>
         </div>
-    </div>
+
+    {% else %}
+
+        <span></span>
+
+    {% endif %}
 
 {% endblock %}
 
