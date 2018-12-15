@@ -1,25 +1,46 @@
-{% extends 'base.html' %}
 
-{% block title %}Graph{% endblock %}
-
-{% block head %}
-
-    <script src="{{ url_for('static', filename='js/d3.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
-{% endblock %}
-
-{% block body %}
-
-    <div id="content">
-        <svg width="1000" height="800">
-            <g class="links"></g>
-            <g class="nodes"></g>
-        </svg>
+<div class="row w-100">
+    <div class="col-md-9"><span></span></div>
+    <div class="col-md-3">
+        <a id="display-graph" href="#">Display Textrank Graph</a>
     </div>
+</div>
+<div class="modal" id="graph-container">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="content">
+            <svg width="800" height="600" id="svg">
+                <g class="links"></g>
+                <g class="nodes"></g>
+            </svg>
+        </div>    
+        <script>
 
-    <script>
-        var data = {{ data | safe }};
-        draw(data);
-    </script>
+            var data = {{ data | safe }};
+            draw(data);
 
-{% endblock %}
+        </script>
+    </div>
+</div>
+
+<script>
+
+    var modal = document.getElementById("graph-container");
+    var link = document.getElementById("display-graph");
+    var span = document.getElementsByClassName("close")[0];
+
+    link.onclick = function() {
+        modal.style.display = "block";
+    }
+      
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+      
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+</script>
