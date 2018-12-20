@@ -32,6 +32,9 @@ class FakeNewsAPI:
         self.start_date = self.format_date(kwargs.get("start_date", default_start_date))
         self.end_date = self.format_date(kwargs.get("end_date", date.today()))
 
+        # display options
+        self.max_articles = kwargs.get("max_articles", 2)
+
         # operations
         self.sources = self.load_sources()
         self.keywords, self.graph, self.l2w, self.scores = self.get_keywords()
@@ -120,7 +123,7 @@ class FakeNewsAPI:
         for article in self.articles["articles"]:
             if article["source"]["id"] in source_map:
                 sorted_sources[source_map[article["source"]["id"]]].append(article)
-        return sorted_sources
+        return {k: v[:self.max_articles] for k, v in sorted_sources.items()}
 
     def load_sources(self):
         with open(self.source_file) as f:
