@@ -144,9 +144,14 @@ class FakeNewsAPI:
     def process_input(cls, text, method="remove"):
         assert method in ["remove", "transform"]
         if method == "remove":
-            return " ".join(filter(lambda s: not s.startswith("#"), text.split()))
+            return " ".join(filter(lambda s: not cls.flag_word(s), text.split()))
         else:
             return " ".join(map(cls.transform_hashtag, text.split()))
+
+    @staticmethod
+    def flag_word(word):
+        # Flag mentions and hashtags
+        word[0] in ["#", "@"]
 
     @staticmethod
     def transform_hashtag(word):
