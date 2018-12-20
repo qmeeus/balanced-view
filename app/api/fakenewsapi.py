@@ -151,7 +151,7 @@ class FakeNewsAPI:
     @staticmethod
     def flag_word(word):
         # Flag mentions and hashtags
-        word[0] in ["#", "@"]
+        return word[0] in ["#", "@"]
 
     @staticmethod
     def transform_hashtag(word):
