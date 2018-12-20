@@ -16,7 +16,7 @@ def absolute_path(filename):
 class FakeNewsAPI:
 
     def __init__(self, text, language='en', **kwargs):
-        self.input_text = text
+        self.input_text = self.process_input(text, method="remove")
         self.language = language
 
         # summa options
@@ -101,7 +101,6 @@ class FakeNewsAPI:
             pd.DataFrame(kwds, columns=["keyword", "score"]).sort_values("score", ascending=False), 
             graph, l2w, scores)
 
-
     def filter_keywords(self):
         try:
             to_keep = max(
@@ -140,6 +139,25 @@ class FakeNewsAPI:
     def load_key(self):
         with open(self.keyfile) as f:
             return f.read().strip()
+
+    @classmethod
+    def process_input(cls, text, method="remove"):
+        assert method in ["remove", "transform"]
+        if method == "remove":
+            return " ".join(filter(lambda s: not s.startswith("#"), text.split()))
+        else:
+            return " ".join(map(cls.transform_hashtag, text.split()))
+
+    @staticmethod
+    def transform_hashtag(word):
+        if word.startswith("#"):
+            words = []
+            for char in word[1:]:
+                if char.isupper():
+                    words.append([])
+                words[-1].append(char)
+            return " ".join(map("".join, words))
+        return word
 
     @staticmethod
     def format_date(dt):
