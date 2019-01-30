@@ -25,7 +25,8 @@ Execute a shell inside the container:<br/>
 `docker exec -it fact-checker bash`
 
 ## Note for developers
-Please not that this project is under the GPL license, which authorise you to do pretty much anything with the code except changing the License. In other words, feel free to clone it, transform it, improve it, but you can't make it private, it has to remain open source.
+**Please not that this project is under the GPL license, which authorise you to do pretty much anything with the code except changing the License. In other words, feel free to clone it, transform it, improve it, but you can't make it private, it has to remain open source.**
+
 The repository is organised as follow:
  - `/` all the files that have to do with deploying the website, including docker configuration files and various scripts to launch and deploy the app
  - `/app` the code of the website
