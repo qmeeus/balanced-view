@@ -1,6 +1,6 @@
 # Twitter Trolls Unveiled
 
-This is a project for the class Knowledge and the Web of the Master in Artificial Intelligence of KU Leuven. The app is available [here](https://fact-checker.herokuapp.com/).
+This is a project for the class Knowledge and the Web of the Master in Artificial Intelligence of KU Leuven. The app is available [here](https://fact-checker.herokuapp.com/). Quentin Meeus & Calum Thornhill.
 
 ## Requirements
 - docker (yup that's it !)
