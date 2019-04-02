@@ -20,9 +20,9 @@ class FakeNewsAPI:
         self.language = language
 
         # summa options
-        self.min_results = kwargs.get("min_results", 2)
-        self.max_results = kwargs.get("min_results", 3)
-        self.min_score = kwargs.get("min_score", .2)
+        self.min_results = kwargs.get("min_results", 3)
+        self.max_results = kwargs.get("max_results", 5)
+        self.min_score = kwargs.get("min_score", .05)
 
         # newsapi options
         self.default_period = kwargs.get("default_period", {"months": 1})
@@ -87,7 +87,7 @@ class FakeNewsAPI:
         return {
             "nodes": list(map(self.get_node_info, nodes)),
             "links": [
-                {"source": nodes.index(node_a), "target": nodes.index(node_b)} 
+                {"source": nodes.index(node_a), "target": nodes.index(node_b)}
                 for node_a, node_b in edges]
         }
 
@@ -101,13 +101,13 @@ class FakeNewsAPI:
     def get_keywords(self):
         kwds, (graph, l2w, scores) = keywords(self.input_text, ratio=1.0, split=True, scores=True)
         return (
-            pd.DataFrame(kwds, columns=["keyword", "score"]).sort_values("score", ascending=False), 
+            pd.DataFrame(kwds, columns=["keyword", "score"]).sort_values("score", ascending=False),
             graph, l2w, scores)
 
     def filter_keywords(self):
         try:
             to_keep = max(
-                min((self.keywords["score"] > self.min_score).sum(), self.min_results), 
+                min((self.keywords["score"] > self.min_score).sum(), self.min_results),
                 self.max_results)
             return " ".join(self.keywords["keyword"].head(to_keep).values)
         except IndexError:
@@ -115,8 +115,8 @@ class FakeNewsAPI:
 
     def sort_articles(self):
         source_map = {
-            source: key 
-            for key, sources in self.sources.items() 
+            source: key
+            for key, sources in self.sources.items()
             for source in sources}
 
         sorted_sources = {key: [] for key in self.sources.keys()}
@@ -129,7 +129,7 @@ class FakeNewsAPI:
         with open(self.source_file) as f:
             sources = json.load(f)
         return {source_group["name"]: source_group["sources"] for source_group in sources}
-    
+
     def filter_sources(self, influence="all"):
         sources = self.sources
         if influence == "all":
@@ -172,16 +172,39 @@ class FakeNewsAPI:
         return dt.strftime('%Y-%m-%d')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     from pprint import pprint
-    # Test API
-    text = """Democrat Stacey Abrams acknowledges that Republican Brian Kemp will be certified as 
-    the next Georgia governor, but says she is not offering a speech of concession because that 
-    would suggest the election process was just: "The state failed its voters" - @MSNBC"""
-    fakenews = FakeNewsAPI(text)
+
+    texts = ["""
+Everybody agrees that ObamaCare doesn’t work. Premiums & deductibles are far too high - Really bad HealthCare! Even the Dems want to replace it, but with Medicare for all, which would cause 180 million Americans to lose their beloved private health insurance. The Republicans are developing a really great HealthCare Plan with far lower premiums (cost) & deductibles than ObamaCare. In other words it will be far less expensive & much more usable than ObamaCare. Vote will be taken right after the
+Election when Republicans hold the Senate & win back the House. It will be truly great HealthCare that will work for America. Also, Republicans will always support Pre-Existing Conditions. The Republican Party will be known as the Party of Great HealtCare. Meantime, the USA is doing better than ever & is respected again!""",
+
+"""
+The Democrats today killed a Bill that would have provided great relief to Farmers and yet more money to Puerto Rico despite the fact that Puerto Rico has already been scheduled to receive more hurricane relief funding than any “place” in history. The people of Puerto Rico are GREAT, but the politicians are incompetent or corrupt. Puerto Rico got far more money than Texas & Florida combined, yet their government can’t do anything right, the place is a mess - nothing works. FEMA & the Military
+worked emergency miracles, but politicians like the crazed and incompetent Mayor of San Juan have done such a poor job  of bringing the Island back to health. 91 Billion Dollars to Puerto Rico, and now the Dems want to give them more, taking dollars away from our Farmers and so many others. Disgraceful!""",
+
+"""
+Mexico must use its very strong immigration laws to stop the many thousands of people trying to get into the USA. Our detention areas are maxed out & we will take no more illegals. Next step is to close the Border! This will also help us with stopping the Drug flow from Mexico!""",
+
+"""
+Stop & search is necessary to bring down knife crime. We need to be tough. We need to back our police. We need to change the odds in the minds of the kids who carry knives. And we can. We’ve done it before"""]
+
+    for text in texts:
+        fakenews = FakeNewsAPI(text)
+        graph = fakenews.get_graph()
+        pprint(graph)
+        #results, (_, _, scores) = keywords(text)
+        #print("\nOriginal text:")
+        #pprint(text)
+        #print("\nKeywords:")
+        #print(results)
+        #print("\nScores:")
+        #pprint(sorted(scores.items(), key=lambda t: t[1], reverse=True))
+        #print("\n" + "="*100)
+
+
+
     # articles = fakenews.get_results()
     # pprint(articles)
-    graph = fakenews.get_graph()
-    pprint(graph)
     # with open(absolute_path('results.json'), 'w') as f:
     #     json.dump(articles, f)
