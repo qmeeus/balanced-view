@@ -15,6 +15,12 @@ def absolute_path(filename):
 
 class FakeNewsAPI:
 
+    languages = {
+        'en': 'english',
+        'nl': 'dutch',
+        'de': 'german',
+    }
+
     def __init__(self, text, language='en', **kwargs):
         self.input_text = self.process_input(text, method="remove")
         self.language = language
@@ -99,7 +105,12 @@ class FakeNewsAPI:
         return {"name": name, "token": node, "score": score}
 
     def get_keywords(self):
-        kwds, (graph, l2w, scores) = keywords(self.input_text, ratio=1.0, split=True, scores=True)
+        kwds, (graph, l2w, scores) = keywords(self.input_text, 
+                                              language=self.languages[self.language], 
+                                              ratio=1.0, 
+                                              split=True, 
+                                              scores=True)
+
         return (
             pd.DataFrame(kwds, columns=["keyword", "score"]).sort_values("score", ascending=False),
             graph, l2w, scores)
