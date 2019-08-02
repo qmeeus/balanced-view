@@ -1,4 +1,4 @@
-# Twitter Trolls Unveiled
+# BalancedView
 
 This is a project for the class Knowledge and the Web of the Master in Artificial Intelligence of KU Leuven. The app is available [here](https://fact-checker.herokuapp.com/). 
 
@@ -37,3 +37,28 @@ The repository is organised as follow:
  - `/app/templates` the various templates of the static webpages
  - `/app/static` static files including css and js libraries used in the webpages
 
+## TODO
+ - CI/CD (Continuous integration / continuous development)
+ - Decoupling services with Kubernetes and docker-compose
+   - Structure:
+     - User Interface (receive input and display response)
+     - REST API for BalancedView service (json with input and language -> curated selection of articles)
+     - Translate API (provided by IBM)
+     - Journalist Interface (adapted to the specific needs of news reporters)
+   - Questions:
+     - Hosting? (a.t.m. Heroku with the advantages and disadvantages, possible @KUL? AWS?)
+     - What about domain name?
+ - Check dutch parsing (and improve if needed)
+ - Translate the website and option to switch languages
+ - Connect to belgian (nl-fr) news providers (legal requirements regarding scraping)
+    - Which news provider provides a developer API?
+    - Are there fees to pay?
+    - What can we scrape without risk of infringing IP laws?
+ - IBM Translation service
+ - Multilingual support (provide translated articles from other languages)
+ - Matching algorithm:
+   - Latest developments in NLP (Attention is all you need)
+   - Strategy: training data / unsupervised learning / train and host vs continuous learning
+ - Connect DB and store searches?
+   - If yes: requirements > GDPR?
+ - Develop journalist interface (needs input from the concerned parties)
