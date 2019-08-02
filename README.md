@@ -8,7 +8,7 @@ Active developer: [Quentin Meeus](https://github.com/qmeeus)
 
 This tool started as a project for the course Knowledge and the Web of the Master in Artificial Intelligence of KU Leuven. It is now part of the DIAMOND (Diversity and Information Media: New Tools for a Multifaceted Public Debate) workgroup in collaboration with the universities of Leuven, Antwerpen and Brussels. 
 
-This tool aims to inform the public and interested parties (including journalists) about how a specific fact or event has been covered in the media. It is a quick and easy way of fact checking something.  
+This tool aims to inform the public and interested parties (including journalists) about how a specific fact or event has been covered in the media. It is an attempt to educate online users about fake news and misinformation. It is also an easy way to quickly check whether a fact is real or not.
 
 A paper was published in June 2019 under the name "A Digital Nudge to Counter Confirmation Bias". The publication is available [here](https://github.com/qmeeus/balanced-view/blob/master/documents/Digital_Nudge.pdf).
 
@@ -92,4 +92,4 @@ The repository is organised as follow:
 
 **NB**: Tested on Linux, should be similar on all UNIX-like systems equiped with Docker. For Windows 
 you probably need to replace `$(id -u)` 
-with any number >= 1000. Also, if like me you're using fish shell you probably want to remove the $ sign in front of the variables<br/><br/>
+with any number >= 1000. Also, if like me you're using fish shell you probably want to remove the `$` sign in front of the variables<br/><br/>
