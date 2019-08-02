@@ -33,9 +33,9 @@ If you find this tool or the publication useful for your research project, pleas
 ```
 
 ## TODO - Project Plan
- - CI/CD (Continuous integration / continuous development)
  - Decoupling services with Kubernetes and docker-compose
-   - Structure:
+   - CI/CD (Continuous integration / continuous development)
+   - Structure (see schema):
      - User Interface (receive input and display response)
      - REST API for BalancedView service (json with input and language -> curated selection of articles)
      - Translate API (provided by IBM)
@@ -43,15 +43,18 @@ If you find this tool or the publication useful for your research project, pleas
    - Questions:
      - Hosting? (a.t.m. Heroku with the advantages and disadvantages, possible @KUL? AWS?)
      - What about domain name?
+     - How to make the site faster? Is it slow because of Heroku?
  - Check dutch parsing (and improve if needed)
  - Translate the website and option to switch languages
  - Connect to belgian (nl-fr) news providers
-    - Which news provider provides a developer API?
-    - Are there fees to pay?
-    - What can we scrape without risk of infringing IP laws?
+   - Catgories of news provider - do the current categories still make sense?
+   - Which news provider provides a developer API?
+   - Are there fees to pay?
+   - What can we scrape without risk of infringing IP laws?
  - IBM Translation service
  - Multilingual support (provide translated articles from other languages)
  - Matching algorithm:
+   - Move from TextRank to Deep Learning (Graph Convolutional Nets, Bi-LSTM?)
    - Latest developments in NLP (Attention is all you need)
    - Strategy: training data / unsupervised learning / train and host vs continuous learning
  - Connect DB and store searches?
