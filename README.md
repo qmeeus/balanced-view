@@ -34,7 +34,7 @@ If you find this tool or the publication useful for your research project, pleas
 
 ## TODO - Project Plan
  - Decoupling services with Kubernetes and docker-compose
-   - CI/CD (Continuous integration / continuous development)
+   - CI/CD (Continuous integration / continuous deployment)
    - Structure (see schema):
      - User Interface (receive input and display response)
      - REST API for BalancedView service (json with input and language -> curated selection of articles)
