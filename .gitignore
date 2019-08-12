@@ -1,6 +1,8 @@
 data/
 outputs/
 apikey
+*_apikey
+*credentials*
 
 # Windows shit
 .DS_Store
