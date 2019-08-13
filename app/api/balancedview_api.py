@@ -48,14 +48,21 @@ def run(params):
 
     sources = {source_group["name"]: source_group["sources"] for source_group in sources}
 
-    summary = Summary(
-        text, 
-        language=LANGUAGES[params['language']]
-    )
+    try:
+        summary = Summary(
+            text, 
+            language=LANGUAGES[params['language']]
+        )
 
-    output["graph"] = summary.get_graph(MIN_KEYWORDS, MAX_KEYWORDS, MIN_SCORE)
+        output["graph"] = summary.get_graph(MIN_KEYWORDS, MAX_KEYWORDS, MIN_SCORE)
 
-    if not len(summary.keywords):
+    except Exception as err:
+        output["graph"] = {"error": {
+            "text": "Summarisation failed!",
+            "reason": str(err)
+        }}
+
+    if "error" in output["graph"] or not len(summary.keywords):
         output["articles"] = {"error": {
             "text": "Keyword extraction failed!",
             "reason": "One frequent explanation is that the text is too short."
