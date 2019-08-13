@@ -1,981 +1,983 @@
-[
-    {
-        "name": "ABC News",
-        "code": "abc-news",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "ABC News (AU)",
-        "code": "abc-news-au",
-        "language": " English",
-        "country": " Australia",
-        "category": " General news"
-    },
-    {
-        "name": "Aftenposten",
-        "code": "aftenposten",
-        "language": " Norwegian",
-        "country": " Norway",
-        "category": " General news"
-    },
-    {
-        "name": "Al Jazeera English",
-        "code": "al-jazeera-english",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "ANSA.it",
-        "code": "ansa",
-        "language": " Italian",
-        "country": " Italy",
-        "category": " General news"
-    },
-    {
-        "name": "Argaam",
-        "code": "argaam",
-        "language": " Arabic",
-        "country": " Saudi Arabia",
-        "category": " Business news"
-    },
-    {
-        "name": "Ars Technica",
-        "code": "ars-technica",
-        "language": " English",
-        "country": " United States",
-        "category": " Technology news"
-    },
-    {
-        "name": "Ary News",
-        "code": "ary-news",
-        "language": " Urdu",
-        "country": " Pakistan",
-        "category": " General news"
-    },
-    {
-        "name": "Associated Press",
-        "code": "associated-press",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "Australian Financial Review",
-        "code": "australian-financial-review",
-        "language": " English",
-        "country": " Australia",
-        "category": " Business news"
-    },
-    {
-        "name": "Axios",
-        "code": "axios",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "BBC News",
-        "code": "bbc-news",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " General news",
-        "influence": "center"
-    },
-    {
-        "name": "BBC Sport",
-        "code": "bbc-sport",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " Sports news"
-    },
-    {
-        "name": "Bild",
-        "code": "bild",
-        "language": " German",
-        "country": " Germany",
-        "category": " General news"
-    },
-    {
-        "name": "Blasting News (BR)",
-        "code": "blasting-news-br",
-        "language": " Portuguese",
-        "country": " Brazil",
-        "category": " General news"
-    },
-    {
-        "name": "Bleacher Report",
-        "code": "bleacher-report",
-        "language": " English",
-        "country": " United States",
-        "category": " Sports news"
-    },
-    {
-        "name": "Bloomberg",
-        "code": "bloomberg",
-        "language": " English",
-        "country": " United States",
-        "category": " Business news",
-        "influence": "center"
-    },
-    {
-        "name": "Breitbart News",
-        "code": "breitbart-news",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "Business Insider",
-        "code": "business-insider",
-        "language": " English",
-        "country": " United States",
-        "category": " Business news"
-    },
-    {
-        "name": "Business Insider (UK)",
-        "code": "business-insider-uk",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " Business news"
-    },
-    {
-        "name": "Buzzfeed",
-        "code": "buzzfeed",
-        "language": " English",
-        "country": " United States",
-        "category": " Entertainment news"
-    },
-    {
-        "name": "CBC News",
-        "code": "cbc-news",
-        "language": " English",
-        "country": " Canada",
-        "category": " General news"
-    },
-    {
-        "name": "CBS News",
-        "code": "cbs-news",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "CNBC",
-        "code": "cnbc",
-        "language": " English",
-        "country": " United States",
-        "category": " Business news"
-    },
-    {
-        "name": "CNN",
-        "code": "cnn",
-        "language": " English",
-        "country": " United States",
-        "category": " General news",
-        "influence": "center"
-    },
-    {
-        "name": "CNN Spanish",
-        "code": "cnn-es",
-        "language": " Spanish",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "Crypto Coins News",
-        "code": "crypto-coins-news",
-        "language": " English",
-        "country": " United States",
-        "category": " Technology news"
-    },
-    {
-        "name": "Daily Mail",
-        "code": "daily-mail",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " Entertainment news",
-        "influence": "right"
-    },
-    {
-        "name": "Der Tagesspiegel",
-        "code": "der-tagesspiegel",
-        "language": " German",
-        "country": " Germany",
-        "category": " General news"
-    },
-    {
-        "name": "Die Zeit",
-        "code": "die-zeit",
-        "language": " German",
-        "country": " Germany",
-        "category": " Business news"
-    },
-    {
-        "name": "El Mundo",
-        "code": "el-mundo",
-        "language": " Spanish",
-        "country": " Spain",
-        "category": " General news"
-    },
-    {
-        "name": "Engadget",
-        "code": "engadget",
-        "language": " English",
-        "country": " United States",
-        "category": " Technology news"
-    },
-    {
-        "name": "Entertainment Weekly",
-        "code": "entertainment-weekly",
-        "language": " English",
-        "country": " United States",
-        "category": " Entertainment news"
-    },
-    {
-        "name": "ESPN",
-        "code": "espn",
-        "language": " English",
-        "country": " United States",
-        "category": " Sports news"
-    },
-    {
-        "name": "ESPN Cric Info",
-        "code": "espn-cric-info",
-        "language": " English",
-        "country": " United States",
-        "category": " Sports news"
-    },
-    {
-        "name": "Financial Post",
-        "code": "financial-post",
-        "language": " English",
-        "country": " Canada",
-        "category": " Business news"
-    },
-    {
-        "name": "Financial Times",
-        "code": "financial-times",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " Business news",
-        "influence": "center"
-    },
-    {
-        "name": "Focus",
-        "code": "focus",
-        "language": " German",
-        "country": " Germany",
-        "category": " General news"
-    },
-    {
-        "name": "Football Italia",
-        "code": "football-italia",
-        "language": " English",
-        "country": " Italy",
-        "category": " Sports news"
-    },
-    {
-        "name": "Fortune",
-        "code": "fortune",
-        "language": " English",
-        "country": " United States",
-        "category": " Business news"
-    },
-    {
-        "name": "FourFourTwo",
-        "code": "four-four-two",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " Sports news"
-    },
-    {
-        "name": "Fox News",
-        "code": "fox-news",
-        "language": " English",
-        "country": " United States",
-        "category": " General news",
-        "influence": "right"
-    },
-    {
-        "name": "Fox Sports",
-        "code": "fox-sports",
-        "language": " English",
-        "country": " United States",
-        "category": " Sports news"
-    },
-    {
-        "name": "Globo",
-        "code": "globo",
-        "language": " Portuguese",
-        "country": " Brazil",
-        "category": " General news"
-    },
-    {
-        "name": "Google News",
-        "code": "google-news",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "Google News (Argentina)",
-        "code": "google-news-ar",
-        "language": " Spanish",
-        "country": " Argentina",
-        "category": " General news"
-    },
-    {
-        "name": "Google News (Australia)",
-        "code": "google-news-au",
-        "language": " English",
-        "country": " Australia",
-        "category": " General news"
-    },
-    {
-        "name": "Google News (Brasil)",
-        "code": "google-news-br",
-        "language": " Portuguese",
-        "country": " Brazil",
-        "category": " General news"
-    },
-    {
-        "name": "Google News (Canada)",
-        "code": "google-news-ca",
-        "language": " English",
-        "country": " Canada",
-        "category": " General news"
-    },
-    {
-        "name": "Google News (France)",
-        "code": "google-news-fr",
-        "language": " French",
-        "country": " France",
-        "category": " General news"
-    },
-    {
-        "name": "Google News (India)",
-        "code": "google-news-in",
-        "language": " English",
-        "country": " India",
-        "category": " General news"
-    },
-    {
-        "name": "Google News (Israel)",
-        "code": "google-news-is",
-        "language": " Hebrew",
-        "country": " Israel",
-        "category": " General news"
-    },
-    {
-        "name": "Google News (Italy)",
-        "code": "google-news-it",
-        "language": " Italian",
-        "country": " Italy",
-        "category": " General news"
-    },
-    {
-        "name": "Google News (Russia)",
-        "code": "google-news-ru",
-        "language": " Russian",
-        "country": " Russia",
-        "category": " General news"
-    },
-    {
-        "name": "Google News (Saudi Arabia)",
-        "code": "google-news-sa",
-        "language": " Arabic",
-        "country": " Saudi Arabia",
-        "category": " General news"
-    },
-    {
-        "name": "Google News (UK)",
-        "code": "google-news-uk",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " General news"
-    },
-    {
-        "name": "Göteborgs-Posten",
-        "code": "goteborgs-posten",
-        "language": " Swedish",
-        "country": " Sweden",
-        "category": " General news"
-    },
-    {
-        "name": "Gruenderszene",
-        "code": "gruenderszene",
-        "language": " German",
-        "country": " Germany",
-        "category": " Technology news"
-    },
-    {
-        "name": "Hacker News",
-        "code": "hacker-news",
-        "language": " English",
-        "country": " United States",
-        "category": " Technology news"
-    },
-    {
-        "name": "Handelsblatt",
-        "code": "handelsblatt",
-        "language": " German",
-        "country": " Germany",
-        "category": " Business news"
-    },
-    {
-        "name": "IGN",
-        "code": "ign",
-        "language": " English",
-        "country": " United States",
-        "category": " Entertainment news"
-    },
-    {
-        "name": "Il Sole 24 Ore",
-        "code": "il-sole-24-ore",
-        "language": " Italian",
-        "country": " Italy",
-        "category": " Business news"
-    },
-    {
-        "name": "Independent",
-        "code": "independent",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " General news",
-        "influence": "left"
-    },
-    {
-        "name": "Infobae",
-        "code": "infobae",
-        "language": " Spanish",
-        "country": " Argentina",
-        "category": " General news"
-    },
-    {
-        "name": "InfoMoney",
-        "code": "info-money",
-        "language": " Portuguese",
-        "country": " Brazil",
-        "category": " Business news"
-    },
-    {
-        "name": "La Gaceta",
-        "code": "la-gaceta",
-        "language": " Spanish",
-        "country": " Argentina",
-        "category": " General news"
-    },
-    {
-        "name": "La Nacion",
-        "code": "la-nacion",
-        "language": " Spanish",
-        "country": " Argentina",
-        "category": " General news"
-    },
-    {
-        "name": "La Repubblica",
-        "code": "la-repubblica",
-        "language": " Italian",
-        "country": " Italy",
-        "category": " General news"
-    },
-    {
-        "name": "Le Monde",
-        "code": "le-monde",
-        "language": " French",
-        "country": " France",
-        "category": " General news"
-    },
-    {
-        "name": "Lenta",
-        "code": "lenta",
-        "language": " Russian",
-        "country": " Russia",
-        "category": " General news"
-    },
-    {
-        "name": "L'equipe",
-        "code": "lequipe",
-        "language": " French",
-        "country": " France",
-        "category": " Sports news"
-    },
-    {
-        "name": "Les Echos",
-        "code": "les-echos",
-        "language": " French",
-        "country": " France",
-        "category": " Business news"
-    },
-    {
-        "name": "Libération",
-        "code": "liberation",
-        "language": " French",
-        "country": " France",
-        "category": " General news"
-    },
-    {
-        "name": "Marca",
-        "code": "marca",
-        "language": " Spanish",
-        "country": " Spain",
-        "category": " Sports news"
-    },
-    {
-        "name": "Mashable",
-        "code": "mashable",
-        "language": " English",
-        "country": " United States",
-        "category": " Entertainment news"
-    },
-    {
-        "name": "Medical News Today",
-        "code": "medical-news-today",
-        "language": " English",
-        "country": " United States",
-        "category": " Health news"
-    },
-    {
-        "name": "Metro",
-        "code": "metro",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " General news"
-    },
-    {
-        "name": "Mirror",
-        "code": "mirror",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " General news"
-    },
-    {
-        "name": "MSNBC",
-        "code": "msnbc",
-        "language": " English",
-        "country": " United States",
-        "category": " General news",
-        "influence": "left"
-    },
-    {
-        "name": "MTV News",
-        "code": "mtv-news",
-        "language": " English",
-        "country": " United States",
-        "category": " Entertainment news"
-    },
-    {
-        "name": "MTV News (UK)",
-        "code": "mtv-news-uk",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " Entertainment news"
-    },
-    {
-        "name": "National Geographic",
-        "code": "national-geographic",
-        "language": " English",
-        "country": " United States",
-        "category": " Science news"
-    },
-    {
-        "name": "National Review",
-        "code": "national-review",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "NBC News",
-        "code": "nbc-news",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "News24",
-        "code": "news24",
-        "language": " English",
-        "country": " South Africa",
-        "category": " General news"
-    },
-    {
-        "name": "New Scientist",
-        "code": "new-scientist",
-        "language": " English",
-        "country": " United States",
-        "category": " Science news"
-    },
-    {
-        "name": "News.com.au",
-        "code": "news-com-au",
-        "language": " English",
-        "country": " Australia",
-        "category": " General news"
-    },
-    {
-        "name": "Newsweek",
-        "code": "newsweek",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "New York Magazine",
-        "code": "new-york-magazine",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "Next Big Future",
-        "code": "next-big-future",
-        "language": " English",
-        "country": " United States",
-        "category": " Science news"
-    },
-    {
-        "name": "NFL News",
-        "code": "nfl-news",
-        "language": " English",
-        "country": " United States",
-        "category": " Sports news"
-    },
-    {
-        "name": "NHL News",
-        "code": "nhl-news",
-        "language": " English",
-        "country": " United States",
-        "category": " Sports news"
-    },
-    {
-        "name": "NRK",
-        "code": "nrk",
-        "language": " Norwegian",
-        "country": " Norway",
-        "category": " General news"
-    },
-    {
-        "name": "Politico",
-        "code": "politico",
-        "language": " English",
-        "country": " United States",
-        "category": " General news",
-        "influence": "left"
-    },
-    {
-        "name": "Polygon",
-        "code": "polygon",
-        "language": " English",
-        "country": " United States",
-        "category": " Entertainment news"
-    },
-    {
-        "name": "RBC",
-        "code": "rbc",
-        "language": " Russian",
-        "country": " Russia",
-        "category": " General news"
-    },
-    {
-        "name": "Recode",
-        "code": "recode",
-        "language": " English",
-        "country": " United States",
-        "category": " Technology news"
-    },
-    {
-        "name": "Reddit /r/all",
-        "code": "reddit-r-all",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "Reuters",
-        "code": "reuters",
-        "language": " English",
-        "country": " United States",
-        "category": " General news",
-        "influence": "center"
-    },
-    {
-        "name": "RT",
-        "code": "rt",
-        "language": " Russian",
-        "country": " Russia",
-        "category": " General news"
-    },
-    {
-        "name": "RTE",
-        "code": "rte",
-        "language": " English",
-        "country": " Ireland",
-        "category": " General news"
-    },
-    {
-        "name": "RTL Nieuws",
-        "code": "rtl-nieuws",
-        "language": " Dutch",
-        "country": " Netherlands",
-        "category": " General news"
-    },
-    {
-        "name": "SABQ",
-        "code": "sabq",
-        "language": " Arabic",
-        "country": " Saudi Arabia",
-        "category": " General news"
-    },
-    {
-        "name": "Spiegel Online",
-        "code": "spiegel-online",
-        "language": " German",
-        "country": " Germany",
-        "category": " General news"
-    },
-    {
-        "name": "Svenska Dagbladet",
-        "code": "svenska-dagbladet",
-        "language": " Swedish",
-        "country": " Sweden",
-        "category": " General news"
-    },
-    {
-        "name": "T3n",
-        "code": "t3n",
-        "language": " German",
-        "country": " Germany",
-        "category": " Technology news"
-    },
-    {
-        "name": "TalkSport",
-        "code": "talksport",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " Sports news"
-    },
-    {
-        "name": "TechCrunch",
-        "code": "techcrunch",
-        "language": " English",
-        "country": " United States",
-        "category": " Technology news"
-    },
-    {
-        "name": "TechCrunch (CN)",
-        "code": "techcrunch-cn",
-        "language": " Chinese",
-        "country": " China",
-        "category": " Technology news"
-    },
-    {
-        "name": "TechRadar",
-        "code": "techradar",
-        "language": " English",
-        "country": " United States",
-        "category": " Technology news"
-    },
-    {
-        "name": "The American Conservative",
-        "code": "the-american-conservative",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "The Economist",
-        "code": "the-economist",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " Business news"
-    },
-    {
-        "name": "The Globe And Mail",
-        "code": "the-globe-and-mail",
-        "language": " English",
-        "country": " Canada",
-        "category": " General news"
-    },
-    {
-        "name": "The Guardian (AU)",
-        "code": "the-guardian-au",
-        "language": " English",
-        "country": " Australia",
-        "category": " General news"
-    },
-    {
-        "name": "The Guardian (UK)",
-        "code": "the-guardian-uk",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " General news",
-        "influence": "left"
-    },
-    {
-        "name": "The Hill",
-        "code": "the-hill",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "The Hindu",
-        "code": "the-hindu",
-        "language": " English",
-        "country": " India",
-        "category": " General news"
-    },
-    {
-        "name": "The Huffington Post",
-        "code": "the-huffington-post",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "The Irish Times",
-        "code": "the-irish-times",
-        "language": " English",
-        "country": " Ireland",
-        "category": " General news"
-    },
-    {
-        "name": "The Jerusalem Post",
-        "code": "the-jerusalem-post",
-        "language": " English",
-        "country": " Israel",
-        "category": " General news"
-    },
-    {
-        "name": "The Lad Bible",
-        "code": "the-lad-bible",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " Entertainment news"
-    },
-    {
-        "name": "The New York Times",
-        "code": "the-new-york-times",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "The Next Web",
-        "code": "the-next-web",
-        "language": " English",
-        "country": " United States",
-        "category": " Technology news"
-    },
-    {
-        "name": "The Sport Bible",
-        "code": "the-sport-bible",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " Sports news"
-    },
-    {
-        "name": "The Telegraph",
-        "code": "the-telegraph",
-        "language": " English",
-        "country": " United Kingdom",
-        "category": " General news",
-        "influence": "right"
-    },
-    {
-        "name": "The Times of India",
-        "code": "the-times-of-india",
-        "language": " English",
-        "country": " India",
-        "category": " General news"
-    },
-    {
-        "name": "The Verge",
-        "code": "the-verge",
-        "language": " English",
-        "country": " United States",
-        "category": " Technology news"
-    },
-    {
-        "name": "The Wall Street Journal",
-        "code": "the-wall-street-journal",
-        "language": " English",
-        "country": " United States",
-        "category": " Business news",
-        "influence": "center"
-    },
-    {
-        "name": "The Washington Post",
-        "code": "the-washington-post",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "The Washington Times",
-        "code": "the-washington-times",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "Time",
-        "code": "time",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "USA Today",
-        "code": "usa-today",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "Vice News",
-        "code": "vice-news",
-        "language": " English",
-        "country": " United States",
-        "category": " General news"
-    },
-    {
-        "name": "Wired",
-        "code": "wired",
-        "language": " English",
-        "country": " United States",
-        "category": " Technology news"
-    },
-    {
-        "name": "Wired.de",
-        "code": "wired-de",
-        "language": " German",
-        "country": " Germany",
-        "category": " Technology news"
-    },
-    {
-        "name": "Wirtschafts Woche",
-        "code": "wirtschafts-woche",
-        "language": " German",
-        "country": " Germany",
-        "category": " Business news"
-    },
-    {
-        "name": "Xinhua Net",
-        "code": "xinhua-net",
-        "language": " Chinese",
-        "country": " China",
-        "category": " General news"
-    },
-    {
-        "name": "Ynet",
-        "code": "ynet",
-        "language": " Hebrew",
-        "country": " Israel",
-        "category": " General news"
-    }
-]
+{"sources":
+    [
+        {
+            "name": "ABC News",
+            "code": "abc-news",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "ABC News (AU)",
+            "code": "abc-news-au",
+            "language": " English",
+            "country": " Australia",
+            "category": " General news"
+        },
+        {
+            "name": "Aftenposten",
+            "code": "aftenposten",
+            "language": " Norwegian",
+            "country": " Norway",
+            "category": " General news"
+        },
+        {
+            "name": "Al Jazeera English",
+            "code": "al-jazeera-english",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "ANSA.it",
+            "code": "ansa",
+            "language": " Italian",
+            "country": " Italy",
+            "category": " General news"
+        },
+        {
+            "name": "Argaam",
+            "code": "argaam",
+            "language": " Arabic",
+            "country": " Saudi Arabia",
+            "category": " Business news"
+        },
+        {
+            "name": "Ars Technica",
+            "code": "ars-technica",
+            "language": " English",
+            "country": " United States",
+            "category": " Technology news"
+        },
+        {
+            "name": "Ary News",
+            "code": "ary-news",
+            "language": " Urdu",
+            "country": " Pakistan",
+            "category": " General news"
+        },
+        {
+            "name": "Associated Press",
+            "code": "associated-press",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "Australian Financial Review",
+            "code": "australian-financial-review",
+            "language": " English",
+            "country": " Australia",
+            "category": " Business news"
+        },
+        {
+            "name": "Axios",
+            "code": "axios",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "BBC News",
+            "code": "bbc-news",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " General news",
+            "influence": "center"
+        },
+        {
+            "name": "BBC Sport",
+            "code": "bbc-sport",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " Sports news"
+        },
+        {
+            "name": "Bild",
+            "code": "bild",
+            "language": " German",
+            "country": " Germany",
+            "category": " General news"
+        },
+        {
+            "name": "Blasting News (BR)",
+            "code": "blasting-news-br",
+            "language": " Portuguese",
+            "country": " Brazil",
+            "category": " General news"
+        },
+        {
+            "name": "Bleacher Report",
+            "code": "bleacher-report",
+            "language": " English",
+            "country": " United States",
+            "category": " Sports news"
+        },
+        {
+            "name": "Bloomberg",
+            "code": "bloomberg",
+            "language": " English",
+            "country": " United States",
+            "category": " Business news",
+            "influence": "center"
+        },
+        {
+            "name": "Breitbart News",
+            "code": "breitbart-news",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "Business Insider",
+            "code": "business-insider",
+            "language": " English",
+            "country": " United States",
+            "category": " Business news"
+        },
+        {
+            "name": "Business Insider (UK)",
+            "code": "business-insider-uk",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " Business news"
+        },
+        {
+            "name": "Buzzfeed",
+            "code": "buzzfeed",
+            "language": " English",
+            "country": " United States",
+            "category": " Entertainment news"
+        },
+        {
+            "name": "CBC News",
+            "code": "cbc-news",
+            "language": " English",
+            "country": " Canada",
+            "category": " General news"
+        },
+        {
+            "name": "CBS News",
+            "code": "cbs-news",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "CNBC",
+            "code": "cnbc",
+            "language": " English",
+            "country": " United States",
+            "category": " Business news"
+        },
+        {
+            "name": "CNN",
+            "code": "cnn",
+            "language": " English",
+            "country": " United States",
+            "category": " General news",
+            "influence": "center"
+        },
+        {
+            "name": "CNN Spanish",
+            "code": "cnn-es",
+            "language": " Spanish",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "Crypto Coins News",
+            "code": "crypto-coins-news",
+            "language": " English",
+            "country": " United States",
+            "category": " Technology news"
+        },
+        {
+            "name": "Daily Mail",
+            "code": "daily-mail",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " Entertainment news",
+            "influence": "right"
+        },
+        {
+            "name": "Der Tagesspiegel",
+            "code": "der-tagesspiegel",
+            "language": " German",
+            "country": " Germany",
+            "category": " General news"
+        },
+        {
+            "name": "Die Zeit",
+            "code": "die-zeit",
+            "language": " German",
+            "country": " Germany",
+            "category": " Business news"
+        },
+        {
+            "name": "El Mundo",
+            "code": "el-mundo",
+            "language": " Spanish",
+            "country": " Spain",
+            "category": " General news"
+        },
+        {
+            "name": "Engadget",
+            "code": "engadget",
+            "language": " English",
+            "country": " United States",
+            "category": " Technology news"
+        },
+        {
+            "name": "Entertainment Weekly",
+            "code": "entertainment-weekly",
+            "language": " English",
+            "country": " United States",
+            "category": " Entertainment news"
+        },
+        {
+            "name": "ESPN",
+            "code": "espn",
+            "language": " English",
+            "country": " United States",
+            "category": " Sports news"
+        },
+        {
+            "name": "ESPN Cric Info",
+            "code": "espn-cric-info",
+            "language": " English",
+            "country": " United States",
+            "category": " Sports news"
+        },
+        {
+            "name": "Financial Post",
+            "code": "financial-post",
+            "language": " English",
+            "country": " Canada",
+            "category": " Business news"
+        },
+        {
+            "name": "Financial Times",
+            "code": "financial-times",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " Business news",
+            "influence": "center"
+        },
+        {
+            "name": "Focus",
+            "code": "focus",
+            "language": " German",
+            "country": " Germany",
+            "category": " General news"
+        },
+        {
+            "name": "Football Italia",
+            "code": "football-italia",
+            "language": " English",
+            "country": " Italy",
+            "category": " Sports news"
+        },
+        {
+            "name": "Fortune",
+            "code": "fortune",
+            "language": " English",
+            "country": " United States",
+            "category": " Business news"
+        },
+        {
+            "name": "FourFourTwo",
+            "code": "four-four-two",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " Sports news"
+        },
+        {
+            "name": "Fox News",
+            "code": "fox-news",
+            "language": " English",
+            "country": " United States",
+            "category": " General news",
+            "influence": "right"
+        },
+        {
+            "name": "Fox Sports",
+            "code": "fox-sports",
+            "language": " English",
+            "country": " United States",
+            "category": " Sports news"
+        },
+        {
+            "name": "Globo",
+            "code": "globo",
+            "language": " Portuguese",
+            "country": " Brazil",
+            "category": " General news"
+        },
+        {
+            "name": "Google News",
+            "code": "google-news",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "Google News (Argentina)",
+            "code": "google-news-ar",
+            "language": " Spanish",
+            "country": " Argentina",
+            "category": " General news"
+        },
+        {
+            "name": "Google News (Australia)",
+            "code": "google-news-au",
+            "language": " English",
+            "country": " Australia",
+            "category": " General news"
+        },
+        {
+            "name": "Google News (Brasil)",
+            "code": "google-news-br",
+            "language": " Portuguese",
+            "country": " Brazil",
+            "category": " General news"
+        },
+        {
+            "name": "Google News (Canada)",
+            "code": "google-news-ca",
+            "language": " English",
+            "country": " Canada",
+            "category": " General news"
+        },
+        {
+            "name": "Google News (France)",
+            "code": "google-news-fr",
+            "language": " French",
+            "country": " France",
+            "category": " General news"
+        },
+        {
+            "name": "Google News (India)",
+            "code": "google-news-in",
+            "language": " English",
+            "country": " India",
+            "category": " General news"
+        },
+        {
+            "name": "Google News (Israel)",
+            "code": "google-news-is",
+            "language": " Hebrew",
+            "country": " Israel",
+            "category": " General news"
+        },
+        {
+            "name": "Google News (Italy)",
+            "code": "google-news-it",
+            "language": " Italian",
+            "country": " Italy",
+            "category": " General news"
+        },
+        {
+            "name": "Google News (Russia)",
+            "code": "google-news-ru",
+            "language": " Russian",
+            "country": " Russia",
+            "category": " General news"
+        },
+        {
+            "name": "Google News (Saudi Arabia)",
+            "code": "google-news-sa",
+            "language": " Arabic",
+            "country": " Saudi Arabia",
+            "category": " General news"
+        },
+        {
+            "name": "Google News (UK)",
+            "code": "google-news-uk",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " General news"
+        },
+        {
+            "name": "Göteborgs-Posten",
+            "code": "goteborgs-posten",
+            "language": " Swedish",
+            "country": " Sweden",
+            "category": " General news"
+        },
+        {
+            "name": "Gruenderszene",
+            "code": "gruenderszene",
+            "language": " German",
+            "country": " Germany",
+            "category": " Technology news"
+        },
+        {
+            "name": "Hacker News",
+            "code": "hacker-news",
+            "language": " English",
+            "country": " United States",
+            "category": " Technology news"
+        },
+        {
+            "name": "Handelsblatt",
+            "code": "handelsblatt",
+            "language": " German",
+            "country": " Germany",
+            "category": " Business news"
+        },
+        {
+            "name": "IGN",
+            "code": "ign",
+            "language": " English",
+            "country": " United States",
+            "category": " Entertainment news"
+        },
+        {
+            "name": "Il Sole 24 Ore",
+            "code": "il-sole-24-ore",
+            "language": " Italian",
+            "country": " Italy",
+            "category": " Business news"
+        },
+        {
+            "name": "Independent",
+            "code": "independent",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " General news",
+            "influence": "left"
+        },
+        {
+            "name": "Infobae",
+            "code": "infobae",
+            "language": " Spanish",
+            "country": " Argentina",
+            "category": " General news"
+        },
+        {
+            "name": "InfoMoney",
+            "code": "info-money",
+            "language": " Portuguese",
+            "country": " Brazil",
+            "category": " Business news"
+        },
+        {
+            "name": "La Gaceta",
+            "code": "la-gaceta",
+            "language": " Spanish",
+            "country": " Argentina",
+            "category": " General news"
+        },
+        {
+            "name": "La Nacion",
+            "code": "la-nacion",
+            "language": " Spanish",
+            "country": " Argentina",
+            "category": " General news"
+        },
+        {
+            "name": "La Repubblica",
+            "code": "la-repubblica",
+            "language": " Italian",
+            "country": " Italy",
+            "category": " General news"
+        },
+        {
+            "name": "Le Monde",
+            "code": "le-monde",
+            "language": " French",
+            "country": " France",
+            "category": " General news"
+        },
+        {
+            "name": "Lenta",
+            "code": "lenta",
+            "language": " Russian",
+            "country": " Russia",
+            "category": " General news"
+        },
+        {
+            "name": "L'equipe",
+            "code": "lequipe",
+            "language": " French",
+            "country": " France",
+            "category": " Sports news"
+        },
+        {
+            "name": "Les Echos",
+            "code": "les-echos",
+            "language": " French",
+            "country": " France",
+            "category": " Business news"
+        },
+        {
+            "name": "Libération",
+            "code": "liberation",
+            "language": " French",
+            "country": " France",
+            "category": " General news"
+        },
+        {
+            "name": "Marca",
+            "code": "marca",
+            "language": " Spanish",
+            "country": " Spain",
+            "category": " Sports news"
+        },
+        {
+            "name": "Mashable",
+            "code": "mashable",
+            "language": " English",
+            "country": " United States",
+            "category": " Entertainment news"
+        },
+        {
+            "name": "Medical News Today",
+            "code": "medical-news-today",
+            "language": " English",
+            "country": " United States",
+            "category": " Health news"
+        },
+        {
+            "name": "Metro",
+            "code": "metro",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " General news"
+        },
+        {
+            "name": "Mirror",
+            "code": "mirror",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " General news"
+        },
+        {
+            "name": "MSNBC",
+            "code": "msnbc",
+            "language": " English",
+            "country": " United States",
+            "category": " General news",
+            "influence": "left"
+        },
+        {
+            "name": "MTV News",
+            "code": "mtv-news",
+            "language": " English",
+            "country": " United States",
+            "category": " Entertainment news"
+        },
+        {
+            "name": "MTV News (UK)",
+            "code": "mtv-news-uk",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " Entertainment news"
+        },
+        {
+            "name": "National Geographic",
+            "code": "national-geographic",
+            "language": " English",
+            "country": " United States",
+            "category": " Science news"
+        },
+        {
+            "name": "National Review",
+            "code": "national-review",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "NBC News",
+            "code": "nbc-news",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "News24",
+            "code": "news24",
+            "language": " English",
+            "country": " South Africa",
+            "category": " General news"
+        },
+        {
+            "name": "New Scientist",
+            "code": "new-scientist",
+            "language": " English",
+            "country": " United States",
+            "category": " Science news"
+        },
+        {
+            "name": "News.com.au",
+            "code": "news-com-au",
+            "language": " English",
+            "country": " Australia",
+            "category": " General news"
+        },
+        {
+            "name": "Newsweek",
+            "code": "newsweek",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "New York Magazine",
+            "code": "new-york-magazine",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "Next Big Future",
+            "code": "next-big-future",
+            "language": " English",
+            "country": " United States",
+            "category": " Science news"
+        },
+        {
+            "name": "NFL News",
+            "code": "nfl-news",
+            "language": " English",
+            "country": " United States",
+            "category": " Sports news"
+        },
+        {
+            "name": "NHL News",
+            "code": "nhl-news",
+            "language": " English",
+            "country": " United States",
+            "category": " Sports news"
+        },
+        {
+            "name": "NRK",
+            "code": "nrk",
+            "language": " Norwegian",
+            "country": " Norway",
+            "category": " General news"
+        },
+        {
+            "name": "Politico",
+            "code": "politico",
+            "language": " English",
+            "country": " United States",
+            "category": " General news",
+            "influence": "left"
+        },
+        {
+            "name": "Polygon",
+            "code": "polygon",
+            "language": " English",
+            "country": " United States",
+            "category": " Entertainment news"
+        },
+        {
+            "name": "RBC",
+            "code": "rbc",
+            "language": " Russian",
+            "country": " Russia",
+            "category": " General news"
+        },
+        {
+            "name": "Recode",
+            "code": "recode",
+            "language": " English",
+            "country": " United States",
+            "category": " Technology news"
+        },
+        {
+            "name": "Reddit /r/all",
+            "code": "reddit-r-all",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "Reuters",
+            "code": "reuters",
+            "language": " English",
+            "country": " United States",
+            "category": " General news",
+            "influence": "center"
+        },
+        {
+            "name": "RT",
+            "code": "rt",
+            "language": " Russian",
+            "country": " Russia",
+            "category": " General news"
+        },
+        {
+            "name": "RTE",
+            "code": "rte",
+            "language": " English",
+            "country": " Ireland",
+            "category": " General news"
+        },
+        {
+            "name": "RTL Nieuws",
+            "code": "rtl-nieuws",
+            "language": " Dutch",
+            "country": " Netherlands",
+            "category": " General news"
+        },
+        {
+            "name": "SABQ",
+            "code": "sabq",
+            "language": " Arabic",
+            "country": " Saudi Arabia",
+            "category": " General news"
+        },
+        {
+            "name": "Spiegel Online",
+            "code": "spiegel-online",
+            "language": " German",
+            "country": " Germany",
+            "category": " General news"
+        },
+        {
+            "name": "Svenska Dagbladet",
+            "code": "svenska-dagbladet",
+            "language": " Swedish",
+            "country": " Sweden",
+            "category": " General news"
+        },
+        {
+            "name": "T3n",
+            "code": "t3n",
+            "language": " German",
+            "country": " Germany",
+            "category": " Technology news"
+        },
+        {
+            "name": "TalkSport",
+            "code": "talksport",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " Sports news"
+        },
+        {
+            "name": "TechCrunch",
+            "code": "techcrunch",
+            "language": " English",
+            "country": " United States",
+            "category": " Technology news"
+        },
+        {
+            "name": "TechCrunch (CN)",
+            "code": "techcrunch-cn",
+            "language": " Chinese",
+            "country": " China",
+            "category": " Technology news"
+        },
+        {
+            "name": "TechRadar",
+            "code": "techradar",
+            "language": " English",
+            "country": " United States",
+            "category": " Technology news"
+        },
+        {
+            "name": "The American Conservative",
+            "code": "the-american-conservative",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "The Economist",
+            "code": "the-economist",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " Business news"
+        },
+        {
+            "name": "The Globe And Mail",
+            "code": "the-globe-and-mail",
+            "language": " English",
+            "country": " Canada",
+            "category": " General news"
+        },
+        {
+            "name": "The Guardian (AU)",
+            "code": "the-guardian-au",
+            "language": " English",
+            "country": " Australia",
+            "category": " General news"
+        },
+        {
+            "name": "The Guardian (UK)",
+            "code": "the-guardian-uk",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " General news",
+            "influence": "left"
+        },
+        {
+            "name": "The Hill",
+            "code": "the-hill",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "The Hindu",
+            "code": "the-hindu",
+            "language": " English",
+            "country": " India",
+            "category": " General news"
+        },
+        {
+            "name": "The Huffington Post",
+            "code": "the-huffington-post",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "The Irish Times",
+            "code": "the-irish-times",
+            "language": " English",
+            "country": " Ireland",
+            "category": " General news"
+        },
+        {
+            "name": "The Jerusalem Post",
+            "code": "the-jerusalem-post",
+            "language": " English",
+            "country": " Israel",
+            "category": " General news"
+        },
+        {
+            "name": "The Lad Bible",
+            "code": "the-lad-bible",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " Entertainment news"
+        },
+        {
+            "name": "The New York Times",
+            "code": "the-new-york-times",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "The Next Web",
+            "code": "the-next-web",
+            "language": " English",
+            "country": " United States",
+            "category": " Technology news"
+        },
+        {
+            "name": "The Sport Bible",
+            "code": "the-sport-bible",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " Sports news"
+        },
+        {
+            "name": "The Telegraph",
+            "code": "the-telegraph",
+            "language": " English",
+            "country": " United Kingdom",
+            "category": " General news",
+            "influence": "right"
+        },
+        {
+            "name": "The Times of India",
+            "code": "the-times-of-india",
+            "language": " English",
+            "country": " India",
+            "category": " General news"
+        },
+        {
+            "name": "The Verge",
+            "code": "the-verge",
+            "language": " English",
+            "country": " United States",
+            "category": " Technology news"
+        },
+        {
+            "name": "The Wall Street Journal",
+            "code": "the-wall-street-journal",
+            "language": " English",
+            "country": " United States",
+            "category": " Business news",
+            "influence": "center"
+        },
+        {
+            "name": "The Washington Post",
+            "code": "the-washington-post",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "The Washington Times",
+            "code": "the-washington-times",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "Time",
+            "code": "time",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "USA Today",
+            "code": "usa-today",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "Vice News",
+            "code": "vice-news",
+            "language": " English",
+            "country": " United States",
+            "category": " General news"
+        },
+        {
+            "name": "Wired",
+            "code": "wired",
+            "language": " English",
+            "country": " United States",
+            "category": " Technology news"
+        },
+        {
+            "name": "Wired.de",
+            "code": "wired-de",
+            "language": " German",
+            "country": " Germany",
+            "category": " Technology news"
+        },
+        {
+            "name": "Wirtschafts Woche",
+            "code": "wirtschafts-woche",
+            "language": " German",
+            "country": " Germany",
+            "category": " Business news"
+        },
+        {
+            "name": "Xinhua Net",
+            "code": "xinhua-net",
+            "language": " Chinese",
+            "country": " China",
+            "category": " General news"
+        },
+        {
+            "name": "Ynet",
+            "code": "ynet",
+            "language": " Hebrew",
+            "country": " Israel",
+            "category": " General news"
+        }
+    ]
+}
