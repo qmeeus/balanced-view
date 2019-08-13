@@ -4,7 +4,7 @@ from flask import Flask
 
 def create_app(test_config=None):
     # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, template_folder="ui/templates", static_folder="ui/static") # ,root_path="ui"
     app.config.from_mapping(
         # TODO: adjust to real settings 
         # TODO: include necessary config for heroku including port (localed in env. var. $PORT) 
@@ -24,7 +24,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from . import index
+    from .ui import index
     app.register_blueprint(index.bp)
 
     return app

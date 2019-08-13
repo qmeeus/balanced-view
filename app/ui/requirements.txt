@@ -1,0 +1,9 @@
+numpy
+pandas
+flask
+WTForms
+Flask-WTF
+wtforms_components
+newsapi-python
+ibm-watson
+git+https://github.com/qmeeus/textrank.git

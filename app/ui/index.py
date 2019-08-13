@@ -3,9 +3,7 @@ from flask import (
 )
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField, validators
-import json
-
-from .api import balancedview_api 
+from app.api import balancedview_api
 
 
 bp = Blueprint('index', __name__, url_prefix='/')
