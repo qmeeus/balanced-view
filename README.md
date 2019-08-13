@@ -62,7 +62,7 @@ If you find this tool or the publication useful for your research project, pleas
    - If yes: requirements > GDPR?
  - Develop journalist interface (needs input from the concerned parties)
 
-![Building blocks](images/appview.jpg)
+![Building blocks](misc/appview.jpg)
 
 ## Notes for developers
 **Please note that this project is under the GNU General Public License, which authorises you to do pretty much anything with the code except changing the license. In other words, feel free to clone it, transform it or improve it as much as you want, but you can't make it private: it has to remain open source.**
