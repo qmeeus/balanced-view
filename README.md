@@ -36,9 +36,10 @@ If you find this tool or the publication useful for your research project, pleas
  - Decoupling services with Kubernetes and docker-compose
    - CI/CD (Continuous integration / continuous deployment)
    - Structure (see schema):
-     - User Interface (receive input and display response)
-     - REST API for BalancedView service (json with input and language -> curated selection of articles)
-     - Translate API (provided by IBM)
+     - ~~User Interface (receive input and display response)~~ (needs to send requests to BalancedView service still)
+     - ~~REST API for BalancedView service (json with input and language -> curated selection of articles)~~ (Not as a REST API yet but organised as a service -- needs own container and listening for input)
+       - create DB and at each call, store input/output status/articles
+     - ~~Translate API (provided by IBM)~~
      - Journalist Interface (adapted to the specific needs of news reporters)
    - Questions:
      - Hosting? (a.t.m. Heroku with the advantages and disadvantages, possible @KUL? AWS?)
@@ -51,7 +52,7 @@ If you find this tool or the publication useful for your research project, pleas
    - Which news provider provides a developer API?
    - Are there fees to pay?
    - What can we scrape without risk of infringing IP laws?
- - IBM Translation service
+ - ~~IBM Translation service~~
  - Multilingual support (provide translated articles from other languages)
  - Matching algorithm:
    - Move from TextRank to Deep Learning (Graph Convolutional Nets, Bi-LSTM?)
