@@ -14,9 +14,7 @@ LANGUAGES = {
     'fr': 'french'
 }
 
-MIN_KEYWORDS = 3
 MAX_KEYWORDS = 5
-MIN_SCORE = .05
 SOURCE_FILE = "api_sources.json"
 MAX_ARTICLES = 2
 
@@ -54,7 +52,7 @@ def run(params):
             language=LANGUAGES[params['language']]
         )
 
-        output["graph"] = summary.get_graph(MIN_KEYWORDS, MAX_KEYWORDS, MIN_SCORE)
+        output["graph"] = summary.get_graph()
 
     except Exception as err:
         output["graph"] = {"error": {
@@ -73,7 +71,7 @@ def run(params):
     try:
 
         newsapi = NewsClient(
-            summary.get_keywords(), 
+            summary.get_keywords(MAX_KEYWORDS), 
             ",".join([s for l in sources.values() for s in l]), 
             format_date(start_date), 
             format_date(end_date), 

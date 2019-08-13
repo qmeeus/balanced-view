@@ -1,5 +1,6 @@
 import pandas as pd
 from summa.keywords import keywords
+from app.api.utils.knapsack import knapsack_dp
 
 
 class Summary:
@@ -11,7 +12,7 @@ class Summary:
         self.keywords, self.graph, self.lemma2words, self.scores = \
             self._process_text(text)
 
-    def get_graph(self, min_kws=3, max_kws=5, min_score=.05):
+    def get_graph(self):
         nodes, edges = self.graph.nodes(), []
         for node_a, node_b in self.graph.edges():
             if (node_b, node_a) not in edges and node_a != node_b:
@@ -29,13 +30,9 @@ class Summary:
                 for node_a, node_b in edges]
         }
 
-    def get_keywords(self, min_kws=3, max_kws=5, min_score=.05):
-        filters = (min_kws, max_kws, min_score)
-        to_keep = self._num_keywords_to_keep(*filters)
-        if to_keep < 1:
-            msg = "min_kws: {}, max_kws: {}, min_score: {}".format(*filters)
-            raise Exception("Filter is too strict: {}".format(msg))    
-        return " ".join(self.keywords['keyword'].head(to_keep).values)
+    def get_keywords(self, max_kws=5):
+        to_keep = self._keywords_to_keep(max_kws)
+        return " ".join(self.keywords['keyword'].iloc[to_keep].values)
 
     def _process_text(self, text):
         kwds, (graph, l2w, scores) = keywords(
@@ -50,9 +47,10 @@ class Summary:
         kwds_df = kwds_df.sort_values("score", ascending=False)
         return kwds_df, graph, l2w, scores
 
-    def _num_keywords_to_keep(self, min_kws, max_kws, min_score):
-        # FIXME
-        n_sufficient_score = (self.keywords["score"] > min_score).sum()
-        n_words = self.keywords['keyword'].map(lambda s: len(s.split()))
-        return max(min(n_sufficient_score, min_kws), max_kws)
+    def _keywords_to_keep(self, max_kws):
+        weights = self.keywords['keyword'].map(lambda s: len(s.split())).values.tolist()
+        values = self.keywords['score'].values.tolist()
+        to_keep = knapsack_dp(values, weights, max_kws, max_kws)
+        return to_keep
+
 
