@@ -1,3 +1,5 @@
+flask
+flask-restful
 numpy
 pandas
 newsapi-python

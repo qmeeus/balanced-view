@@ -4,8 +4,11 @@ from copy import deepcopy
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
-from .clients import NewsClient, IBMTranslator, Summary
-
+try:
+    from clients import NewsClient, IBMTranslator, Summary
+except ImportError:
+    from .clients import NewsClient, IBMTranslator, Summary
+    
 
 LANGUAGES = {
     'en': 'english',

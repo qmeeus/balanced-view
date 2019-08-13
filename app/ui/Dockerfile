@@ -15,13 +15,11 @@ RUN mkdir /home/patrick/src
 WORKDIR /home/patrick/src
 
 ENV PATH="/home/patrick/.local/bin/:$PATH"
-COPY --chown=patrick:users app /home/patrick/src/app
+COPY --chown=patrick:users . /home/patrick/src/app
 
 ENV FLASK_APP=app
-ENV FLASK_ENV=production
+ENV FLASK_ENV=development
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-COPY --chown=patrick:users entrypoint.sh /home/patrick/src/entrypoint.sh
-# Cannot use ENTRYPOINT with heroku
-CMD [ "./entrypoint.sh" ]
+CMD [ "python", "index.py" ]

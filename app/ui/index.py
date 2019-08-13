@@ -3,7 +3,18 @@ from flask import (
 )
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField, validators
-from app.api import balancedview_api
+
+try:
+    from app.api import balancedview_api
+except ImportError:
+    import requests
+    class Client:
+        url = "http://localhost:5001"
+        def run(self, params):
+            return requests.post(self.url, data=params)
+    
+    balancedview_api = Client()
+
 
 
 bp = Blueprint('index', __name__, url_prefix='/')
@@ -35,3 +46,8 @@ def fact_checker():
 #         translation = IBMTranslator()(text)
 #         print(translation)
 #     return render_template('index.html', form=form)
+
+if __name__ == "__main__":
+    from flask import Flask
+    app = Flask(__name__)
+    app.run(host='0.0.0.0', port=5000, debug=True)
