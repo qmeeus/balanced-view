@@ -5,7 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import TextAreaField, validators
 import json
 
-from .api.fakenewsapi import FakeNewsAPI
+from .api import balancedview_api 
 
 
 bp = Blueprint('index', __name__, url_prefix='/')
@@ -24,8 +24,16 @@ def fact_checker():
     form = FactForm()
     if form.validate_on_submit():
         text = form.text.data
-        fakenewsapi = FakeNewsAPI(text)
-        articles = fakenewsapi.get_results()
-        graph_data = fakenewsapi.get_graph()
-        return render_template('index.html', form=form, search_results=articles, data=graph_data)
+        data = balancedview_api.run({'text': text, 'language': 'en'})
+        return render_template('index.html', form=form, search_results=data["articles"], data=data["graph"])
     return render_template('index.html', form=form)
+
+
+# @bp.route('/translate', methods=['POST', 'GET'])
+# def translate():
+#     form = FactForm()
+#     if form.validate_on_submit():
+#         text = form.text.data
+#         translation = IBMTranslator()(text)
+#         print(translation)
+#     return render_template('index.html', form=form)
