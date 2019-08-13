@@ -15,7 +15,7 @@ LANGUAGES = {
 }
 
 MAX_KEYWORDS = 5
-SOURCE_FILE = "api_sources.json"
+SOURCE_FILE = "resources/api_sources.json"
 MAX_ARTICLES = 2
 
 UNKNOWN_LANG_ERROR = {"error": {"text": "The language could not be identified", "reason": None}}
