@@ -1,6 +1,6 @@
 import os.path as p
 import json
-
+from copy import deepcopy
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
@@ -17,6 +17,18 @@ LANGUAGES = {
 MAX_KEYWORDS = 5
 SOURCE_FILE = "api_sources.json"
 MAX_ARTICLES = 2
+
+UNKNOWN_LANG_ERROR = {"error": {"text": "The language could not be identified", "reason": None}}
+TRANSLATION_ERROR = {"error": {"text": "The input text could not be translated", "reason": None}}
+SUMMA_ERROR = {"error": {"text": "Summarisation failed!", "reason": None}}
+NO_KEYWORDS_ERROR = {"error": {"text": "Keyword extraction failed!", "reason": None}}
+NEWSAPI_ERROR = {"error": {"text": "Keyword extraction failed!", "reason": None}}
+NO_RESULTS_ERROR = {"error": {"text": "Keyword extraction failed!", "reason": None}}
+
+def format_error(error, reason):
+    error = deepcopy(error)
+    error["error"]["reason"] = reason
+    return error
 
 def absolute_path(filename):
     return p.join(p.dirname(p.abspath(__file__)), filename)
@@ -39,7 +51,23 @@ def run(params):
     end_date = date.today()
     start_date = end_date - relativedelta(months=1)
 
-    text = process_input(params["text"], method="remove")
+    text = params.pop("text")
+    translator = IBMTranslator()
+
+    try:
+        language = translator.identify(text, return_all=False)
+        if language != "en":
+            try:
+                text = translator.translate(text, source=language, target="en", return_all=False)
+                language = "en"
+            except Exception as err:
+                output["graph"] = output["articles"] = format_error(TRANSLATION_ERROR, str(err))
+                return output
+    except Exception as err:
+        output["graph"] = output["articles"] = format_error(UNKNOWN_LANG_ERROR, str(err))
+        return output
+
+    text = process_input(text, method="remove")
 
     with open(absolute_path(SOURCE_FILE)) as f:
         sources = json.load(f)
@@ -49,23 +77,16 @@ def run(params):
     try:
         summary = Summary(
             text, 
-            language=LANGUAGES[params['language']]
+            language=LANGUAGES[language]
         )
 
         output["graph"] = summary.get_graph()
 
     except Exception as err:
-        output["graph"] = {"error": {
-            "text": "Summarisation failed!",
-            "reason": str(err)
-        }}
+        output["graph"] = format_error(SUMMA_ERROR, str(err))
 
     if "error" in output["graph"] or not len(summary.keywords):
-        output["articles"] = {"error": {
-            "text": "Keyword extraction failed!",
-            "reason": "One frequent explanation is that the text is too short."
-        }}
-
+        output["articles"] = format_error(NO_KEYWORDS_ERROR, "Try with a longer text")
         return output
 
     try:
@@ -75,22 +96,16 @@ def run(params):
             ",".join([s for l in sources.values() for s in l]), 
             format_date(start_date), 
             format_date(end_date), 
-            params['language']
+            language
         )
 
     except Exception as err:
         print(err)
-        output["articles"] = {"error": {
-            "text": "API error!",
-            "reason": "It is possible that the api key was not found or is expired or we have reached our limit."
-        }}
+        output["articles"] = format_error(NEWSAPI_ERROR, str(err))
         return output
 
     if not newsapi.articles["totalResults"]:
-        output["articles"] = {"error": {
-            "text": "Search yielded no results!",
-            "reason": "We could not find related articles in any of the sources."
-        }}
+        output["articles"] = format_error(NO_RESULTS_ERROR, "We could not find related articles in any of the sources.")
         return output
         
     source_map = {source: key

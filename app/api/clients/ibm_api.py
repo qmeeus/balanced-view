@@ -6,13 +6,13 @@ from ibm_watson import LanguageTranslatorV3
 def parse_result(json_key):
     def parse_result_decorator(func):
         def wrapper(*args, **kwargs):
-            return_best = kwargs.pop("return_best", False)
+            return_all = kwargs.pop("return_all", True)
             response = func(*args, **kwargs)
             result = response.get_result()
             top_level_key = json_key + "s"
             if top_level_key in result:
                 result = result[top_level_key]
-                return result if not return_best else result[0][json_key]
+                return result if return_all else result[0][json_key]
             raise Exception("API Error: {}".format(result))
         return wrapper
     return parse_result_decorator

@@ -24,7 +24,7 @@ def fact_checker():
     form = FactForm()
     if form.validate_on_submit():
         text = form.text.data
-        data = balancedview_api.run({'text': text, 'language': 'en'})
+        data = balancedview_api.run({'text': text})
         return render_template('index.html', form=form, search_results=data["articles"], data=data["graph"])
     return render_template('index.html', form=form)
 
