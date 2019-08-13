@@ -41,11 +41,3 @@ class IBMTranslator(LanguageTranslatorV3):
     @parse_result(json_key="translation")
     def translate(self, *args, **kwargs):
         return super(IBMTranslator, self).translate(*args, **kwargs)
-        
-
-if __name__ == "__main__":
-    translator = IBMTranslator()
-    target = translator.identify("Waar is de papegaai?", return_best=True)
-    print(target)
-    translated = translator.translate("The parrot is in the cage", source="en", target=target, return_best=True)
-    print(translated)
