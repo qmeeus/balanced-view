@@ -1,0 +1,17 @@
+gauche:
+    de morgen
+    de wereldmorgen.be
+    de knack
+liberal-conservateur:
+    de standaard
+    de tijd
+
+liberal:
+    la derniere heure
+    la libre belgique
+    l'echo
+    le soir
+    trends tendances
+centre-gauche:
+    le vif/l'express
+
