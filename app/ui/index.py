@@ -9,9 +9,9 @@ try:
 except ImportError:
     import requests
     class Client:
-        url = "http://localhost:5001"
+        url = "http://webservice:5000"
         def run(self, params):
-            return requests.post(self.url, data=params)
+            return requests.post(self.url, data=params).json()
     
     balancedview_api = Client()
 
@@ -50,4 +50,6 @@ def fact_checker():
 if __name__ == "__main__":
     from flask import Flask
     app = Flask(__name__)
+    app.config.from_mapping(SECRET_KEY='dev')
+    app.register_blueprint(bp)
     app.run(host='0.0.0.0', port=5000, debug=True)
