@@ -9,6 +9,8 @@ try:
 except ImportError:
     import requests
     class Client:
+        # QUICKFIX
+        # TODO: catch error if request fails
         url = "http://webservice:5000"
         def run(self, params):
             return requests.post(self.url, data=params).json()
