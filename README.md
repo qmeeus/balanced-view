@@ -36,8 +36,8 @@ If you find this tool or the publication useful for your research project, pleas
  - Decoupling services with Kubernetes and docker-compose
    - CI/CD (Continuous integration / continuous deployment)
    - Structure (see schema):
-     - ~~User Interface (receive input and display response)~~ (needs to send requests to BalancedView service still)
-     - ~~REST API for BalancedView service (json with input and language -> curated selection of articles)~~ (Not as a REST API yet but organised as a service -- needs own container and listening for input)
+     - ~~User Interface (receive input and display response)~~
+     - ~~REST API for BalancedView service (json with input and language -> curated selection of articles)~~
        - create DB and at each call, store input/output status/articles
      - ~~Translate API (provided by IBM)~~
      - Journalist Interface (adapted to the specific needs of news reporters)

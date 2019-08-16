@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restful import Resource, Api, reqparse
 import balancedview_api
 
+
 # Instantiate the app
 app = Flask(__name__)
 api = Api(app)
