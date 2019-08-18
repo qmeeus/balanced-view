@@ -18,7 +18,7 @@ LANGUAGES = {
 }
 
 MAX_KEYWORDS = 5
-SOURCE_FILE = "resources/api_sources.json"
+SOURCE_FILE = "api_resources/api_sources.json"
 MAX_ARTICLES = 2
 
 UNKNOWN_LANG_ERROR = {"error": {"text": "The language could not be identified", "reason": None}}
@@ -40,7 +40,7 @@ def format_date(date):
     return date.strftime('%Y-%m-%d')
 
 def process_input(text, method="remove"):
-
+    # FIXME: ugly workaround for limited cases
     def flag_word(word):
         return word[0] not in ["#", "@"]
 
@@ -108,7 +108,8 @@ def run(params):
         return output
 
     if not newsapi.articles["totalResults"]:
-        output["articles"] = format_error(NO_RESULTS_ERROR, "We could not find related articles in any of the sources.")
+        output["articles"] = format_error(
+            NO_RESULTS_ERROR, "We could not find related articles in any of the sources.")
         return output
         
     source_map = {source: key

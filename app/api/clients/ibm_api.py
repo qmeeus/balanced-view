@@ -20,7 +20,7 @@ def parse_result(json_key):
 
 class IBMTranslator(LanguageTranslatorV3):
 
-    cred_file = "ibm-credentials.env"
+    cred_file = "api_resources/ibm-credentials.env"
     version = "2018-05-01"
 
     def __init__(self):
