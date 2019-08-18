@@ -49,10 +49,10 @@ If you find this tool or the publication useful for your research project, pleas
  - Translate the website and option to switch languages
  - Connect to belgian (nl-fr) news providers
    - Catgories of news provider - do the current categories still make sense?
-   - Which news provider provides a developer API?
-   - Are there fees to pay?
-   - What can we scrape without risk of infringing IP laws?
- - ~~IBM Translation service~~
+   - Which news provider provides a developer API? 
+     - [GoPress](http://api-staging.gopress.be/): XML, No documentation, academic = free access for articles > 2days old
+     - [NexisLexis](https://www.lexisnexis.com/communities/academic/w/wiki/111.url-api-specifications.aspx): Not recommended
+ - ~~IBM Translation service~~ --> Google Translate API
  - Multilingual support (provide translated articles from other languages)
  - Matching algorithm:
    - Move from TextRank to Deep Learning (Graph Convolutional Nets, Bi-LSTM?)
