@@ -1,8 +1,8 @@
-FROM python:3.6-stretch
+FROM python:3.6-slim-stretch
 
 COPY requirements.txt requirements.txt
 RUN apt-get update \
-    && apt-get install -y python3-pip python3-dev \
+    && apt-get install -y python3-pip python3-dev git \
     && pip3 install --upgrade pip \
     && pip3 install -r requirements.txt
 

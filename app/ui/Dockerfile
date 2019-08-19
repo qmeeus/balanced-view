@@ -1,4 +1,5 @@
-FROM python:3.6-stretch
+#FROM python:3.6-stretch
+FROM python:3.6-slim-stretch
 
 COPY requirements.txt requirements.txt
 RUN apt-get update \
