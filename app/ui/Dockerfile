@@ -16,10 +16,10 @@ RUN mkdir /home/patrick/src
 WORKDIR /home/patrick/src
 
 ENV PATH="/home/patrick/.local/bin/:$PATH"
-COPY --chown=patrick:users . /home/patrick/src/app
+COPY --chown=patrick:users . /home/patrick/src
 
-ENV FLASK_APP=app
-ENV FLASK_ENV=development
+# ENV FLASK_APP=app
+# ENV FLASK_ENV=development
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
