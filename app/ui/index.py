@@ -1,3 +1,4 @@
+import requests
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
@@ -7,7 +8,6 @@ from wtforms import TextAreaField, validators
 try:
     from app.api import balancedview_api
 except ImportError:
-    import requests
     class Client:
         # QUICKFIX
         # TODO: catch error if request fails
@@ -35,19 +35,14 @@ def fact_checker():
     form = FactForm()
     if form.validate_on_submit():
         text = form.text.data
-        data = balancedview_api.run({'text': text})
+        try:
+            data = balancedview_api.run({'text': text})
+        except requests.exceptions.ConnectionError:
+            error = {"error": {"text": "API is unreachable", "reason": "It might be down or misconfigured"}}
+            data = {"articles": error, "graph": error}
         return render_template('index.html', form=form, search_results=data["articles"], data=data["graph"])
     return render_template('index.html', form=form)
 
-
-# @bp.route('/translate', methods=['POST', 'GET'])
-# def translate():
-#     form = FactForm()
-#     if form.validate_on_submit():
-#         text = form.text.data
-#         translation = IBMTranslator()(text)
-#         print(translation)
-#     return render_template('index.html', form=form)
 
 if __name__ == "__main__":
     from flask import Flask
