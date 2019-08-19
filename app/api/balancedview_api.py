@@ -18,7 +18,7 @@ LANGUAGES = {
 }
 
 MAX_KEYWORDS = 5
-SOURCE_FILE = "api_resources/api_sources.json"
+SOURCE_FILE = "resources/api_sources.json"
 MAX_ARTICLES = 2
 
 UNKNOWN_LANG_ERROR = {"error": {"text": "The language could not be identified", "reason": None}}
@@ -49,7 +49,7 @@ def process_input(text, method="remove"):
 
 def run(params):
 
-    output = {"graph": {}, "articles": {}}
+    output = {"graph": {}, "articles": {}, "keywords": []}
 
     end_date = date.today()
     start_date = end_date - relativedelta(months=1)
@@ -84,6 +84,7 @@ def run(params):
         )
 
         output["graph"] = summary.get_graph()
+        output["keywords"] = summary.get_keywords().split()
 
     except Exception as err:
         output["graph"] = format_error(SUMMA_ERROR, str(err))
