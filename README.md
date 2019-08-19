@@ -33,7 +33,7 @@ If you find this tool or the publication useful for your research project, pleas
 ```
 
 ## TODO - Project Plan
- - Decoupling services with Kubernetes and docker-compose
+ - ~~Decoupling services with Kubernetes and docker-compose~~
    - CI/CD (Continuous integration / continuous deployment)
    - Structure (see schema):
      - ~~User Interface (receive input and display response)~~
@@ -44,18 +44,25 @@ If you find this tool or the publication useful for your research project, pleas
    - Questions:
      - Hosting? (a.t.m. Heroku with the advantages and disadvantages, possible @KUL? AWS?)
      - What about domain name?
-     - How to make the site faster? Is it slow because of Heroku?
- - Check dutch parsing (and improve if needed)
+     - ~~How to make the site faster? Is it slow because of Heroku?~~ YES
+ - ~~Check dutch parsing (and improve if needed)~~
  - Translate the website and option to switch languages
  - Connect to belgian (nl-fr) news providers
-   - Catgories of news provider - do the current categories still make sense?
+   - Categories of news provider - do the current categories still make sense?
    - Which news provider provides a developer API? 
-     - [GoPress](http://api-staging.gopress.be/): XML, No documentation, academic = free access for articles > 2days old
-     - [NexisLexis](https://www.lexisnexis.com/communities/academic/w/wiki/111.url-api-specifications.aspx): Not recommended
- - ~~IBM Translation service~~ --> Google Translate API
+     - [GoPress](http://api-staging.gopress.be/): 
+       - General API (not KUL): XML, No documentation, needs a licenseKey
+       - academic = free access for articles > 2days old but no API (that I know of) + only browser based (need heavy intergration work) 
+     - [NexisLexis](https://www.lexisnexis.com/communities/academic/w/wiki/111.url-api-specifications.aspx)
+       - academic: Not recommended, authenticate twice with KUL account + only browser based (need heavy intergration work)
+       - General API: authentication & access not clear
+ - Translation service: IBM vs Google Translate
+   - IBM: not always stable
+   - Google: more expensive & need billing information even for free API calls
  - Multilingual support (provide translated articles from other languages)
  - Matching algorithm:
    - Move from TextRank to Deep Learning (Graph Convolutional Nets, Bi-LSTM?)
+     - Is it necessary since with the modifications, the summarisation works fine?
    - Latest developments in NLP (Attention is all you need)
    - Strategy: training data / unsupervised learning / train and host vs continuous learning
  - Connect DB and store searches?
