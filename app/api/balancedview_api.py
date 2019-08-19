@@ -60,6 +60,7 @@ def run(params):
     try:
         language = translator.identify(text, return_all=False)
         if language != "en":
+            language = language if not language == "af" else "nl" # FIXME: ugly workaround
             try:
                 text = translator.translate(text, source=language, target="en", return_all=False)
                 language = "en"
