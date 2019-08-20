@@ -8,10 +8,9 @@ from wtforms import TextAreaField, validators
 try:
     from app.api import balancedview_api
 except ImportError:
+    # QUICKFIX
     class Client:
-        # QUICKFIX
-        # TODO: catch error if request fails
-        url = "http://webservice:5000"
+        url = "http://localhost:5000"
         def run(self, params):
             return requests.post(self.url, data=params).json()
     
@@ -37,8 +36,8 @@ def fact_checker():
         text = form.text.data
         try:
             data = balancedview_api.run({'text': text})
-        except requests.exceptions.ConnectionError:
-            error = {"error": {"text": "API is unreachable", "reason": "It might be down or misconfigured"}}
+        except Exception as err:
+            error = {"error": {"text": "API is unreachable", "reason": str(err)}}
             data = {"articles": error, "graph": error}
         return render_template('index.html', form=form, search_results=data["articles"], data=data["graph"])
     return render_template('index.html', form=form)
@@ -49,4 +48,4 @@ if __name__ == "__main__":
     app = Flask(__name__)
     app.config.from_mapping(SECRET_KEY='dev')
     app.register_blueprint(bp)
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
