@@ -1,6 +1,7 @@
 data/
 outputs/
 api_resources/
+notes/
 
 # Windows shit
 .DS_Store
