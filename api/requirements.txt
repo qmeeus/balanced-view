@@ -1,5 +1,9 @@
 flask
+# Flask-API
 flask-restful
+flask-sqlalchemy
+flask-migrate
+python-dotenv
 numpy
 pandas
 newsapi-python

@@ -1,10 +1,7 @@
 import pandas as pd
 from summa.keywords import keywords
 
-try:
-    from utils.knapsack import knapsack_dp
-except ImportError:
-    from app.api.utils.knapsack import knapsack_dp
+from utils.knapsack import knapsack_dp
 
 
 class Summary:
