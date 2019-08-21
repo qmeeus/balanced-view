@@ -1,13 +1,8 @@
-#FROM python:3.6-stretch
 FROM python:3.7-alpine
 
 COPY requirements.txt /
 RUN pip install -r /requirements.txt
 COPY . .
-# RUN apt-get update \
-#     && apt-get install -y python3-pip \
-#     && pip3 install --upgrade pip \
-#     && pip3 install -r requirements.txt
 
 ENV USER=patrick
 ENV UID=27328
@@ -22,6 +17,6 @@ RUN adduser \
     "$USER" \
  && chown $USER:$USER .
 
- USER $USER
+USER $USER
 
-CMD [ "flask", "run" ]
+CMD [ "flask", "run", "--host=0.0.0.0" ]
