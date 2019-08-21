@@ -19,4 +19,7 @@ RUN adduser \
 
 USER $USER
 
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
 CMD [ "flask", "run", "--host=0.0.0.0" ]
