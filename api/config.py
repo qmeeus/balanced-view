@@ -9,5 +9,13 @@ class Config(object):
     SECRET_KEY = os.environ["SECRET_KEY"]
     SERVER_NAME = f"0.0.0.0:{os.environ['FLASK_RUN_PORT']}"
 
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    POSTGRES = {
+        'user': os.environ["POSTGRES_USER"],
+        'pw': os.environ["POSTGRES_PASSWORD"],
+        'db': os.environ["POSTGRES_DB"],
+        'host': os.environ["POSTGRES_HOST"],
+        'port': os.environ["POSTGRES_PORT"],
+    }
+
+    SQLALCHEMY_DATABASE_URI = "postgresql://{user}:{pw}@{host}:{port}/{db}".format(**POSTGRES)
     SQLALCHEMY_TRACK_MODIFICATIONS = False

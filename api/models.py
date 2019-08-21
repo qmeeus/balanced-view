@@ -1,4 +1,4 @@
-from api import db
+from .api import db
 
 
 text_keyword = db.Table('text_keywords',
@@ -43,3 +43,11 @@ class Source(db.Model):
     name = db.Column(db.String(80), primary_key=True)
     lang = db.Column(db.String(10), primary_key=True)
     country = db.Column(db.String(10), primary_key=True)
+
+
+# if __name__ == "__main__":
+#     from sqlalchemy import create_engine
+
+#     engine = create_engine(DB_URI)
+#     Base.metadata.drop_all(engine)
+#     Base.metadata.create_all(engine)
