@@ -8,14 +8,14 @@ from flask_migrate import Migrate
 # create and configure the app
 app = Flask(__name__)
 
-from config import Config
+from .config import Config
 app.config.from_object(Config())
 
-# db = SQLAlchemy(app)
-# migrate = Migrate(app, db)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 api = Api(app)
 
-import resources
+from . import resources
 api.add_resource(resources.BalancedView, '/')
 
 

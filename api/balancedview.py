@@ -4,7 +4,7 @@ from copy import deepcopy
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
-from clients import NewsClient, IBMTranslator, Summary
+from .clients import NewsClient, IBMTranslator, Summary
     
 
 LANGUAGES = {
