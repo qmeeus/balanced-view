@@ -3,3 +3,4 @@ WTForms
 Flask-WTF
 wtforms_components
 requests
+python-dotenv
