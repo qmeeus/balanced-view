@@ -7,7 +7,6 @@ dotenv.load_dotenv(p.join(p.dirname(__file__), ".env"))
 class Config(object):
     DEBUG = True
     SECRET_KEY = os.environ["SECRET_KEY"]
-    SERVER_NAME = f"0.0.0.0:{os.environ['FLASK_RUN_PORT']}"
 
     POSTGRES = {
         'user': os.environ["POSTGRES_USER"],

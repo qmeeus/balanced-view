@@ -6,7 +6,6 @@ RUN apt-get update \
 
 COPY requirements.txt /
 RUN pip install -r /requirements.txt
-COPY . .
 
 ENV USER=patrick
 ENV UID=27328
@@ -20,6 +19,8 @@ RUN useradd \
  && chown $USER:$USER .
 
 USER $USER
+
+COPY . .
 
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
