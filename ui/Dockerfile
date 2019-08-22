@@ -3,7 +3,7 @@ FROM python:3.7-alpine
 COPY requirements.txt /
 RUN pip install -r /requirements.txt
 
-ENV USER=patrick
+ENV USER=ui
 ENV UID=27328
 WORKDIR "/$USER"
 
@@ -23,4 +23,4 @@ COPY . .
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-CMD [ "flask", "run", "--host=0.0.0.0" ]
+CMD [ "gunicorn", "--chdir", "..", "-w3", "--bind=0.0.0.0:8080", "ui.wsgi" ]

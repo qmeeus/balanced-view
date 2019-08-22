@@ -10,3 +10,4 @@ python-dotenv
 requests
 WTForms
 wtforms_components
+gunicorn

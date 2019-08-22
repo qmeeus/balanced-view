@@ -5,6 +5,10 @@ import dotenv
 dotenv.load_dotenv(p.join(p.dirname(__file__), ".env"))
 
 
-class Base:
+class Development:
     DEBUG = True
     SECRET_KEY = os.environ["SECRET_KEY"]
+
+
+class Production(Development):
+    DEBUG = False

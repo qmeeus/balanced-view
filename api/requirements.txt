@@ -10,3 +10,4 @@ newsapi-python
 ibm-watson
 #google-cloud-translate
 git+https://github.com/qmeeus/textrank.git
+gunicorn
