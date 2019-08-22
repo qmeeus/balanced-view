@@ -4,7 +4,7 @@ from newsapi import NewsApiClient
 
 class NewsClient(NewsApiClient):
 
-    keyfile = "api_resources/news_apikey"
+    keyfile = "resources/news_apikey"
 
     def __init__(self, keywords, sources, start_date, end_date, language):
         full_path = p.join(p.dirname(__file__), self.keyfile)
