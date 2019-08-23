@@ -38,11 +38,12 @@ If you find this tool or the publication useful for your research project, pleas
    - Structure (see schema):
      - ~~User Interface (receive input and display response)~~
      - ~~REST API for BalancedView service (json with input and language -> curated selection of articles)~~
-       - create DB and at each call, store input/output status/articles
+       - ~~create DB and at each call, store input/output status/articles~~
      - ~~Translate API (provided by IBM)~~
      - Journalist Interface (adapted to the specific needs of news reporters)
    - Questions:
      - Hosting? (a.t.m. Heroku with the advantages and disadvantages, possible @KUL? AWS?)
+        - To KU Leuven using Podman instead of Docker 
      - What about domain name?
      - ~~How to make the site faster? Is it slow because of Heroku?~~ YES
  - ~~Check dutch parsing (and improve if needed)~~
@@ -57,14 +58,14 @@ If you find this tool or the publication useful for your research project, pleas
        - academic: Not recommended, authenticate twice with KUL account + only browser based (need heavy intergration work)
        - General API: authentication & access not clear
  - Translation service: IBM vs Google Translate
-   - IBM: not always stable
+   - IBM: not always stable 
    - Google: more expensive & need billing information even for free API calls
  - Multilingual support (provide translated articles from other languages)
  - Matching algorithm:
-   - Move from TextRank to Deep Learning (Graph Convolutional Nets, Bi-LSTM?)
-     - Is it necessary since with the modifications, the summarisation works fine?
-   - Latest developments in NLP (Attention is all you need)
-   - Strategy: training data / unsupervised learning / train and host vs continuous learning
+   - ~~Move from TextRank to Deep Learning? (Graph Convolutional Nets, Bi-LSTM?)~~ NOT PRIORITY
+     - ~~Is it necessary since with the modifications, the summarisation works fine?~~
+   - ~~Latest developments in NLP (Attention is all you need)~~
+   - ~~Strategy: training data / unsupervised learning / train and host vs continuous learning~~
  - Connect DB and store searches?
    - If yes: requirements > GDPR?
  - Develop journalist interface (needs input from the concerned parties)
