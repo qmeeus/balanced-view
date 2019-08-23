@@ -106,7 +106,7 @@ cd ..
 docker run -d --name balancedview-api -p 5000:5000 -v $(pwd)/api:/api -v $(pwd)/data:/var/lib/sqlite balancedview:api
 docker run -d --name balancedview-ui -p 8080:8080 balancedview:ui
 ```
-3. Bootstrap script with podman
+3. Bootstrap script with podman (after building and pushing the repositories to docker hub)
 ```
 ./bootstrap.sh
 ```
