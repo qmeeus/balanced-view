@@ -1,4 +1,3 @@
-data/
 outputs/
 api_resources/
 notes/
@@ -95,6 +94,7 @@ celerybeat-schedule
 
 # Environments
 .env
+*.env
 .venv
 env/
 venv/

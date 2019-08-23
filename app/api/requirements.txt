@@ -1,8 +1,0 @@
-flask
-flask-restful
-numpy
-pandas
-newsapi-python
-ibm-watson
-#google-cloud-translate
-git+https://github.com/qmeeus/textrank.git

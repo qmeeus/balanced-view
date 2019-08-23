@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Index{% endblock %}
+
+{% block head %} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ribbon.css') }}">
+    <script src="{{ url_for('static', filename='js/d3.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+
+    <nav class="navbar navbar-light bg-secondary">
+        <div class="d-flex justify-content-center container-fluid">
+            <a class="navbar-brand text-primary" href="#"><b class="text-white"> BalancedView</b></a>
+        </div>
+    </nav>
+    <div class="ribbon right orange">
+        <a href="https://github.com/qmeeus/balanced-view">Fork me on GitHub</a>
+    </div>
+    <div class="container">
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <h1 class="text-center text-secondary">Overcoming confirmation bias in social networks</h1>
+            </div>
+        </div>
+    </div>
+
+{% include 'form.html' %}
+
+    {% if search_results %}
+
+        <div class="container my-2">
+
+            <div class="row w-100" id="graph-container">
+                {% include 'graph.html' %}
+            </div>
+            <div class="row my-5 py-2 w-100" >
+                {% include "results.html" %}
+            </div>
+        </div>
+
+    {% else %}
+
+        <span></span>
+
+    {% endif %}
+
+{% endblock %}

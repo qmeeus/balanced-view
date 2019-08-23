@@ -1,27 +1,31 @@
 FROM python:3.6-slim-stretch
 
-COPY requirements.txt requirements.txt
 RUN apt-get update \
     && apt-get install -y python3-pip python3-dev git \
-    && pip3 install --upgrade pip \
-    && pip3 install -r requirements.txt
+    && pip install --upgrade pip
 
-# Did not find a way to use build_arg with heroku
-RUN useradd --uid 1001 --shell /bin/bash --create-home patrick
-USER patrick
+COPY requirements.txt /
+RUN pip install -r /requirements.txt
 
-WORKDIR /home/patrick
-RUN mkdir /home/patrick/src
-WORKDIR /home/patrick/src
+ENV USER=patrick
+ENV UID=27328
+WORKDIR "/$USER"
 
-ENV PATH="/home/patrick/.local/bin/:$PATH"
-COPY --chown=patrick:users app /home/patrick/src/app
+RUN useradd \
+  --home-dir "$(pwd)" \
+  --no-create-home \
+  --uid "$UID" \
+  "$USER" \ 
+ && chown $USER:$USER .
 
-ENV FLASK_APP=app
-ENV FLASK_ENV=production
+USER $USER
+
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
+ENV FLASK_ENV=production
 
-COPY --chown=patrick:users entrypoint.sh /home/patrick/src/entrypoint.sh
-# Cannot use ENTRYPOINT with heroku
+COPY --chown=$USER:$USER ./api ./api
+COPY --chown=$USER:$USER ./ui ./ui
+COPY --chown=$USER:$USER entrypoint.sh .
+
 CMD [ "./entrypoint.sh" ]

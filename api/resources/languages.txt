@@ -1,0 +1,14 @@
+     91   English
+     10   German
+      7   Spanish
+      5   French
+      4   Russian
+      4   Portuguese
+      4   Italian
+      3   Arabic
+      2   Swedish
+      2   Norwegian
+      2   Hebrew
+      2   Chinese
+      1   Urdu
+      1   Dutch

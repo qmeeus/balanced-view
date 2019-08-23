@@ -1,0 +1,26 @@
+<div class="container my-2">
+
+    <form method="post" class="w-100" action="#">
+        {{ form.csrf_token }}
+        <div class="row">
+            <div class="col-md-12">
+                <fieldset class="w-100">
+                    <div class="form-group w-100 form-row">
+                        {{ form.text(class="form-control", id="text", cols="50", rows="5", placeholder="Enter a text to fact check...") }}
+                    </div>
+                </fieldset>
+            </div>
+            <div class="row pl-2">
+                <fieldset class="col-md-6">
+
+                </fieldset>
+                <fieldset class="col-md-6">
+
+                </fieldset>
+
+
+            </div>
+            <input type="submit" class="btn btn-block btn-secondary">
+        </div>
+    </form>
+</div>
