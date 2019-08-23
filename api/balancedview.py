@@ -46,16 +46,22 @@ def process_input(text, method="remove"):
 
 def run(params):
 
-    output = {"graph": {}, "articles": {}, "keywords": []}
+    output = {
+        "graph": {}, 
+        "articles": {}, 
+        "keywords": [], 
+        "language": "", 
+        "totalResults": 0}
 
     end_date = date.today()
     start_date = end_date - relativedelta(months=1)
 
-    text = params.pop("text")
+    text = params["text"]
     translator = IBMTranslator()
 
     try:
         language = translator.identify(text, return_all=False)
+        output["language"] = language
         if language != "en":
             language = language if not language == "af" else "nl" # FIXME: ugly workaround
             try:
@@ -111,6 +117,7 @@ def run(params):
             NO_RESULTS_ERROR, "We could not find related articles in any of the sources.")
         return output
         
+    output["totalResults"] = newsapi.articles["totalResults"]
     source_map = {source: key
                   for key, sources in sources.items()
                   for source in sources}

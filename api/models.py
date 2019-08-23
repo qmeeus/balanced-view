@@ -2,20 +2,21 @@ from .api import db
 
 
 text_keyword = db.Table('text_keywords',
-    db.Column('input_text_id', db.String(80), db.ForeignKey('text.id'), primary_key=True),
+    db.Column('input_text_id', db.String(80), db.ForeignKey('input_text.id'), primary_key=True),
     db.Column('keyword_id', db.String(80), db.ForeignKey('keyword.id'), primary_key=True)
 )
 
 text_article = db.Table('text_articles',
-    db.Column('input_text_id', db.String(80), db.ForeignKey('text.id'), primary_key=True),
+    db.Column('input_text_id', db.String(80), db.ForeignKey('input_text.id'), primary_key=True),
     db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True)
 )
 
 
 class InputText(db.Model):
     id = db.Column(db.String(80), primary_key=True)
+    timestamp = db.Column(db.TIMESTAMP(), primary_key=True)
     text = db.Column(db.Text())
-    timstamp = db.TIMESTAMP()
+    detected_language = db.Column(db.String(3))
     keywords = db.relationship('Keyword', secondary=text_keyword, lazy='subquery',
         backref=db.backref('keywords', lazy=True))
     articles = db.relationship('Article', secondary=text_article, lazy='subquery',
@@ -23,7 +24,7 @@ class InputText(db.Model):
 
 
 class Keyword(db.Model):
-    id = db.Column(db.String(80), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.String(80), unique=True)
 
 
@@ -33,16 +34,15 @@ class Article(db.Model):
     articleURL = db.Column(db.String(200))
     author = db.Column(db.String(80))
     description = db.Column(db.Text())
-    content = db.Column(db.Text())
     imageURL = db.Column(db.String(200))
     publication_date = db.Column(db.TIMESTAMP())
     idSource = db.Column(db.ForeignKey('source.id'))
 
 class Source(db.Model):
     id = db.Column(db.String(80), primary_key=True)
-    name = db.Column(db.String(80), primary_key=True)
-    lang = db.Column(db.String(10), primary_key=True)
-    country = db.Column(db.String(10), primary_key=True)
+    name = db.Column(db.String(80))
+    lang = db.Column(db.String(10))
+    country = db.Column(db.String(20))
 
 
 # if __name__ == "__main__":

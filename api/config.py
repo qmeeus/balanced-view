@@ -10,8 +10,8 @@ class Config(object):
 
     DATABASE = {
         'prefix': os.environ["SQLALCHEMY_DATABASE_PREFIX"],
-        'db': p.join(p.dirname(__file__), os.environ["SQLALCHEMY_DATABASE_NAME"]),
+        'db': os.environ["SQLALCHEMY_DATABASE_NAME"],
     }
 
-    SQLALCHEMY_DATABASE_URI = "{prefix}://{db}".format(**DATABASE)
+    SQLALCHEMY_DATABASE_URI = "{prefix}:///{db}".format(**DATABASE)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
