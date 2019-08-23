@@ -8,6 +8,7 @@ COPY requirements.txt /
 RUN pip install -r /requirements.txt
 
 ENV USER=api
+<<<<<<< HEAD
 # ARG UID
 WORKDIR "/$USER"
 
@@ -17,6 +18,18 @@ WORKDIR "/$USER"
 #   --uid "$UID" \
 #   "$USER" \ 
 #  && chown $USER:$USER .
+=======
+ARG UID
+WORKDIR "/$USER"
+
+RUN useradd \
+  --home-dir "$(pwd)" \
+  --no-create-home \
+  --uid "$UID" \
+  --gid "$UID" \
+  "$USER" \ 
+ && chown $USER:$USER .
+>>>>>>> c14f1e9834e2b162e33f8ef63da4c43c88dd0ca6
 
 # USER $USER
 
