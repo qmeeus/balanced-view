@@ -8,17 +8,17 @@ COPY requirements.txt /
 RUN pip install -r /requirements.txt
 
 ENV USER=api
-ENV UID=27328
+# ARG UID
 WORKDIR "/$USER"
 
-RUN useradd \
-  --home-dir "$(pwd)" \
-  --no-create-home \
-  --uid "$UID" \
-  "$USER" \ 
- && chown $USER:$USER .
+# RUN useradd \
+#   --home-dir "$(pwd)" \
+#   --no-create-home \
+#   --uid "$UID" \
+#   "$USER" \ 
+#  && chown $USER:$USER .
 
-USER $USER
+# USER $USER
 
 COPY . .
 

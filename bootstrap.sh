@@ -12,13 +12,17 @@ function exit_on_error {
 }
 
 if [ "$(podman pod ps | grep $APP | wc -l)" != "0" ] ; then
-    echo "Pod $APP is already running. Re-create it? Y/N"
+    echo "Pod $APP is already running. Re-create it? y/N"
     read input
     case $input in
         y|Y) echo "Deleting pod $APP" && podman pod rm -f $APP ;;
         *) echo "Leaving build process" && exit 0 ;;
     esac
 fi
+
+# if [ -z "$PODMAN_USERNS" ]; then
+#     PODMAN_USERNS=keep-id; export PODMAN_USERNS
+# fi
 
 echo "Pull images from online repository"
 podman pull $IMAGE_REPO/$APP:api
@@ -37,15 +41,15 @@ podman run -d \
     $IMAGE_REPO/$APP:api || exit_on_error $APP
 
 echo "Initialise the database"
-podman exec -u api --privileged $APP-api flask db init
+podman exec $APP-api flask db init || exit 1
 sleep 1
 
 echo "Compute the migrations"
-podman exec -u api $APP-api flask db migrate
+podman exec $APP-api flask db migrate || exit 1
 sleep 1
 
 echo "Apply the migrations"
-podman exec -u api $APP-api flask db upgrade
+podman exec $APP-api flask db upgrade || exit 1
 
 echo "Create ui service on port $UI_PORT with name $APP-ui"
 podman run -d --name $APP-ui --pod $APP $IMAGE_REPO/$APP:ui || exit_on_error $APP
