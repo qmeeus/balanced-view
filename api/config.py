@@ -8,13 +8,10 @@ class Config(object):
     DEBUG = True
     SECRET_KEY = os.environ["SECRET_KEY"]
 
-    POSTGRES = {
-        'user': os.environ["POSTGRES_USER"],
-        'pw': os.environ["POSTGRES_PASSWORD"],
-        'db': os.environ["POSTGRES_DB"],
-        'host': os.environ["POSTGRES_HOST"],
-        'port': os.environ["POSTGRES_PORT"],
+    DATABASE = {
+        'prefix': os.environ["SQLALCHEMY_DATABASE_PREFIX"],
+        'db': p.join(p.dirname(__file__), os.environ["SQLALCHEMY_DATABASE_NAME"]),
     }
 
-    SQLALCHEMY_DATABASE_URI = "postgresql://{user}:{pw}@{host}:{port}/{db}".format(**POSTGRES)
+    SQLALCHEMY_DATABASE_URI = "{prefix}://{db}".format(**DATABASE)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
