@@ -84,23 +84,32 @@ The repository is organised as follow:
  - `/app/static` static files including css and js libraries used in the webpages
 
 ## Requirements
-- docker (yup that's it !)
+- docker or podman (the rest is automatically included when builing in the containers)
 
 ## How to build and deploy locally?
-1. First build the container. From the project root, run this:<br/>
-`docker build -t python3-flask -f Dockerfile.dev --build-arg user_id=$(id -u) .`
-
-2. Launch the container in deamon mode: <br/>
-`docker run -d --name fact-checker -p 5000:5000 -v $(pwd):/home/patrick/src python3-flask`
-
-3. Navigate to [http://localhost:5000](http://localhost:5000)
-
-4. Check the logs:<br/>
-`docker logs -f fact-checker`
-
-5. Command-line debugging of the container: <br/>
-`docker exec -it fact-checker bash`
-
+1. For one container running both the api and ui, from the project root:<br/>
+```
+docker build -t balancedview:full --build-arg UID=$(id -u) .
+docker run -d --name balancedview-full -p 8080:8080 balancedview:full
+# LOGS
+docker logs -f balancedview-full
+# RUN SHELL IN CONTAINER
+docker exec -it balancedview-full bash
+```
+2. For multi-containers run this:
+```
+cd api
+docker build -t balancedview:api --build-arg UID=$(id -u) .
+cd ../ui
+docker build -t balancedview:ui --build-arg UID=$(id -u) .
+cd ..
+docker run -d --name balancedview-api -p 5000:5000 -v $(pwd)/api:/api -v $(pwd)/data:/var/lib/sqlite balancedview:api
+docker run -d --name balancedview-ui -p 8080:8080 balancedview:ui
+```
+3. Bootstrap script with podman
+```
+./bootstrap.sh
+```
 
 **NB**: Tested on Linux, should be similar on all UNIX-like systems equiped with Docker. For Windows 
 you probably need to replace `$(id -u)` 
