@@ -1,5 +1,4 @@
 from flask_restful import Resource, reqparse
-from hashlib import md5
 import datetime as dt
 from . import balancedview
 from .models import Keyword, InputText, Article, Source
@@ -16,7 +15,6 @@ class BalancedView(Resource):
         params = parser.parse_args()
         output = balancedview.run(params)
         text = InputText(
-            id=md5(params["text"].encode()).hexdigest(), 
             text=params["text"], 
             timestamp=dt.datetime.now(), 
             detected_language=output["language"])

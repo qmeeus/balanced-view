@@ -2,19 +2,19 @@ from .api import db
 
 
 text_keyword = db.Table('text_keywords',
-    db.Column('input_text_id', db.String(80), db.ForeignKey('input_text.id'), primary_key=True),
-    db.Column('keyword_id', db.String(80), db.ForeignKey('keyword.id'), primary_key=True)
+    db.Column('input_text_id', db.Integer, db.ForeignKey('input_text.id'), primary_key=True),
+    db.Column('keyword_id', db.Integer, db.ForeignKey('keyword.id'), primary_key=True)
 )
 
 text_article = db.Table('text_articles',
-    db.Column('input_text_id', db.String(80), db.ForeignKey('input_text.id'), primary_key=True),
+    db.Column('input_text_id', db.Integer, db.ForeignKey('input_text.id'), primary_key=True),
     db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True)
 )
 
 
 class InputText(db.Model):
-    id = db.Column(db.String(80), primary_key=True)
-    timestamp = db.Column(db.TIMESTAMP(), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.TIMESTAMP())
     text = db.Column(db.Text())
     detected_language = db.Column(db.String(3))
     keywords = db.relationship('Keyword', secondary=text_keyword, lazy='subquery',
