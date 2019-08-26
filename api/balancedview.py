@@ -22,8 +22,8 @@ UNKNOWN_LANG_ERROR = {"error": {"text": "The language could not be identified", 
 TRANSLATION_ERROR = {"error": {"text": "The input text could not be translated", "reason": None}}
 SUMMA_ERROR = {"error": {"text": "Summarisation failed!", "reason": None}}
 NO_KEYWORDS_ERROR = {"error": {"text": "Keyword extraction failed!", "reason": None}}
-NEWSAPI_ERROR = {"error": {"text": "Keyword extraction failed!", "reason": None}}
-NO_RESULTS_ERROR = {"error": {"text": "Keyword extraction failed!", "reason": None}}
+NEWSAPI_ERROR = {"error": {"text": "Error with the NewsAPI", "reason": None}}
+NO_RESULTS_ERROR = {"error": {"text": "No relevant articles found", "reason": None}}
 
 def format_error(error, reason):
     error = deepcopy(error)
