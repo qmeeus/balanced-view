@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Bangers");
+
 body {
     min-height: 100vh;
     position: relative;
@@ -13,6 +15,22 @@ footer {
 line {
   stroke: #ccc;
 }
+
+nav {
+  padding: 10 0 10 0;
+}
+
+h1 {
+  font-family: 'Bangers';
+  font-size: 62px;
+}
+
+h2 {
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 32px;
+  font-weight: bold;
+}
+
 text {
   text-anchor: middle;
   font-family: "Helvetica Neue", Helvetica, sans-serif;
@@ -75,3 +93,4 @@ div.tooltip {
   color: red;
   font-size: 1.3em;
 }
+
