@@ -1,6 +1,7 @@
 outputs/
-api_resources/
 notes/
+*credentials*
+*apikey
 
 # Windows shit
 .DS_Store
