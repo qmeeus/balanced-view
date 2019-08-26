@@ -40,16 +40,27 @@ podman run -d \
     -v $(pwd)/data:/var/lib/sqlite \
     $IMAGE_REPO/$APP:api || exit_on_error $APP
 
-echo "Initialise the database"
-podman exec $APP-api flask db init || exit 1
-sleep 1
+echo "Perform database operations"
+echo "Initialise database? Y/n"
+read input
+case $input in
+    n|N) echo "Database not initialised";;
+    *) podman exec $APP-api flask db init || exit 1;;
+esac
 
-echo "Compute the migrations"
-podman exec $APP-api flask db migrate || exit 1
-sleep 1
+echo "Compute the migrations? Y/n"
+read input
+case $input in
+    n|N) echo "Migrations not computed";;
+    *) podman exec $APP-api flask db migrate || exit 1;;
+esac
 
-echo "Apply the migrations"
-podman exec $APP-api flask db upgrade || exit 1
+echo "Apply the migrations? Y/n"
+read input
+case $input in
+    n|N) echo "No changes to database";;
+    *) podman exec $APP-api flask db upgrade || exit 1;;
+esac
 
 echo "Create ui service on port $UI_PORT with name $APP-ui"
 podman run -d --name $APP-ui --pod $APP $IMAGE_REPO/$APP:ui || exit_on_error $APP
