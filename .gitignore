@@ -2,6 +2,7 @@ outputs/
 notes/
 *credentials*
 *apikey
+http_proxy.conf
 
 # Windows shit
 .DS_Store
