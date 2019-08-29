@@ -27,5 +27,6 @@ ENV FLASK_ENV=production
 COPY --chown=$USER:$USER ./api ./api
 COPY --chown=$USER:$USER ./ui ./ui
 COPY --chown=$USER:$USER entrypoint.sh .
+COPY --chown=$USER:$USER ./data /var/lib/sqlite
 
 CMD [ "./entrypoint.sh" ]

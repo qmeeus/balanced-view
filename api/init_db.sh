@@ -1,17 +1,18 @@
+#!/bin/bash
 
-if [ -d /var/lib/sqlite ]; then
-    DB_PATH=/var/lib/sqlite/api.db
-else
-    DB_PATH=../data/api.db
-fi
+DB_PATH=$(cat .env | grep SQLALCHEMY_DATABASE_NAME | cut -d= -f2)
 
 if [ -f $DB_PATH ]; then
     echo "Database exists. Remove? y/N"; read input
     if [ "$input" == "Y" ] || [ "$input" == "y" ]; then
-        echo "Recreate DB" 
+        echo "Remove database and migrations" 
 	rm -r $DB_PATH migrations
-	flask db init
     fi
+fi
+
+if ! [ -f $DB_PATH ]; then
+    echo "Create database"
+    flask db init
 fi
 
 if ! [ -d migrations ]; then
@@ -20,3 +21,5 @@ if ! [ -d migrations ]; then
 fi
 
 flask db migrate && flask db upgrade
+
+echo "Database updated"

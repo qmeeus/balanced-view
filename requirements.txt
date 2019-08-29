@@ -1,7 +1,10 @@
 flask
+flask-migrate
 flask-restful
+flask-sqlalchemy
 Flask-WTF
 git+https://github.com/qmeeus/textrank.git
+gunicorn
 ibm-watson
 newsapi-python
 numpy
@@ -10,4 +13,3 @@ python-dotenv
 requests
 WTForms
 wtforms_components
-gunicorn
