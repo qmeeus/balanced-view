@@ -4,6 +4,8 @@ APP=balancedview
 API_PORT=5000
 UI_PORT=8080
 IMAGE_REPO=docker.io/qmeeus
+API_TAG=$IMAGE_REPO/$APP:api
+UI_TAG=$IMAGE_REPO/$APP:ui
 
 function exit_on_error {
     echo "Error with pod" $1 ". Trying to delete..."
@@ -20,13 +22,23 @@ if [ "$(podman pod ps | grep $APP | wc -l)" != "0" ] ; then
     esac
 fi
 
-# if [ -z "$PODMAN_USERNS" ]; then
-#     PODMAN_USERNS=keep-id; export PODMAN_USERNS
-# fi
-
-echo "Pull images from online repository"
-podman pull $IMAGE_REPO/$APP:api
-podman pull $IMAGE_REPO/$APP:ui
+if [[ $(podman images | grep $APP | wc -l) < 2 ]]; then
+    printf "No local image found. Options: (default 1)"
+    printf "\t(1) Build locally"
+    printf "\t(2) Download from $IMAGE_REPO"
+    read input
+    case $input in
+	2)
+	    echo "Pull images from online repository"
+	    podman pull $API_TAG || exit 1
+	    podman pull $UI_TAG || exit 1
+	    ;;
+	*)
+	    echo "Build $API_TAG" && cd api && podman build -t $API_TAG . || exit 1
+	    echo "Build $UI_TAG" && cd ../ui && podman build -t $UI_TAG . || exit 1
+	    ;;
+    esac
+fi
 
 echo "Create pod with name $APP"
 podman pod create --name $APP -p $API_PORT -p $UI_PORT || exit_on_error $APP
@@ -38,31 +50,11 @@ podman run -d \
     --pod $APP \
     -v $(pwd)/api:/api \
     -v $(pwd)/data:/var/lib/sqlite \
-    $IMAGE_REPO/$APP:api || exit_on_error $APP
+    $API_TAG || exit_on_error $APP
 
-echo "Perform database operations"
-echo "Initialise database? Y/n"
-read input
-case $input in
-    n|N) echo "Database not initialised";;
-    *) podman exec $APP-api flask db init || exit 1;;
-esac
-
-echo "Compute the migrations? Y/n"
-read input
-case $input in
-    n|N) echo "Migrations not computed";;
-    *) podman exec $APP-api flask db migrate || exit 1;;
-esac
-
-echo "Apply the migrations? Y/n"
-read input
-case $input in
-    n|N) echo "No changes to database";;
-    *) podman exec $APP-api flask db upgrade || exit 1;;
-esac
+podman exec -it $APP-api bash init_db.sh
 
 echo "Create ui service on port $UI_PORT with name $APP-ui"
-podman run -d --name $APP-ui --pod $APP $IMAGE_REPO/$APP:ui || exit_on_error $APP
+podman run -d --name $APP-ui --pod $APP $UI_TAG || exit_on_error $APP
 
 podman ps
