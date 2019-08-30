@@ -14,7 +14,7 @@ def create_app(development=False):
 
     app.config.from_object(Config())
 
-    Talisman(app, force_https=False, content_security_policy=None)
+    Talisman(app, force_https=False, content_security_policy={'default-src':"'none'",'script-src':"'self'"})
 
     from . import views
     app.register_blueprint(views.bp)
