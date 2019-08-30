@@ -1,6 +1,6 @@
 # BalancedView
 
-The app is deployed with Heroku [here](https://fact-checker.herokuapp.com/).
+The app is deployed [here](http://cardia.cs.kuleuven.be:8080).
 
 Authors: [Quentin Meeus](https://github.com/qmeeus) & [Calum Thornhill](https://github.com/cjthornhill) 
 
