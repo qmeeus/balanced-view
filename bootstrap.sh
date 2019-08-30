@@ -45,7 +45,7 @@ if [[ $(podman images | grep $APP | wc -l) < 3 ]]; then
 fi
 
 echo "Create pod with name $APP"
-podman pod create --name $APP -p $API_PORT -p $UI_PORT -p $SRV_PORT || exit_on_error $APP
+podman pod create --name $APP -p $SRV_PORT || exit_on_error $APP
 
 echo "Create nginx server listening on port $SRV_PORT"
 podman run -d --name $APP-srv --pod $APP $SRV_TAG || exit_on_error $APP
