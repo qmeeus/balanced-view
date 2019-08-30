@@ -2,10 +2,12 @@
 
 APP=balancedview
 API_PORT=5000
-UI_PORT=8080
+UI_PORT=9999
+SRV_PORT=8080
 IMAGE_REPO=docker.io/qmeeus
 API_TAG=$IMAGE_REPO/$APP:api
 UI_TAG=$IMAGE_REPO/$APP:ui
+SRV_TAG=$IMAGE_REPO/$APP:srv
 
 function exit_on_error {
     echo "Error with pod" $1 ". Trying to delete..."
@@ -22,26 +24,32 @@ if [ "$(podman pod ps | grep $APP | wc -l)" != "0" ] ; then
     esac
 fi
 
-if [[ $(podman images | grep $APP | wc -l) < 2 ]]; then
-    printf "No local image found. Options: (default 1)"
-    printf "\t(1) Build locally"
-    printf "\t(2) Download from $IMAGE_REPO"
+if [[ $(podman images | grep $APP | wc -l) < 3 ]]; then
+    echo "No local image found. Options: (default 1)"
+    printf "\t(1) Build locally\n"
+    printf "\t(2) Download from $IMAGE_REPO\n"
     read input
     case $input in
 	2)
 	    echo "Pull images from online repository"
 	    podman pull $API_TAG || exit 1
 	    podman pull $UI_TAG || exit 1
+        podman pull $SRV_TAG || exit 1
 	    ;;
 	*)
 	    echo "Build $API_TAG" && cd api && podman build -t $API_TAG . || exit 1
 	    echo "Build $UI_TAG" && cd ../ui && podman build -t $UI_TAG . || exit 1
+	    echo "Build $SRV_TAG" && cd ../nginx && podman build -t $SRV_TAG . || exit 1
 	    ;;
     esac
 fi
 
 echo "Create pod with name $APP"
-podman pod create --name $APP -p $API_PORT -p $UI_PORT || exit_on_error $APP
+podman pod create --name $APP -p $API_PORT -p $UI_PORT -p $SRV_PORT || exit_on_error $APP
+
+echo "Create nginx server listening on port $SRV_PORT"
+podman run -d --name $APP-srv --pod $APP $SRV_TAG || exit_on_error $APP
+
 
 echo "Create api service on port $API_PORT with name $APP-api"
 

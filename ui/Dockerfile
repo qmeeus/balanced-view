@@ -23,4 +23,4 @@ COPY . .
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-CMD [ "gunicorn", "--chdir", "..", "-w3", "--bind=0.0.0.0:8080", "ui.wsgi" ]
+CMD [ "gunicorn", "--chdir", "..", "-w3", "--bind=0.0.0.0:9999", "ui.wsgi" ]
