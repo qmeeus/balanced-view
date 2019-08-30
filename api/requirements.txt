@@ -3,6 +3,7 @@ flask
 flask-restful
 flask-sqlalchemy
 flask-migrate
+flask-talisman
 python-dotenv
 numpy
 pandas

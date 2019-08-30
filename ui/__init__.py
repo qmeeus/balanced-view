@@ -1,5 +1,6 @@
 import os, os.path as p
 from flask import Flask
+from flask_talisman import Talisman
 
 
 def create_app(development=False):
@@ -12,6 +13,8 @@ def create_app(development=False):
         from .config import Production as Config
 
     app.config.from_object(Config())
+
+    Talisman(app, force_https=False)
 
     from . import views
     app.register_blueprint(views.bp)
