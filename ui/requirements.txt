@@ -1,7 +1,6 @@
 flask
 WTForms
 Flask-WTF
-flask-talisman
 wtforms_components
 requests
 python-dotenv
