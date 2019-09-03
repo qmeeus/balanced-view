@@ -28,7 +28,7 @@ if [ "$1" == "--update" ]; then
     echo "Updating the local containers. Options:"
     printf "\t(1) Build locally\n"
     printf "\t(2) Download from $IMAGE_REPO\n"
-    printf "Choice (Default 1) > " read input
+    printf "Choice (Default 1) > " && read input
     case $input in
 	2)
 	    echo "Pull images from online repository"
