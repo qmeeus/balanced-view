@@ -3,9 +3,9 @@
 DB_PATH=$(cat .env | grep SQLALCHEMY_DATABASE_NAME | cut -d= -f2)
 
 if [ -f $DB_PATH ]; then
-    echo "Database exists. Remove? y/N"; read input
+    printf "Database exists. Remove? (y/N) "; read input
     if [ "$input" == "Y" ] || [ "$input" == "y" ]; then
-        echo "Remove database and migrations" 
+        echo "Remove database and migrations"
 	rm -r $DB_PATH migrations
     fi
 fi
