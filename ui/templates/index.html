@@ -4,8 +4,6 @@
 
 {% block head %} 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/ribbon.css') }}">
-    <script src="{{ url_for('static', filename='js/d3.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -29,22 +27,6 @@
 
 {% include 'form.html' %}
 
-    {% if search_results %}
-
-        <div class="container my-2">
-
-            <div class="row w-100" id="graph-container">
-                {% include 'graph.html' %}
-            </div>
-            <div class="row my-5 py-2 w-100" >
-                {% include "results.html" %}
-            </div>
-        </div>
-
-    {% else %}
-
-        <span></span>
-
-    {% endif %}
+{% block results %}{% endblock %}
 
 {% endblock %}

@@ -1,6 +1,18 @@
 
-function draw(data) {
+function getData() {
+    try {
+        const JsonElement = $("#graph-data");
+        const data = JSON.parse(JsonElement.text());
+        console.log(data);
+        return data;
+    } catch (err) {
+        console.error(`Couldn't read JSON data for the graph`, err);
+    }
+}
 
+function draw_graph(data) {
+
+    console.log(data);
     container_dims = document.getElementById("graph-container").getBoundingClientRect();
     var width = container_dims.width;
     var height = 600;
@@ -87,3 +99,25 @@ function draw(data) {
     }
 
 }
+
+$(document).ready(function() {
+    var modal = document.getElementById("modal");
+    var span = document.getElementsByClassName("close")[0];
+    var link = document.getElementById("display-graph");
+
+    link.onclick = function() {
+        modal.style.display = "block";
+    }
+    
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    draw_graph(getData());
+});

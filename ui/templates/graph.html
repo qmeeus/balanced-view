@@ -5,6 +5,9 @@
         <a id="display-graph" href="#">Display Textrank Graph</a>
     </div>
 </div>
+<script type="application/json" id="graph-data">
+    {{ data | tojson }}
+</script>
 <div class="modal" id="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
@@ -13,34 +16,6 @@
                 <g class="links"></g>
                 <g class="nodes"></g>
             </svg>
-        </div>    
-        <script>
-
-            var data = {{ data | safe }};
-            draw(data);
-
-        </script>
+        </div>
     </div>
 </div>
-
-<script>
-
-    var modal = document.getElementById("modal");
-    var link = document.getElementById("display-graph");
-    var span = document.getElementsByClassName("close")[0];
-
-    link.onclick = function() {
-        modal.style.display = "block";
-    }
-      
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-      
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-
-</script>
