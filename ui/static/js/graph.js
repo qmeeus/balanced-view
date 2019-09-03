@@ -1,18 +1,12 @@
 
 function getData() {
-    try {
-        const JsonElement = $("#graph-data");
-        const data = JSON.parse(JsonElement.text());
-        console.log(data);
-        return data;
-    } catch (err) {
-        console.error(`Couldn't read JSON data for the graph`, err);
-    }
+    const JsonElement = $("#graph-data");
+    const data = JSON.parse(JsonElement.text());
+    return data;
 }
 
 function draw_graph(data) {
 
-    console.log(data);
     container_dims = document.getElementById("graph-container").getBoundingClientRect();
     var width = container_dims.width;
     var height = 600;
