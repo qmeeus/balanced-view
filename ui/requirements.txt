@@ -1,6 +1,7 @@
 flask
 WTForms
 Flask-WTF
+flask-csp
 wtforms_components
 requests
 python-dotenv
