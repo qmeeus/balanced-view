@@ -24,11 +24,11 @@ if [ "$(podman pod ps | grep $APP | wc -l)" != "0" ] ; then
     esac
 fi
 
-if [[ $(podman images | grep $APP | wc -l) < 3 ]]; then
-    echo "No local image found. Options: (default 1)"
+if [ "$1" == "--update" ]; then
+    echo "Updating the local containers. Options:"
     printf "\t(1) Build locally\n"
     printf "\t(2) Download from $IMAGE_REPO\n"
-    read input
+    printf "Choice (Default 1) > " read input
     case $input in
 	2)
 	    echo "Pull images from online repository"
@@ -40,6 +40,7 @@ if [[ $(podman images | grep $APP | wc -l) < 3 ]]; then
 	    echo "Build $API_TAG" && cd api && podman build -t $API_TAG . || exit 1
 	    echo "Build $UI_TAG" && cd ../ui && podman build -t $UI_TAG . || exit 1
 	    echo "Build $SRV_TAG" && cd ../nginx && podman build -t $SRV_TAG . || exit 1
+        cd ..
 	    ;;
     esac
 fi
@@ -49,7 +50,6 @@ podman pod create --name $APP -p $SRV_PORT || exit_on_error $APP
 
 echo "Create nginx server listening on port $SRV_PORT"
 podman run -d --name $APP-srv --pod $APP $SRV_TAG || exit_on_error $APP
-
 
 echo "Create api service on port $API_PORT with name $APP-api"
 
