@@ -26,7 +26,7 @@ def index():
             resp = requests.post(url, data={'text': text})
             data = resp.json()
         except Exception as err:
-            error = {"error": {"text": "API is unreachable", "reason": str(err)}}
+            error = {"error": {"text": "Houston we have a problem!", "reason": "API is unreachable"}}
             data = {"articles": error, "graph": error}
         return render_template('results.html', form=form, search_results=data["articles"], data=data["graph"])
     return render_template('index.html', form=form)

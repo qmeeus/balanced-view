@@ -4,21 +4,27 @@
 
     <div class="container my-2">
 
-        <div class="row w-100" id="graph-container">
-            {% include 'graph.html' %}
-        </div>
-        
+        {% if not "error" in data %}
+            <div class="row w-100" id="graph-container">
+                {% include 'graph.html' %}
+            </div>
+        {% endif %}
+
         <div class="row my-5 py-2 w-100" >
             {% if "error" in search_results %}
 
-                <h2 class="col-*-12 w-100 text-center" title="{{ search_results["error"]["reason"] }}">{{ search_results["error"]["text"] }}</h2>
+                <h2 class="col-*-12 w-100 text-center" title="{{ search_results['error']['reason'] }}">
+                    {{ search_results["error"]["text"] }}
+                </h2>
 
             {% else %}
 
                 {% for political_leaning, results in search_results.items() %}
 
                     <div class="col-xs-12 col-md-4">
-                        <h5 class="text-center border-secondary border-bottom mt-1">{{ political_leaning.title() }}</h5>
+                        <h5 class="text-center border-secondary border-bottom mt-1">
+                            {{ political_leaning.title() }}
+                        </h5>
 
                         {% for article in results %}
                             <div class="thumbnail article">
