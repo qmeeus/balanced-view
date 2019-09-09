@@ -1,5 +1,7 @@
 from pprint import pprint
-from .utils import load_test_data
+from tests.utils import load_test_data
+from api.balancedview import run
+
 
 def _test_balancedview(func):
     for text in load_test_data():
@@ -20,19 +22,8 @@ def _test_balancedview(func):
                 "{}: {}".format(orientation, str(len(articles))) for orientation, articles in response["articles"].items()]))
 
 def test_procedure():
-    from api.balancedview import run
     _test_balancedview(run)
-
-def test_api():
-    import requests
-    url = "http://localhost:5000"    
-    
-    def api_request(params):
-        return requests.post(url, data=params).json()
-
-    _test_balancedview(api_request)
 
 
 if __name__ == '__main__':
-    # test_procedure()
-    test_api()
+    test_procedure()
