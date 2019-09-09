@@ -11,7 +11,7 @@ def _test_post_request(text, csrf_token):
     params = {"text": text, "csrf_token": csrf_token}
     resp = requests.post(UI_LOCATION, params)
     resp.raise_for_status()
-    soup = BeautifulSoup(resp.text, "html5lib")
+    soup = BeautifulSoup(resp.text, "html.parser")
     graph_container = soup.find("div", {"id": "graph-container"})
     if not graph_container:
         warnings.warn("No graph found")
@@ -24,7 +24,7 @@ def test_ui():
     resp = requests.get(UI_LOCATION)
     resp.raise_for_status()
 
-    soup = BeautifulSoup(resp.text, "html5lib")
+    soup = BeautifulSoup(resp.text, "html.parser")
     csrf_token = soup.find("input", {"id": "csrf_token"}).get("value")
     assert bool(csrf_token)
 
