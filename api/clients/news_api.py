@@ -1,6 +1,6 @@
 import os.path as p
 from newsapi import NewsApiClient
-
+from api.utils.logger import logger
 
 class NewsClient(NewsApiClient):
 
@@ -19,7 +19,10 @@ class NewsClient(NewsApiClient):
         with open(full_path) as keyfile:
             super(NewsClient, self).__init__(keyfile.read().strip())
 
-        self.articles = self.get_everything(
+
+    def fetch_all(self):
+        logger.info(f"Requesting NewsAPI for {self.keywords}")
+        return self.get_everything(
                 q=self.keywords,
                 sources=self.sources,
                 from_param=self.start_date,

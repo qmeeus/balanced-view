@@ -1,7 +1,7 @@
 import shutil
 import os.path as p
 from ibm_watson import LanguageTranslatorV3
-
+from api.utils.logger import logger
 
 def parse_result(json_key):
     def parse_result_decorator(func):
@@ -36,8 +36,10 @@ class IBMTranslator(LanguageTranslatorV3):
 
     @parse_result(json_key="language")
     def identify(self, *args, **kwargs):
+        logger.info(f"Identify language: {args} {kwargs}")
         return super(IBMTranslator, self).identify(*args, **kwargs)
 
     @parse_result(json_key="translation")
     def translate(self, *args, **kwargs):
+        logger.info(f"Tranlate language: {args} {kwargs}")
         return super(IBMTranslator, self).translate(*args, **kwargs)

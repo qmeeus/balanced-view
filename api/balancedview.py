@@ -5,7 +5,8 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 
 from .clients import NewsClient, IBMTranslator, Summary
-    
+from api.utils.logger import logger
+
 
 LANGUAGES = {
     'en': 'english',
@@ -18,15 +19,10 @@ MAX_KEYWORDS = 5
 SOURCE_FILE = "resources/api_sources.json"
 MAX_ARTICLES = 2
 
-UNKNOWN_LANG_ERROR = {"error": {"text": "The language could not be identified", "reason": None}}
-TRANSLATION_ERROR = {"error": {"text": "The input text could not be translated", "reason": None}}
-SUMMA_ERROR = {"error": {"text": "Summarisation failed!", "reason": None}}
-NO_KEYWORDS_ERROR = {"error": {"text": "Keyword extraction failed!", "reason": None}}
-NEWSAPI_ERROR = {"error": {"text": "Error with the NewsAPI", "reason": None}}
-NO_RESULTS_ERROR = {"error": {"text": "No relevant articles found", "reason": None}}
+DEFAULT_ERROR_MSG = {"error": {"text": "Houston, we have a problem!", "error": None}}
 
-def format_error(error, reason):
-    error = deepcopy(error)
+def format_error(reason):
+    error = deepcopy(DEFAULT_ERROR_MSG)
     error["error"]["reason"] = reason
     return error
 
@@ -45,6 +41,8 @@ def process_input(text, method="remove"):
     
 
 def run(params):
+
+    logger.debug(f"Request with params {params}")
 
     output = {
         "graph": {}, 
@@ -68,10 +66,12 @@ def run(params):
                 text = translator.translate(text, source=language, target="en", return_all=False)
                 language = "en"
             except Exception as err:
-                output["graph"] = output["articles"] = format_error(TRANSLATION_ERROR, str(err))
+                logger.exception(err)
+                output["graph"] = output["articles"] = format_error("The input text could not be translated")
                 return output
     except Exception as err:
-        output["graph"] = output["articles"] = format_error(UNKNOWN_LANG_ERROR, str(err))
+        logger.exception(err)
+        output["graph"] = output["articles"] = format_error("The language could not be identified")
         return output
 
     text = process_input(text, method="remove")
@@ -82,19 +82,18 @@ def run(params):
     sources = {source_group["name"]: source_group["sources"] for source_group in sources}
 
     try:
-        summary = Summary(
-            text, 
-            language=LANGUAGES[language]
-        )
-
+        summary = Summary(language=LANGUAGES[language]).fit(text)
         output["graph"] = summary.get_graph()
         output["keywords"] = summary.get_keywords().split()
 
     except Exception as err:
-        output["graph"] = format_error(SUMMA_ERROR, str(err))
+        logger.exception(err)
+        output["graph"] = format_error("Summarisation failed!")
 
-    if "error" in output["graph"] or not len(summary.keywords):
-        output["articles"] = format_error(NO_KEYWORDS_ERROR, "Try with a longer text")
+    if "error" in output["graph"] or not len(summary.keywords_):
+        if not len(summary.keywords_):
+            logger.error("No keywords")
+        output["articles"] = format_error("Try with a longer text")
         return output
 
     try:
@@ -107,23 +106,26 @@ def run(params):
             language
         )
 
+        articles = newsapi.fetch_all()
+
     except Exception as err:
-        print(err)
-        output["articles"] = format_error(NEWSAPI_ERROR, str(err))
+        logger.exception(err)
+        output["articles"] = format_error("Error with the news provider")
         return output
 
-    if not newsapi.articles["totalResults"]:
+    if not articles["totalResults"]:
+        logger.error(f"No articles found: {articles}")
         output["articles"] = format_error(
-            NO_RESULTS_ERROR, "We could not find related articles in any of the sources.")
+            "No relevant articles found")
         return output
         
-    output["totalResults"] = newsapi.articles["totalResults"]
+    output["totalResults"] = articles["totalResults"]
     source_map = {source: key
                   for key, sources in sources.items()
                   for source in sources}
     
     sorted_sources = {key: [] for key in sources.keys()}
-    for article in newsapi.articles["articles"]:
+    for article in articles["articles"]:
         if article["source"]["id"] in source_map:
             sorted_sources[source_map[article["source"]["id"]]].append(article)
     
