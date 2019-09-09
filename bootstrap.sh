@@ -7,7 +7,7 @@ SRV_PORT=8080
 IMAGE_REPO=docker.io/qmeeus
 API_TAG=$IMAGE_REPO/$APP:api
 UI_TAG=$IMAGE_REPO/$APP:ui
-SRV_TAG=$IMAGE_REPO/$APP:srv
+SRV_TAG=$IMAGE_REPO/$APP:nginx
 
 function exit_on_error {
     echo "Error with pod" $1 ". Trying to delete..."
@@ -37,10 +37,9 @@ if [ "$1" == "--update" ]; then
         podman pull $SRV_TAG || exit 1
 	    ;;
 	*)
-	    echo "Build $API_TAG" && cd api && podman build -t $API_TAG . || exit 1
-	    echo "Build $UI_TAG" && cd ../ui && podman build -t $UI_TAG . || exit 1
-	    echo "Build $SRV_TAG" && cd ../nginx && podman build -t $SRV_TAG . || exit 1
-        cd ..
+	    echo "Build $API_TAG" && podman build -t $API_TAG ./api || exit 1
+	    echo "Build $UI_TAG" && podman build -t $UI_TAG ./ui || exit 1
+	    echo "Build $SRV_TAG" && podman build -t $SRV_TAG ./nginx || exit 1
 	    ;;
     esac
 fi
