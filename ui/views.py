@@ -23,7 +23,8 @@ def index():
         text = form.text.data
         try:
             url = os.environ["API_URL"]
-            data = requests.post(url, data={'text': text}).json()
+            resp = requests.post(url, data={'text': text})
+            data = resp.json()
         except Exception as err:
             error = {"error": {"text": "API is unreachable", "reason": str(err)}}
             data = {"articles": error, "graph": error}
