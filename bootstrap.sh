@@ -48,7 +48,7 @@ echo "Create pod with name $APP"
 podman pod create --name $APP -p $SRV_PORT || exit_on_error $APP
 
 echo "Create nginx server listening on port $SRV_PORT"
-podman run -d --name $APP-srv --pod $APP $SRV_TAG || exit_on_error $APP
+podman run -d --name $APP-nginx --pod $APP $SRV_TAG || exit_on_error $APP
 
 echo "Create api service on port $API_PORT with name $APP-api"
 
