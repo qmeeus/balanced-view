@@ -3,6 +3,7 @@ flask-migrate
 flask-restful
 flask-sqlalchemy
 Flask-WTF
+flask-csp
 git+https://github.com/qmeeus/textrank.git
 gunicorn
 ibm-watson
