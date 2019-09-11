@@ -6,13 +6,17 @@ from api.utils.logger import logger
 def parse_result(json_key):
     def parse_result_decorator(func):
         def wrapper(*args, **kwargs):
+            logger.info(f"{func.__name__.title()} language: {args[1:]} {kwargs}")
             return_all = kwargs.pop("return_all", True)
             response = func(*args, **kwargs)
             result = response.get_result()
             top_level_key = json_key + "s"
             if top_level_key in result:
                 result = result[top_level_key]
-                return result if return_all else result[0][json_key]
+                prediction = result[0]
+                if "confidence" in prediction:
+                    logger.debug("Confidence: {confidence}".format(**prediction))
+                return result if return_all else prediction[json_key]
             raise Exception("API Error: {}".format(result))
         return wrapper
     return parse_result_decorator
@@ -36,10 +40,8 @@ class IBMTranslator(LanguageTranslatorV3):
 
     @parse_result(json_key="language")
     def identify(self, *args, **kwargs):
-        logger.info(f"Identify language: {args} {kwargs}")
         return super(IBMTranslator, self).identify(*args, **kwargs)
 
     @parse_result(json_key="translation")
     def translate(self, *args, **kwargs):
-        logger.info(f"Tranlate language: {args} {kwargs}")
         return super(IBMTranslator, self).translate(*args, **kwargs)
