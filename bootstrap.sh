@@ -82,7 +82,7 @@ if ! [ $(is_running) ]; then
   echo "Create pod with name $APP"
   podman pod create --name $APP -p $NGINX_PORT
 else
-  for container in $CONTAINER; do
+  for container in $CONTAINERS; do
     printf "Restart $container? y/N >>> " && read input
     case $input in
       y|Y)
