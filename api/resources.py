@@ -86,26 +86,30 @@ class DataFetcher(Resource):
             return {'message': 'Malformed JSON'}, 400
 
         collection = SourceCollection(sources)
-
         for source_item in collection:
             source = db.session.query(Source).get(source_item.id)
             if not source:
                 source = Source(**source_item.to_dict())
                 db.session.add(source)
+                db.session.flush()
 
-            for category_item in source:
+            for category_item in source_item:
                 category = db.session.query(Category).filter_by(
-                    name=category_item["name"], source_id=source.id)
+                    name=category_item["name"], source_id=source.id).first()
                 if not category:
                     category = Category(source_id=source.id, **category_item)
                     db.session.add(category)
 
-            db.session.flush()
+        db.session.commit()
         
         for source_id, category_name, results in collection.fetch_all():
 
             category = db.session.query(Category).filter_by(
-                name=category_name, source_id=source.id).first()
+                name=category_name, source_id=source_id).first()
+
+            if category is None:
+                logger.error(f"Category not found: {source_id}/{category_name}")
+                raise KeyError(f"Category({source_id}/{category_name})")
 
             for result in results:
                 pub_date = dt.fromtimestamp(mktime(result["published_parsed"]))
@@ -123,12 +127,12 @@ class DataFetcher(Resource):
                         description=result["summary"],
                         image_url=image_url,
                         publication_date=pub_date,
-                        source_id=source.id,
-                        category_id=category.id
+                        source_id=category.source_id,
+                        category_name=category.name
                     )
                     
                     db.session.add(article)
         
         db.session.commit()
 
-        return jsonify({"message": "Success"}), 200
+        return jsonify({"message": "Success"})

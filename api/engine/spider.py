@@ -61,8 +61,11 @@ class Source:
             url = self.get_url(category)
             logger.info(f"Request feed from {url}")
             result = feedparser.parse(url)
-            if result.status // 400 > 0:
-                raise requests.HTTPError(result.status)
+            if hasattr(result, "status"):
+                if result.status // 400 > 0:
+                    raise requests.HTTPError(result.status)
+            else:
+                logger.warn(result)
             yield self.id, category, result.entries
 
     def to_dict(self):

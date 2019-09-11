@@ -33,11 +33,11 @@
                 },
                 {
                     "name": "Wetenschap",
-                    "url": " /vrtnws/nl.rss.wetenschap.xml"
+                    "url": "/vrtnws/nl.rss.wetenschap.xml"
                 },
                 {
                     "name": "Justitie",
-                    "url": " /vrtnws/nl.rss.justitie.xml"
+                    "url": "/vrtnws/nl.rss.justitie.xml"
                 },
                 {
                     "name": "Ook dat nog",

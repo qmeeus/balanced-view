@@ -33,11 +33,11 @@
                 },
                 {
                     "name": "Wetenschap",
-                    "url": " /vrtnws/nl.rss.wetenschap.xml"
+                    "url": "/vrtnws/nl.rss.wetenschap.xml"
                 },
                 {
                     "name": "Justitie",
-                    "url": " /vrtnws/nl.rss.justitie.xml"
+                    "url": "/vrtnws/nl.rss.justitie.xml"
                 },
                 {
                     "name": "Ook dat nog",
@@ -77,7 +77,7 @@
                     "url": "/rss/section/eb1a6433-ca3f-4a3b-ab48-a81a5fb8f6e2"
                 },
                 {
-                    "name": "Economie",
+                    "name": "Business",
                     "url": "/rss/section/451c8e1e-f9e4-450e-aa1f-341eab6742cc"
                 },
                 {
