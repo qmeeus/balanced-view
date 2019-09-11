@@ -48,10 +48,11 @@ class BalancedView(Resource):
                                 id=result["source"]["id"], 
                                 name=result["source"]["name"])
                             db.session.add(source)
+                            db.session.flush()
                         
                         article = Article(
                             title=result["title"],
-                            article_url=result["url"],
+                            url=result["url"],
                             author=result["author"],
                             description=result["description"],
                             image_url=result["urlToImage"],
@@ -91,12 +92,16 @@ class DataFetcher(Resource):
             if not source:
                 source = Source(**source_item.to_dict())
                 db.session.add(source)
+
             for category_item in source:
                 category = db.session.query(Category).filter_by(
                     name=category_item["name"], source_id=source.id)
                 if not category:
                     category = Category(source_id=source.id, **category_item)
+                    db.session.add(category)
 
+            db.session.flush()
+        
         for source_id, category_name, results in collection.fetch_all():
 
             category = db.session.query(Category).filter_by(
@@ -114,7 +119,7 @@ class DataFetcher(Resource):
                     image_url = image_urls[0] if len(image_urls) else None
                     article = Article(
                         title=result["title"],
-                        article_url=result["link"],
+                        url=result["link"],
                         description=result["summary"],
                         image_url=image_url,
                         publication_date=pub_date,
