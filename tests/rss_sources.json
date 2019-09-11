@@ -89,19 +89,16 @@
                     "url": "/rss/section/113a9a78-f65a-47a8-bd1c-b24483321d0f"
                 },
                 {
-                    "name": "Nieuws - Overzicht",
+                    "name": "Headlines",
                     "url": "/rss/section/a30afc42-3737-4301-8f8a-5b6833855457"
                 },
                 {
-                    "name": "Nieuws - Economie",
+                    "name": "Economie",
                     "url": "/rss/section/a30afc42-3737-4301-8f8a-5b6833855457"
                 },
+
                 {
-                    "name": "Nieuws - Mijn Geld",
-                    "url": "/rss/section/7cfbed9c-5776-460d-9dfc-187500c2620d"
-                },
-                {
-                    "name": "Nieuws - Financiele Markten",
+                    "name": "Beurs",
                     "url": "/rss/section/74cef9d1-3b28-4b90-943a-ce685bf6ed6e"
                 }
             ]
@@ -114,7 +111,7 @@
             "lang": "nl",
             "categories": [
                 {
-                    "name": "Snelnieuws",
+                    "name": "Headlines",
                     "url": "/nieuws/snelnieuws"
                 },
                 {
@@ -138,10 +135,6 @@
                     "url": "/economie/bedrijven"
                 },
                 {
-                    "name": "Bedrijven",
-                    "url": "/economie/bedrijven"
-                },
-                {
                     "name": "Werk",
                     "url": "/economie/Werk"
                 },
@@ -159,7 +152,7 @@
             "lang": "nl",
             "categories": [
                 {
-                    "name": "Nieuws",
+                    "name": "Headlines",
                     "url": "/nieuws/feed.rss"
                 }
             ]

@@ -4,7 +4,7 @@ from copy import deepcopy
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
-from .clients import NewsClient, IBMTranslator, Summary
+from api.clients import NewsClient, IBMTranslator, Summary
 from api.utils.logger import logger
 
 
@@ -19,7 +19,7 @@ MAX_KEYWORDS = 5
 SOURCE_FILE = "resources/api_sources.json"
 MAX_ARTICLES = 2
 
-DEFAULT_ERROR_MSG = {"error": {"text": "Houston, we have a problem!", "error": None}}
+DEFAULT_ERROR_MSG = {"error": {"text": "Houston, we have a problem!", "reason": None}}
 
 def format_error(reason):
     error = deepcopy(DEFAULT_ERROR_MSG)
@@ -33,14 +33,17 @@ def format_date(date):
     return date.strftime('%Y-%m-%d')
 
 def process_input(text, method="remove"):
-    # FIXME: ugly workaround for limited cases
+    
+    if method is not "remove":
+        raise NotImplementedError(method)
+
     def flag_word(word):
-        return word[0] not in ["#", "@"]
+        # FIXME: ugly workaround for limited cases (i.e. tweets)
+        return any(word.startswith(char) for char in ("#", "@"))
 
     return " ".join(filter(flag_word, text.split()))
-    
 
-def run(params):
+def fetch_articles(params):
 
     logger.debug(f"Request with params {params}")
 
@@ -58,17 +61,24 @@ def run(params):
     translator = IBMTranslator()
 
     try:
-        language = translator.identify(text, return_all=False)
+        language = source_lang = translator.identify(text, return_all=False)
         output["language"] = language
+
         if language != "en":
-            language = language if not language == "af" else "nl" # FIXME: ugly workaround
+            # FIXME: ugly workaround for africaans and dutch
+            language = language if not language == "af" else "nl"
+
             try:
                 text = translator.translate(text, source=language, target="en", return_all=False)
                 language = "en"
+
             except Exception as err:
                 logger.exception(err)
-                output["graph"] = output["articles"] = format_error("The input text could not be translated")
+                output["graph"] = output["articles"] = \
+                    format_error("The input text could not be translated "
+                                 f"from {source_lang} to {language}")
                 return output
+
     except Exception as err:
         logger.exception(err)
         output["graph"] = output["articles"] = format_error("The language could not be identified")
@@ -85,14 +95,12 @@ def run(params):
         summary = Summary(language=LANGUAGES[language]).fit(text)
         output["graph"] = summary.get_graph()
         output["keywords"] = summary.get_keywords().split()
+        if not len(summary.keywords_):
+            raise ValueError("No keywords found")
 
     except Exception as err:
         logger.exception(err)
         output["graph"] = format_error("Summarisation failed!")
-
-    if "error" in output["graph"] or not len(summary.keywords_):
-        if not len(summary.keywords_):
-            logger.error("No keywords")
         output["articles"] = format_error("Try with a longer text")
         return output
 
