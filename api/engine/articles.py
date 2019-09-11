@@ -39,7 +39,7 @@ def process_input(text, method="remove"):
 
     def flag_word(word):
         # FIXME: ugly workaround for limited cases (i.e. tweets)
-        return any(word.startswith(char) for char in ("#", "@"))
+        return any(not(word.startswith(char)) for char in ("#", "@"))
 
     return " ".join(filter(flag_word, text.split()))
 
