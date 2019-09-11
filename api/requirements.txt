@@ -1,6 +1,5 @@
 flask
 flask-restful
-flask-script
 flask-sqlalchemy
 flask-migrate
 flask-marshmallow
