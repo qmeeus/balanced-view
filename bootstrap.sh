@@ -4,10 +4,15 @@ function get_env {
   echo "$(cat $1/.env | grep $2 | cut -d'=' -f2)"
 }
 
+function get_nginx_port {
+  echo "$(cat nginx/services/$1.conf | grep listen | cut -d':' -f2 | tr -d ';')"
+}
+
 APP=balancedview
 API_PORT=$(get_env api FLASK_RUN_PORT)
 UI_PORT=$(get_env ui FLASK_RUN_PORT)
-NGINX_PORT=$(cat nginx/server.conf | grep listen | cut -d':' -f2 | tr -d ';')
+NGINX_PORT1=$(get_nginx_port ui)
+NGINX_PORT2=$(get_nginx_port api)
 IMAGE_REPO=docker.io/qmeeus
 DEFAULT_IMAGE=$IMAGE_REPO/$APP
 IMAGES="nginx api ui"
@@ -80,7 +85,7 @@ fi
 
 if ! [ $(is_running) ]; then
   echo "Create pod with name $APP"
-  podman pod create --name $APP -p $NGINX_PORT
+  podman pod create --name $APP -p $NGINX_PORT1 -p $NGINX_PORT2
 else
   for container in $CONTAINERS; do
     printf "Restart $container? y/N >>> " && read input
@@ -119,7 +124,7 @@ if [ $CREATE_DB ]; then
 fi
 
 if ! [ $(is_running nginx) ]; then
-  echo "Run nginx server listening on port $NGINX_PORT"
+  echo "Run nginx server listening on ports $NGINX_PORT1 and $NGINX_PORT2"
   podman run -d \
     --name $APP-nginx \
     --pod $APP \

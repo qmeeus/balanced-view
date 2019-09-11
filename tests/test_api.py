@@ -1,8 +1,7 @@
 import json
 import requests
 
-API_LOCATION = "http://localhost:8080/api"
-# API_LOCATION = "http://cardia.cs.kuleuven.be:8080/api"
+API_LOCATION = "http://localhost:32597"
 
 def post(url):
     def _post(params):
@@ -28,5 +27,5 @@ def test_update():
 
 
 if __name__ == '__main__':
-    # test_api()
-    test_update()
+    test_api()
+    # test_update()
