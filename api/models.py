@@ -48,7 +48,7 @@ class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
     url = db.Column(db.String(200))
-    author = db.Column(db.String(80))
+    author = db.Column(db.String(200))
     description = db.Column(db.Text())
     image_url = db.Column(db.String(200))
     publication_date = db.Column(db.DateTime)
