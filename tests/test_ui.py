@@ -16,8 +16,7 @@ def _test_post_request(text, csrf_token):
     if not graph_container:
         warnings.warn("No graph found")
     articles = soup.find_all("div", {"class": "thumbnail article"})
-    if not len(articles):
-        warnings.warn("No articles found")
+    print(f"{len(articles)} articles", end=" ")
 
 def test_ui():
 
