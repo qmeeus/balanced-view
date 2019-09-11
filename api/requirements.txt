@@ -1,8 +1,12 @@
 flask
-# Flask-API
 flask-restful
+flask-script
 flask-sqlalchemy
 flask-migrate
+flask-marshmallow
+psycopg2-binary
+marshmallow-sqlalchemy
+marshmallow
 python-dotenv
 numpy
 pandas

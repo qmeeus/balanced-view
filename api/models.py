@@ -1,4 +1,7 @@
-from .api import db
+import datetime as dt
+from marshmallow import fields, pre_load, validate
+
+from .api import db, ma
 
 
 text_keyword = db.Table('text_keywords',
@@ -14,7 +17,7 @@ text_article = db.Table('text_articles',
 
 class InputText(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.TIMESTAMP())
+    timestamp = db.Column(db.DateTime, default=dt.datetime.now)
     text = db.Column(db.Text())
     detected_language = db.Column(db.String(3))
     keywords = db.relationship('Keyword', secondary=text_keyword, lazy='subquery',
@@ -27,27 +30,55 @@ class Keyword(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.String(80), unique=True)
 
+class Category(db.Model):
+    source_id = db.Column(db.ForeignKey('source.id'), primary_key=True)
+    name = db.Column(db.String(80), nullable=False, index=True, primary_key=True)
+    url = db.Column(db.String(200), nullable=False)
+
+class Source(db.Model):
+    id = db.Column(db.String(80), primary_key=True, index=True)
+    name = db.Column(db.String(80), index=True)
+    lang = db.Column(db.String(10))
+    country = db.Column(db.String(20))
+    url = db.Column(db.String(200))
+    origin = db.Column(db.String(3), default="api")
+    categories = db.relationship("Category", backref="category")
 
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
-    articleURL = db.Column(db.String(200))
+    url = db.Column(db.String(200))
     author = db.Column(db.String(80))
     description = db.Column(db.Text())
-    imageURL = db.Column(db.String(200))
-    publication_date = db.Column(db.TIMESTAMP())
-    idSource = db.Column(db.ForeignKey('source.id'))
+    image_url = db.Column(db.String(200))
+    publication_date = db.Column(db.DateTime)
+    source_id = db.Column(db.ForeignKey('source.id'))
+    category_name = db.Column(db.String(80))
 
-class Source(db.Model):
-    id = db.Column(db.String(80), primary_key=True)
-    name = db.Column(db.String(80))
-    lang = db.Column(db.String(10))
-    country = db.Column(db.String(20))
+    __table_args__ = (db.ForeignKeyConstraint(
+        [source_id, category_name], [Category.source_id, Category.name]), 
+        {})
 
+class InputTextSchema(ma.Schema):
+    class Meta:
+        fields = ("text", "timestamp", "detected_language", "keywords", "articles")
 
-# if __name__ == "__main__":
-#     from sqlalchemy import create_engine
+class CategorySchema(ma.Schema):
+    class Meta:
+        model = Category
+        fields = ("name", "url")
 
-#     engine = create_engine(DB_URI)
-#     Base.metadata.drop_all(engine)
-#     Base.metadata.create_all(engine)
+class SourceSchema(ma.Schema):
+    class Meta:
+        model = Source
+        fields = ("id", "name", "lang", "country", "url", "categories")
+
+    categories = fields.List(fields.Nested(CategorySchema))
+
+class ArticleSchema(ma.Schema):
+    class Meta:
+        model = Article
+        fields = ("title", "url", "author", "description", "image_url", "publication_date", "source", "category")
+
+    source = fields.Nested(SourceSchema)
+    category = fields.Nested(CategorySchema)
