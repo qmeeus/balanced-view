@@ -28,4 +28,4 @@ def test_update():
 
 if __name__ == '__main__':
     test_api()
-    # test_update()
+    test_update()

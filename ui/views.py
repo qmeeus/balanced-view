@@ -4,6 +4,7 @@ from flask import request, render_template, Blueprint
 from flask_csp.csp import csp_header
 
 from .forms import TextForm
+from .utils.logger import logger
 
 bp = Blueprint('index', __name__, url_prefix='/')
 
@@ -23,8 +24,9 @@ def index():
         text = form.text.data
         try:
             url = os.environ["API_URL"]
-            resp = requests.post(url, data={'text': text})
+            resp = requests.post(url, json={'text': text})
             data = resp.json()
+            logger.debug(data)
         except Exception as err:
             error = {"error": {"text": "Houston we have a problem!", "reason": "API is unreachable"}}
             data = {"articles": error, "graph": error}

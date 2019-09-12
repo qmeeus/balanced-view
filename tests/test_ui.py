@@ -3,8 +3,8 @@ import warnings
 from bs4 import BeautifulSoup
 from tests.utils import load_test_data
 
-UI_LOCATION = "http://localhost:8080"
-# UI_LOCATION = "http://cardia.cs.kuleuven.be:8080"
+# UI_LOCATION = "http://localhost:8080"
+UI_LOCATION = "http://cardia.cs.kuleuven.be:8080"
 
 
 def _test_post_request(text, csrf_token):

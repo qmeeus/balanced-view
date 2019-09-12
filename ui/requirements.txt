@@ -6,3 +6,4 @@ wtforms_components
 requests
 python-dotenv
 gunicorn
+logzero
