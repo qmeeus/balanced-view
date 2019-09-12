@@ -13,3 +13,4 @@ target = translator.identify(text, return_all=True)
 print(target)
 translated = translator.translate(text, source="nl", target="en", return_all=False)
 print(translated)
+

@@ -39,7 +39,7 @@ class Summary:
 
     def get_keywords(self, max_kws=5):
         to_keep = self._keywords_to_keep(max_kws)
-        return " ".join(self.keywords_['keyword'].iloc[to_keep].values)
+        return self.keywords_['keyword'].iloc[to_keep].values.tolist()
 
     def _process_text(self, text):
         kwds, (graph, l2w, scores) = keywords(

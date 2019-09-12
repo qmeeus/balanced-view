@@ -1,11 +1,14 @@
 import shutil
 import os.path as p
 from ibm_watson import LanguageTranslatorV3
+from typing import Callable, Any, Union, Dict, List
 from api.utils.logger import logger
 
-def parse_result(json_key):
-    def parse_result_decorator(func):
-        def wrapper(*args, **kwargs):
+Json = Dict[str, Any]
+
+def parse_result(json_key:str) -> Callable:
+    def parse_result_decorator(func:Callable) -> Callable:
+        def wrapper(*args:Any, **kwargs:Any) -> Union[Json, List[Json]]:
             logger.info(f"{func.__name__.title()} language: {args[1:]} {kwargs}")
             return_all = kwargs.pop("return_all", True)
             response = func(*args, **kwargs)

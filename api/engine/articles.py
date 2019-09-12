@@ -1,49 +1,50 @@
 import os.path as p
 import json
 from copy import deepcopy
-from datetime import date
-from dateutil.relativedelta import relativedelta
+from typing import Dict, Any
 
 from api.clients import NewsClient, IBMTranslator, Summary
 from api.utils.logger import logger
 
+Json = Dict[str, Any]
 
-LANGUAGES = {
+LANGUAGES: Dict[str,str] = {
     'en': 'english',
     'nl': 'dutch',
     'de': 'german',
     'fr': 'french'
 }
 
-MAX_KEYWORDS = 5
-SOURCE_FILE = "resources/api_sources.json"
-MAX_ARTICLES = 2
+MAX_KEYWORDS: int = 5
+SOURCE_FILE: str = "resources/api_sources.json"
+MAX_ARTICLES: int = 2
 
-DEFAULT_ERROR_MSG = {"error": {"text": "Houston, we have a problem!", "reason": None}}
+DEFAULT_ERROR_MSG: str = "Houston, we have a problem!"
 
-def format_error(reason):
-    error = deepcopy(DEFAULT_ERROR_MSG)
-    error["error"]["reason"] = reason
-    return error
+def format_error(reason:str) -> Dict[str, Dict[str, str]]:
+    return {"error": {"text": DEFAULT_ERROR_MSG, "reason": reason}}
 
-def absolute_path(filename):
+def absolute_path(filename:str) -> str:
     return p.join(p.dirname(p.abspath(__file__)), filename)
 
-def format_date(date):
-    return date.strftime('%Y-%m-%d')
-
-def process_input(text, method="remove"):
+def process_input(text:str, method:str="remove") -> str:
     
     if method is not "remove":
         raise NotImplementedError(method)
 
-    def flag_word(word):
+    def flag_word(word:str) -> bool:
         # FIXME: ugly workaround for limited cases (i.e. tweets)
         return any(not(word.startswith(char)) for char in ("#", "@"))
 
     return " ".join(filter(flag_word, text.split()))
 
-def fetch_articles(params):
+def fetch_articles(params:Json) -> Json:
+    """
+    Given a dictionary containing an input text, process the text and get relevant
+    articles from various sources. The output is formatted in a dictionary with multiple
+    elements, the two most important elements are graph (edges and nodes) and a list of articles
+    in json format
+    """
 
     logger.debug(f"Request with params {params}")
 
@@ -53,9 +54,6 @@ def fetch_articles(params):
         "keywords": [], 
         "language": "", 
         "totalResults": 0}
-
-    end_date = date.today()
-    start_date = end_date - relativedelta(months=1)
 
     text = params["text"]
     translator = IBMTranslator()
@@ -94,7 +92,7 @@ def fetch_articles(params):
     try:
         summary = Summary(language=LANGUAGES[language]).fit(text)
         output["graph"] = summary.get_graph()
-        output["keywords"] = summary.get_keywords().split()
+        output["keywords"] = summary.get_keywords()
         if not len(summary.keywords_):
             raise ValueError("No keywords found")
 
@@ -107,11 +105,11 @@ def fetch_articles(params):
     try:
 
         newsapi = NewsClient(
-            summary.get_keywords(MAX_KEYWORDS), 
-            ",".join([s for l in sources.values() for s in l]), 
-            format_date(start_date), 
-            format_date(end_date), 
-            language
+            summary.get_keywords(MAX_KEYWORDS),
+            sources=[s for l in sources.values() for s in l],
+            start_date=None, 
+            end_date=None, 
+            language=language
         )
 
         articles = newsapi.fetch_all()

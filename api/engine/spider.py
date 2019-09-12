@@ -5,14 +5,23 @@ from urllib.parse import urljoin
 from copy import deepcopy
 import requests
 import feedparser
+from typing import Iterator, List, Dict, Union, Optional, Iterable, Tuple, Any
 
 from api.utils.logger import logger
 from api.utils.functools import member, member, member_item
 
+Json = Dict[str, Any]
 
 class Source:
+
+    """
+    Source of RSS feed containing multiple categories corresponding
+    to urls.
+    self.get_latest is a generator that takes a list of categories (default=all)
+    and yields the feeds for each category using feedparser library
+    """
     
-    def __init__(self, name, id, url, country, lang, categories):
+    def __init__(self, name:str, id:str, url:str, country:str, lang:str, categories:List[Dict[str, str]]) -> None:
         self.name = name
         self.id = id
         self.url = url
@@ -20,40 +29,48 @@ class Source:
         self.lang = lang
         self.categories = categories
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Source({self.name})"
 
-    def __iter__(self):
+    def __iter__(self) -> Iterable[Dict[str, str]]:
         return self.categories.__iter__()
 
-    def __contains__(self, category):
-        return category in map(itemgetter("name"), self.categories)
+    def __getitem__(self, category_name:str) -> Dict[str, str]:
+        for category in self.categories:
+            if category["name"] == category_name:
+                return category
+        raise KeyError(category_name)
+
+    def __contains__(self, category_name:str) -> bool:
+        return bool(self[category_name])
 
     @property
-    def available_categories(self):
+    def available_categories(self) -> List[str]:
         return list(map(itemgetter("name"), self.categories))
 
-    def update_categories(self, selection):
+    def update_categories(self, selection:list) -> List[Dict[str, str]]:
         f = member_item(selection, "name")
         self.categories = list(filter(f, self.categories))
         return self.categories
 
-    def get_category(self, name):
+    def get_category(self, category_name:str) -> Dict[str, str]:
+        logger.warn(DeprecationWarning("Replace self.get_category(name) to self[name]"))
         for category in self.categories:
-            if category["name"] == name:
+            if category["name"] == category_name:
                 return category
+        raise KeyError(category_name)
 
-    def get_url(self, category):
+    def get_url(self, category_name:str) -> str:
         avail = self.available_categories
-        if category not in avail:
-            raise KeyError(category)
-        filter_func = lambda el: el["name"] == category
+        if category_name not in avail:
+            raise KeyError(category_name)
+        filter_func = lambda el: el["name"] == category_name
         selected = list(filter(filter_func, self.categories))
         if len(selected) > 1:
-            logger.warn(f"More than one categories with name {category}")
+            logger.warn(f"More than one categories with name {category_name}")
         return urljoin(self.url, selected[0]["url"])
 
-    def get_latest(self, categories=None):
+    def get_latest(self, categories:list=None) -> Iterator[Tuple[str, str, Json]]:
         categories = categories or self.available_categories
         for category in categories:
             if category not in self.available_categories:
@@ -68,7 +85,7 @@ class Source:
                 logger.warn(result)
             yield self.id, category, result.entries
 
-    def to_dict(self):
+    def to_dict(self) -> Dict[str,str]:
         return dict(
             name=self.name, 
             id=self.id, 
@@ -76,29 +93,40 @@ class Source:
             lang=self.lang)
 
     @classmethod
-    def from_dict(cls, attributes):
+    def from_dict(cls, attributes) -> 'Source':
         return cls(**attributes)
 
 class SourceCollection:
 
+    """
+    Collection of RSS sources containing sources to RSS feeds.
+    SourceCollection  is initialised from a list of sources definitions. 
+    The helper methods from_dict and from_file are available to load 
+    directly the sources from multiple origin (for example generated 
+    with json.load or stored in a json file).
+    The method self.fetch_all takes filters as keyword arguments that
+    correspond to attributes of the sources and returns a generator of
+    RSS feeds for the filtered sources.
+    """
+
     SOURCE_FILE = "resources/rss_sources.json"
 
-    def __init__(self, sources):
+    def __init__(self, sources:List[dict]) -> None:
         self.sources = self.convert_sources(sources)
         
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"SourceCollection({p.basename(self.SOURCE_FILE)})"
 
-    def __iter__(self):
+    def __iter__(self) -> Iterable[Source]:
         return self.sources.__iter__()
 
-    def __getitem__(self, source_id):
+    def __getitem__(self, source_id:str) -> Source:
         return self.get_source(id=source_id)
 
-    def __contains__(self, source_id):
-        return source_id in map(attrgetter("id"), self.sources)
+    def __contains__(self, source_id:str) -> bool:
+        return bool(self[source_id])
 
-    def get_source(self, **identifiers):
+    def get_source(self, **identifiers:Union[str,List[str]]) -> Source:
         source = self.find_all(**identifiers)
         if len(source) > 1:
             logger.warn(f"Parameters {identifiers} not unique")
@@ -107,19 +135,26 @@ class SourceCollection:
             raise KeyError(identifiers)
         return source[0]
 
-
     @property
-    def available_sources(self):
+    def available_sources(self) -> List[str]:
         return list(map(attrgetter("id"), self.sources))
 
-    def fetch_all(self, **filters):
+    def fetch_all(self, **filters:Union[str,List[str]]) -> Iterator[Tuple[str, str, Json]]:
         sources = self.find_all(**filters)
         for source in sources:
             yield from source.get_latest()
 
-    def find_all(self, **filters):
-        sources = deepcopy(self.sources)
-        categories = filters.pop("categories", None)
+    def find_all(self, categories:Optional[List[str]]=None, **filters:Union[str,List[str]]) -> List[Source]:
+        """Returns a copy of the sources that match the provided filters, each containing
+        only the given categories. The output is only calculated in the return statement.
+        Params:
+            categories: list of category names to match against each source categories
+            filters: key, value mapping where key is an attribute of Source and value can 
+            be one or more strings to include in the output
+
+        Returns: the list of filtered sources that match the provided filters with the provided categories
+        """
+        sources = iter(deepcopy(self.sources))
         if categories:
             f = lambda s: s.update_categories(categories)
             sources = filter(f, sources)
@@ -127,8 +162,6 @@ class SourceCollection:
         for key, value in filters.items():
             if isinstance(value, (list, tuple, set)):
                 func = lambda el: getattr(el, key) in value
-            elif value is None:
-                func = lambda _: True
             else:
                 func = lambda el: getattr(el, key) == value
             sources = filter(func, sources)
@@ -136,17 +169,17 @@ class SourceCollection:
         return list(sources)
 
     @classmethod
-    def from_dict(cls, sources_dict):
+    def from_dict(cls, sources_dict:Json) -> 'SourceCollection':
         return cls(sources_dict["sources"])
 
     @classmethod
-    def from_file(cls, filename=None):
+    def from_file(cls, filename:Optional[str]=None) -> 'SourceCollection':
         filename = filename or cls.SOURCE_FILE
         full_path = p.abspath(p.join(p.dirname(__file__), filename))
         with open(full_path) as json_file:
             return cls.from_dict(json.load(json_file))
 
     @staticmethod
-    def convert_sources(sources):
+    def convert_sources(sources:List[Json]) -> List[Source]:
         return list(map(Source.from_dict, sources))
 
