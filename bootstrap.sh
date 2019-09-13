@@ -70,14 +70,15 @@ if [ $UPDATE ]; then
     2)
       echo "Pull images from online repository"
       for image in $IMAGES; do
-        podman pull $DEFAULT_IMAGE:$image || exit 1;
+        podman pull -q $DEFAULT_IMAGE:$image || exit 1 &
       done
       ;;
     q)
       echo "Exiting..." && exit 0;;
     *)
+      echo "Build images locally"
       for image in $IMAGES; do
-        podman build -t $DEFAULT_IMAGE:$image ./$image || exit 1
+        podman build -t $DEFAULT_IMAGE:$image -q ./$image || exit 1 &
       done
       ;;
   esac
