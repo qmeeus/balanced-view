@@ -11,8 +11,17 @@ class Summary:
         self.stopwords = stopwords
 
     def fit_transform(self, text):
-        self.keywords_, self.graph_, self.lemma2words_, self.scores_ = \
-            self._process_text(text)
+        kwds, (self.graph_, self.lemma2words_, self.scores_) = keywords(
+            text, 
+            language=self.language,
+            ratio=1.0, 
+            split=True,
+            scores=True
+        )
+
+        kwds_df = pd.DataFrame(kwds, columns=["keyword", "score"])
+        kwds_df = kwds_df.sort_values("score", ascending=False)
+        self.keywords_ = kwds_df
         return self.keywords_
 
     def fit(self, text):
@@ -40,19 +49,6 @@ class Summary:
     def get_keywords(self, max_kws=5):
         to_keep = self._keywords_to_keep(max_kws)
         return self.keywords_['keyword'].iloc[to_keep].values.tolist()
-
-    def _process_text(self, text):
-        kwds, (graph, l2w, scores) = keywords(
-            text, 
-            language=self.language,
-            ratio=1.0, 
-            split=True,
-            scores=True
-        )
-
-        kwds_df = pd.DataFrame(kwds, columns=["keyword", "score"])
-        kwds_df = kwds_df.sort_values("score", ascending=False)
-        return kwds_df, graph, l2w, scores
 
     def _keywords_to_keep(self, max_kws):
         weights = self.keywords_['keyword'].map(lambda s: len(s.split())).values.tolist()
