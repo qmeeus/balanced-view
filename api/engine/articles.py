@@ -63,8 +63,6 @@ def fetch_articles(params:Json) -> Json:
         output["language"] = language
 
         if language != "en":
-            # FIXME: ugly workaround for africaans and dutch
-            language = language if not language == "af" else "nl"
 
             try:
                 text = translator.translate(text, source=language, target="en", return_all=False)
