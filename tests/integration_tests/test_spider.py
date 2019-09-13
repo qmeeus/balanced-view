@@ -26,7 +26,7 @@ def test_source():
     source = Source.from_dict(example)
     assert isinstance(source, Source)
 
-    assert all(isinstance(dict, c) for c in source)
+    assert all(type(c) is dict for c in source)
 
     cats = source.available_categories
     assert type(cats) is list
@@ -74,7 +74,6 @@ def test_source_collection():
     assert all(isinstance(s, Source) for s in sources)
 
     i = 5
-    import ipdb; ipdb.set_trace()
     for name, cat, res in collection.fetch_all(**filters):
         print(name, cat, len(res))
         i -= 1 
@@ -82,6 +81,6 @@ def test_source_collection():
 
 
 if __name__ == "__main__":
-    # import ipdb; ipdb.set_trace()
-    # test_source()
+    import ipdb; ipdb.set_trace()
+    test_source()
     test_source_collection()

@@ -19,10 +19,10 @@ def _test_balancedview(func):
             print("; ".join([
                 "{}: {}".format(orientation, str(len(articles))) for orientation, articles in response["articles"].items()]))
 
-def test_procedure():
+def test_balancedview():
     from api.engine.articles import fetch_articles
     _test_balancedview(fetch_articles)
 
 
 if __name__ == '__main__':
-    test_procedure()
+    test_balancedview()

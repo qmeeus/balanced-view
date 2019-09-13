@@ -11,14 +11,14 @@ def post(url):
 
 def test_api():
 
-    from tests.test_balancedview import _test_balancedview
+    from tests.integration_tests.test_balancedview import _test_balancedview
     _test_balancedview(post(API_LOCATION))
 
 
 def test_update():
     url = API_LOCATION + "/update"
 
-    with open("tests/rss_sources.json") as f:
+    with open("tests/test_data/rss_sources.json") as f:
         sources = json.load(f)
 
     resp = post(url)(sources)        
