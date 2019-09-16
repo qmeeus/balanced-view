@@ -1,7 +1,10 @@
 from datetime import date
+
+from tests.utils import safe
 from api.clients import NewsClient
 
 
+@safe
 def test_news_api():
     keywords = "trump republican shootings el paso".split()
     sources = "cnn,fox-news,politico".split(",")

@@ -1,8 +1,8 @@
 from pprint import pprint
-from tests.utils import load_test_data
+from tests.utils import load_texts
 
 def _test_balancedview(func):
-    for text in load_test_data():
+    for text in load_texts():
         params = {"text": text}
         response = func(params)
         print("Graph:")

@@ -1,7 +1,7 @@
 import requests
 import warnings
 from bs4 import BeautifulSoup
-from tests.utils import load_test_data
+from tests.utils import load_texts
 
 # UI_LOCATION = "http://localhost:8080"
 UI_LOCATION = "http://cardia.cs.kuleuven.be:8080"
@@ -27,7 +27,7 @@ def test_ui():
     csrf_token = soup.find("input", {"id": "csrf_token"}).get("value")
     assert bool(csrf_token)
 
-    for i, text in enumerate(load_test_data()):
+    for i, text in enumerate(load_texts()):
         title = text.strip().split('\n')[0]
         print(f"Text #{i}: {title[:50]}...", end=" ")
         _test_post_request(text, csrf_token)

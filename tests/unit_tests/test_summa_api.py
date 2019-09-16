@@ -1,11 +1,11 @@
 import pandas as pd
 from summa.graph import Graph
 from api.clients import Summary
-from tests.utils import load_test_data
+from tests.utils import load_texts, safe
 
-
+@safe
 def test_summa():
-    for text in load_test_data():
+    for text in load_texts():
         try:
             _test_summa(text)
         except ValueError as e:

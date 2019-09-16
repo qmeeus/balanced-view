@@ -1,8 +1,9 @@
 import operator
 
+from tests.utils import safe
 from api.clients import IBMTranslator
 
-
+@safe
 def test_ibm_translate():
     translator = IBMTranslator()
     target = translator.identify("Waar is de papegaai?", return_all=False)
