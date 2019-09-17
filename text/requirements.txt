@@ -1,0 +1,3 @@
+gensim
+spacy
+nl_core_news_sm

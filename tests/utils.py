@@ -7,8 +7,8 @@ import json
 DATA_DIR = p.join(p.dirname(__file__), "test_data")
 
 
-def load_texts():
-    with open(p.join(DATA_DIR, "texts.txt")) as f:
+def load_texts(filename="texts.txt"):
+    with open(p.join(DATA_DIR, filename)) as f:
         raw = f.read()
     yield from filter(lambda txt: len(txt) > 0, map(str.strip, raw.split("\n\n")))
 
