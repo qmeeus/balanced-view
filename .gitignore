@@ -5,8 +5,10 @@ notes/
 http_proxy.conf
 logs/
 data/
+text/embeddings/*/*
+!text/embeddings/*/*.sh
 
-# Windows shit
+# MacOSX files
 .DS_Store
 
 # Byte-compiled / optimized / DLL files
