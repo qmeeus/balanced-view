@@ -1,3 +1,8 @@
-from .__init__ import main
+from tests.system_tests.test_api import test_balancedview, test_rss
+from tests.system_tests.test_ui import test_ui
 
-main()
+
+test_balancedview()
+test_rss()
+test_ui()
+
