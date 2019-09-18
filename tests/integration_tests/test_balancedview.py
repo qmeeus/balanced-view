@@ -18,6 +18,7 @@ def _test_balancedview(func):
         else:
             print("; ".join([
                 "{}: {}".format(orientation, str(len(articles))) for orientation, articles in response["articles"].items()]))
+        
 
 def test_balancedview():
     from api.engine.articles import fetch_articles
@@ -25,4 +26,5 @@ def test_balancedview():
 
 
 if __name__ == '__main__':
+    import ipdb; ipdb.set_trace()
     test_balancedview()
