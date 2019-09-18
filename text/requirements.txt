@@ -1,3 +1,5 @@
 gensim
 spacy
+spacy-langdetect
 nl_core_news_sm
+logzero
