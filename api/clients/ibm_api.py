@@ -28,8 +28,8 @@ def parse_result(json_key:str) -> Callable:
                     nl_index = index(predictions, "language", "nl")
                     af_index = index(predictions, "language", "af")
                     predictions[nl_index]["confidence"] += predictions.pop(af_index)["confidence"]
-                    logger.debug("Confidence: {confidence}".format(**prediction))
-                return predictions if return_all else prediction[json_key]
+                    logger.debug("Language: {language} Confidence: {confidence:.2%}".format(**prediction))
+                return predictions if return_all else predictions[0][json_key]
             raise Exception("API Error: {}".format(result))
         return wrapper
     return parse_result_decorator
