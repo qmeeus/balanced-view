@@ -3,6 +3,17 @@ from operator import itemgetter, attrgetter
 from api.engine.spider import Source, SourceCollection
 
 
+def _test_output(output):
+    assert len(output) == 4
+    id, category, keywords, article = output
+    assert type(id) is str
+    assert type(category) is str
+    assert type(keywords) is list
+    assert all(type(kw) is dict for kw in keywords)
+    assert isinstance(article, dict)
+    print(article.summary)
+    print("Keywords:", ", ".join(["{keyword} ({score:.2f})".format(**kw) for kw in keywords]))
+
 
 def test_source():
     example =  {
@@ -35,7 +46,7 @@ def test_source():
     assert type(obj) is dict
 
     for result in source.get_latest(["Headlines"]):
-        print(len(result))
+        _test_output(result)
 
 def test_source_collection():
     collection = SourceCollection.from_file()
@@ -74,8 +85,8 @@ def test_source_collection():
     assert all(isinstance(s, Source) for s in sources)
 
     i = 5
-    for name, cat, res in collection.fetch_all(**filters):
-        print(name, cat, len(res))
+    for result in collection.fetch_all(**filters):
+        _test_output(result)
         i -= 1 
         if not(i): break
 

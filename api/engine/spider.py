@@ -7,10 +7,14 @@ import requests
 import feedparser
 from typing import Iterator, List, Dict, Union, Optional, Iterable, Tuple, Any
 
+from api.clients.summa_api import Summary
 from api.utils.logger import logger
 from api.utils.functools import member, member, member_item
+from api.utils.patterns import LANGUAGES, Json
 
-Json = Dict[str, Any]
+
+ResultIterator = Iterator[Tuple[str, str, str, Json]]
+
 
 class Source:
 
@@ -70,7 +74,7 @@ class Source:
             logger.warn(f"More than one categories with name {category_name}")
         return urljoin(self.url, selected[0]["url"])
 
-    def get_latest(self, categories:list=None) -> Iterator[Tuple[str, str, Json]]:
+    def get_latest(self, categories:list=None) -> ResultIterator:
         categories = categories or self.available_categories
         for category in categories:
             if category not in self.available_categories:
@@ -83,7 +87,18 @@ class Source:
                     raise requests.HTTPError(result.status)
             else:
                 logger.warn(result)
-            yield self.id, category, result.entries
+
+            for entry in result.entries:
+                try:
+                    lang = LANGUAGES[entry.summary_detail['language']]
+                    summary = Summary(language=lang).fit(entry.summary)
+                    keywords = summary.get_keywords()
+
+                except Exception as e:
+                    logger.exception(e)
+                    keywords = {}
+
+                yield self.id, category, keywords, entry
 
     def to_dict(self) -> Dict[str,str]:
         return dict(
@@ -139,7 +154,7 @@ class SourceCollection:
     def available_sources(self) -> List[str]:
         return list(map(attrgetter("id"), self.sources))
 
-    def fetch_all(self, **filters:Union[str,List[str]]) -> Iterator[Tuple[str, str, Json]]:
+    def fetch_all(self, **filters:Union[str,List[str]]) -> ResultIterator:
         sources = self.find_all(**filters)
         for source in sources:
             yield from source.get_latest()

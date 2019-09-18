@@ -23,6 +23,12 @@ class TextKeywords(db.Model):
     textrank_score = db.Column('textrank_score', db.Float)
 
 
+class ArticleKeywords(db.Model):
+    article_id = db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True)
+    keyword_id = db.Column('keyword_id', db.Integer, db.ForeignKey('keyword.id'), primary_key=True)
+    textrank_score = db.Column('textrank_score', db.Float)
+
+
 class TextArticles(db.Model):
     input_text_id = db.Column('input_text_id', db.Integer, db.ForeignKey('input_text.id'), primary_key=True)
     article_id = db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True)
@@ -34,8 +40,10 @@ class InputText(db.Model):
     timestamp = db.Column(db.DateTime, default=dt.datetime.now)
     text = db.Column(db.Text())
     detected_language = db.Column(db.String(3))
+
     keywords = db.relationship('Keyword', secondary='TextKeywords', lazy='subquery',
         backref=db.backref('keywords', lazy=True))
+    
     articles = db.relationship('Article', secondary='TextArticles', lazy='subquery',
         backref=db.backref('articles', lazy=True))
 
@@ -68,6 +76,9 @@ class Article(db.Model):
     publication_date = db.Column(db.DateTime)
     source_id = db.Column(db.ForeignKey('source.id'))
     category_name = db.Column(db.String(80))
+
+    keywords = db.relationship('Keyword', secondary='ArticleKeywords', lazy='subquery',
+            backref=db.backref('keywords', lazy=True))
 
     __table_args__ = (db.ForeignKeyConstraint(
         [source_id, category_name], [Category.source_id, Category.name]), 

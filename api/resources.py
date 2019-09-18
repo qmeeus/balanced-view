@@ -96,7 +96,7 @@ class DataFetcher(Resource):
 
         db.session.commit()
         
-        for source_id, category_name, results in collection.fetch_all():
+        for source_id, category_name, keywords, article_json in collection.fetch_all():
 
             category = db.session.query(Category).filter_by(
                 name=category_name, source_id=source_id).first()
@@ -105,26 +105,30 @@ class DataFetcher(Resource):
                 logger.error(f"Category not found: {source_id}/{category_name}")
                 raise KeyError(f"Category({source_id}/{category_name})")
 
-            for result in results:
-                pub_date = dt.fromtimestamp(mktime(result["published_parsed"]))
-                image_urls = [link["href"] 
-                                for link in result['links'] 
-                                if link["type"].startswith("image")]
+            pub_date = dt.fromtimestamp(mktime(article_json["published_parsed"]))
+            image_urls = [link["href"] 
+                          for link in article_json['links'] 
+                          if link["type"].startswith("image")]
 
-                image_url = image_urls[0] if len(image_urls) else None                
-                article, _ = get_or_create(
-                    db.session, Article, 
-                    defaults={
-                        'title': result["title"],
-                        'url': result["link"],
-                        'description': result["summary"],
-                        'image_url': image_url,
-                        'publication_date': pub_date,
-                        'source_id': category.source_id,
-                        'category_name': category.name
-                    },
-                    title=result["title"], publication_date=pub_date)
+            image_url = image_urls[0] if len(image_urls) else None                
+            article, _ = get_or_create(
+                db.session, Article, 
+                defaults={
+                    'title': article_json["title"],
+                    'url': article_json["link"],
+                    'description': article_json["summary"],
+                    'image_url': image_url,
+                    'publication_date': pub_date,
+                    'source_id': category.source_id,
+                    'category_name': category.name
+                },
+                title=article_json["title"], publication_date=pub_date)
         
+            for keyword_dict in keywords:
+                kw_val, score = keyword_dict['keyword'], keyword_dict['score']
+                keyword = get_or_create(db.session, Keyword, default={'score': score}, value=kw_val)
+                article.keywords.append(keyword)
+
         db.session.commit()
 
         return jsonify({"message": "Success"})
