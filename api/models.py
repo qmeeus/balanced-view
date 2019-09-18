@@ -17,15 +17,16 @@ def get_or_create(session, model, defaults=None, **kwargs):
         return instance, True
 
 
-text_keyword = db.Table('text_keywords',
-    db.Column('input_text_id', db.Integer, db.ForeignKey('input_text.id'), primary_key=True),
-    db.Column('keyword_id', db.Integer, db.ForeignKey('keyword.id'), primary_key=True)
-)
+class TextKeywords(db.Model):
+    input_text_id = db.Column('input_text_id', db.Integer, db.ForeignKey('input_text.id'), primary_key=True)
+    keyword_id = db.Column('keyword_id', db.Integer, db.ForeignKey('keyword.id'), primary_key=True)
+    textrank_score = db.Column('textrank_score', db.Float)
 
-text_article = db.Table('text_articles',
-    db.Column('input_text_id', db.Integer, db.ForeignKey('input_text.id'), primary_key=True),
-    db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True)
-)
+
+class TextArticles(db.Model):
+    input_text_id = db.Column('input_text_id', db.Integer, db.ForeignKey('input_text.id'), primary_key=True)
+    article_id = db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True)
+    relevance_score = db.Column('relevance_score', db.Float)
 
 
 class InputText(db.Model):
@@ -33,9 +34,9 @@ class InputText(db.Model):
     timestamp = db.Column(db.DateTime, default=dt.datetime.now)
     text = db.Column(db.Text())
     detected_language = db.Column(db.String(3))
-    keywords = db.relationship('Keyword', secondary=text_keyword, lazy='subquery',
+    keywords = db.relationship('Keyword', secondary='TextKeywords', lazy='subquery',
         backref=db.backref('keywords', lazy=True))
-    articles = db.relationship('Article', secondary=text_article, lazy='subquery',
+    articles = db.relationship('Article', secondary='TextArticles', lazy='subquery',
         backref=db.backref('articles', lazy=True))
 
 

@@ -29,8 +29,9 @@ class BalancedView(Resource):
             detected_language=output["language"])
 
         if output["keywords"]:
-            for kwd_val in output["keywords"]:
-                kwd, _ = get_or_create(db.session, Keyword, value=kwd_val)
+            for kwd_dict in output["keywords"]:
+                kwd_val, score = kwd_dict['keyword'], kwd_dict['score']
+                kwd, _ = get_or_create(db.session, Keyword, defaults={'score': score}, value=kwd_val)
                 text.keywords.append(kwd)
 
         if "error" not in output["articles"]:
