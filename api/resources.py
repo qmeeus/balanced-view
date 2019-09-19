@@ -8,7 +8,7 @@ import json
 from api.engine.articles import fetch_articles
 from api.engine.spider import SourceCollection
 from api.models import db, get_or_create
-from api.models import Keyword, InputText, Article, Source, Category
+from api.models import Keyword, InputText, Article, Source, Category, TextKeyword, ArticleKeyword
 from api.models import SourceSchema, CategorySchema
 from api.utils.logger import logger
 
@@ -23,16 +23,13 @@ class BalancedView(Resource):
     def post(self):
         params = self.parser.parse_args()
         output = fetch_articles(params)
-        text = InputText(
-            text=params["text"], 
-            timestamp=dt.now(), 
-            detected_language=output["language"])
+        text = InputText(text=params["text"], detected_language=output["language"])
 
         if output["keywords"]:
             for kwd_dict in output["keywords"]:
                 kwd_val, score = kwd_dict['keyword'], kwd_dict['score']
-                kwd, _ = get_or_create(db.session, Keyword, defaults={'score': score}, value=kwd_val)
-                text.keywords.append(kwd)
+                keyword, _ = get_or_create(db.session, Keyword, value=kwd_val)
+                text.keywords[keyword] = score
 
         if "error" not in output["articles"]:
             text.totalResults=output["totalResults"]
@@ -52,10 +49,10 @@ class BalancedView(Resource):
                             'author': result["author"],
                             'description': result["description"],
                             'image_url': result["urlToImage"],
-                            'source_id': source.id},
+                            'source': source},
                         title=result["title"], publication_date=publication_date)
 
-                    text.articles.append(article)
+                    text.articles[article] = 0
 
         db.session.add(text)
         db.session.commit()
@@ -92,7 +89,7 @@ class DataFetcher(Resource):
                 category, _ = get_or_create(
                     db.session, Category, 
                     defaults=category_item,
-                    name=category_item["name"], source_id=source.id)
+                    name=category_item["name"], source=source)
 
         db.session.commit()
         
@@ -119,15 +116,18 @@ class DataFetcher(Resource):
                     'description': article_json["summary"],
                     'image_url': image_url,
                     'publication_date': pub_date,
-                    'source_id': category.source_id,
+                    'source': category.source,
                     'category_name': category.name
                 },
                 title=article_json["title"], publication_date=pub_date)
         
             for keyword_dict in keywords:
                 kw_val, score = keyword_dict['keyword'], keyword_dict['score']
-                keyword = get_or_create(db.session, Keyword, default={'score': score}, value=kw_val)
-                article.keywords.append(keyword)
+                keyword, _ = get_or_create(db.session, Keyword, value=kw_val)
+                # article.keywords[keyword] = score
+                assoc_art_kw = get_or_create(db.session, ArticleKeyword, 
+                                             article=article, keyword=keyword, 
+                                             defaults={'textrank_score': score})
 
         db.session.commit()
 
