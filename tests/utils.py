@@ -13,7 +13,15 @@ def load_texts(filename="texts.txt"):
     yield from filter(lambda txt: len(txt) > 0, map(str.strip, raw.split("\n\n")))
 
 def load_rss_sources():
-    with open(p.join(DATA_DIR, "rss_sources.json")) as f:
+    return load_json("rss_sources.json")
+
+
+def load_articles():
+    return load_json("articles.json")
+
+
+def load_json(filename):
+    with open(p.join(DATA_DIR, filename)) as f:
         return json.load(f)
 
 

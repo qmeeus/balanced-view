@@ -1,6 +1,18 @@
 import os.path as p
 from operator import itemgetter, attrgetter
+import json
+
+from tests.utils import load_rss_sources
 from api.engine.spider import Source, SourceCollection
+
+
+def get_more_data():
+    
+    collection = SourceCollection.from_file()
+
+    all_results = list(zip(*collection.fetch_all()))[-1]
+    with open(p.join(p.dirname(__file__), "../test_data/articles.json"), 'w') as f:
+        json.dump({"articles": all_results}, f)
 
 
 def _test_output(output):
@@ -48,6 +60,7 @@ def test_source():
     for result in source.get_latest(["Headlines"]):
         _test_output(result)
 
+
 def test_source_collection():
     collection = SourceCollection.from_file()
     assert isinstance(collection, SourceCollection)
@@ -91,7 +104,9 @@ def test_source_collection():
         if not(i): break
 
 
+
 if __name__ == "__main__":
-    import ipdb; ipdb.set_trace()
-    test_source()
-    test_source_collection()
+    # import ipdb; ipdb.set_trace()
+    # test_source()
+    # test_source_collection()
+    get_more_data()

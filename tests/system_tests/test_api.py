@@ -26,5 +26,5 @@ def test_rss():
 
 
 if __name__ == '__main__':
-    test_api()
-    test_update()
+    test_balancedview()
+    test_rss()
