@@ -1,9 +1,11 @@
 import os.path as p
 from operator import itemgetter, attrgetter
 import json
+from time import time
 
-from tests.utils import load_rss_sources
 from api.engine.spider import Source, SourceCollection
+from tests.unit_tests.test_fetch_rss import _test_output
+from tests.utils import load_rss_sources
 
 
 def get_more_data():
@@ -13,52 +15,6 @@ def get_more_data():
     all_results = list(zip(*collection.fetch_all()))[-1]
     with open(p.join(p.dirname(__file__), "../test_data/articles.json"), 'w') as f:
         json.dump({"articles": all_results}, f)
-
-
-def _test_output(output):
-    assert len(output) == 4
-    id, category, keywords, article = output
-    assert type(id) is str
-    assert type(category) is str
-    assert type(keywords) is list
-    assert all(type(kw) is dict for kw in keywords)
-    assert isinstance(article, dict)
-    print(article.summary)
-    print("Keywords:", ", ".join(["{keyword} ({score:.2f})".format(**kw) for kw in keywords]))
-
-
-def test_source():
-    example =  {
-        "name": "vrt-nieuws", 
-        "id": "vrt", 
-        "url": "https://www.vrt.be",
-        "country": "be",
-        "lang": "nl",
-        "categories": [
-            {
-                "name": "Headlines", 
-                "url": "/vrtnws/nl.rss.headlines.xml"
-            },
-            {
-                "name": "Latest", 
-                "url": "/vrtnws/nl.rss.articles.xml"
-            },
-        ]
-    }
-
-    source = Source.from_dict(example)
-    assert isinstance(source, Source)
-
-    assert all(type(c) is dict for c in source)
-
-    cats = source.available_categories
-    assert type(cats) is list
-
-    obj = source.to_dict()
-    assert type(obj) is dict
-
-    for result in source.get_latest(["Headlines"]):
-        _test_output(result)
 
 
 def test_source_collection():
@@ -97,16 +53,18 @@ def test_source_collection():
     assert len(sources)
     assert all(isinstance(s, Source) for s in sources)
 
-    i = 5
-    for result in collection.fetch_all(**filters):
-        _test_output(result)
-        i -= 1 
-        if not(i): break
+    # start = time()
+    # for result in collection.fetch_all(**filters):
+    #     _test_output(result, print_output=False)
+    # print(f"Job took {time() - start}")
 
+    start = time()
+    for result in collection.fetch_all():
+        _test_output(result, print_output=False)
+    print(f"Job took {time() - start}")
 
 
 if __name__ == "__main__":
     # import ipdb; ipdb.set_trace()
-    # test_source()
-    # test_source_collection()
-    get_more_data()
+    test_source_collection()
+    # get_more_data()

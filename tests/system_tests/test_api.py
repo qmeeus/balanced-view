@@ -7,7 +7,11 @@ API_LOCATION = "http://localhost:32597"
 
 def post(url):
     def _post(params):
-        return requests.post(url, json=params).json()
+        r = requests.post(url, json=params)
+        try:
+            return r.json()
+        except:
+            return r.text
     return _post
 
 def test_balancedview():
@@ -26,5 +30,5 @@ def test_rss():
 
 
 if __name__ == '__main__':
-    test_balancedview()
+    # test_balancedview()
     test_rss()
