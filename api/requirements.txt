@@ -16,3 +16,4 @@ git+https://github.com/qmeeus/textrank.git
 gunicorn
 logzero
 feedparser
+knapsack

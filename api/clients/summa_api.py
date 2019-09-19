@@ -1,8 +1,9 @@
 import pandas as pd
 from summa.keywords import keywords
 from typing import Optional, Any, List, Dict, Union
+from knapsack import knapsack
 
-from api.utils.knapsack import knapsack_dp
+# from api.utils.knapsack import knapsack_dp
 from api.utils.patterns import Json
 
 
@@ -22,6 +23,7 @@ class Summary:
         )
 
         kwds_df = pd.DataFrame(kwds, columns=["keyword", "score"])
+        kwds_df = kwds_df.loc[kwds_df["keyword"].map(len) < 80]
         kwds_df = kwds_df.sort_values("score", ascending=False)
         self.keywords_ = kwds_df
         return self.keywords_
@@ -51,16 +53,16 @@ class Summary:
         }
 
     def get_keywords(self, max_kws:Optional[int]=None, scores:Optional[bool]=True) -> Union[List[Json],List[str]]:
-        to_keep = self._keywords_to_keep(max_kws) if max_kws else self.keywords_.index
+        to_keep = self._keywords_to_keep(max_kws) if max_kws else range(len(self.keywords_))
         keywords = self.keywords_.iloc[to_keep]
         if scores:
             return list(keywords.T.to_dict().values())
         return keywords['keyword'].values.tolist()
 
     def _keywords_to_keep(self, max_kws:int) -> List[int]:
-        weights = self.keywords_['keyword'].map(lambda s: len(s.split())).values.tolist()
-        values = self.keywords_['score'].values.tolist()
-        to_keep = knapsack_dp(values, weights, max_kws, max_kws)
+        lengths = self.keywords_['keyword'].map(lambda s: len(s.split())).values.tolist()
+        weights = self.keywords_['score'].values.tolist()
+        _, to_keep = knapsack(lengths, weights).solve(max_kws)
         return to_keep
 
 
