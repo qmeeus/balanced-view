@@ -90,9 +90,10 @@ class Source:
 
             for entry in result.entries:
                 try:
-                    lang = LANGUAGES[entry.summary_detail['language']]
-                    summary = Summary(language=lang).fit(entry.summary)
-                    keywords = summary.get_keywords()
+                    lang = entry.summary_detail['language'] or result['feed']['language'][:2]
+                    language = LANGUAGES[lang]
+                    summary = Summary(language=language).fit(entry.summary)
+                    keywords = summary.get_keywords(max_kws=10)
 
                 except Exception as e:
                     logger.exception(e)
