@@ -17,3 +17,5 @@ gunicorn
 logzero
 feedparser
 knapsack
+gevent
+gunicorn[gevent]
