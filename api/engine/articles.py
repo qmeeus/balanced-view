@@ -5,15 +5,8 @@ from typing import Dict, Any
 
 from api.clients import NewsClient, IBMTranslator, Summary
 from api.utils.logger import logger
+from api.utils.patterns import LANGUAGES, Json
 
-Json = Dict[str, Any]
-
-LANGUAGES: Dict[str,str] = {
-    'en': 'english',
-    'nl': 'dutch',
-    'de': 'german',
-    'fr': 'french'
-}
 
 MAX_KEYWORDS: int = 5
 SOURCE_FILE: str = "resources/api_sources.json"
@@ -59,6 +52,7 @@ def fetch_articles(params:Json) -> Json:
     translator = IBMTranslator()
 
     try:
+
         language = source_lang = translator.identify(text, return_all=False)
         output["language"] = language
 
@@ -103,7 +97,7 @@ def fetch_articles(params:Json) -> Json:
     try:
 
         newsapi = NewsClient(
-            summary.get_keywords(MAX_KEYWORDS),
+            summary.get_keywords(max_kws=MAX_KEYWORDS, scores=False),
             sources=[s for l in sources.values() for s in l],
             start_date=None, 
             end_date=None, 

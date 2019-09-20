@@ -1,3 +1,8 @@
-from .__init__ import main
+from tests.unit_tests import __main__ as unit_tests
+from tests.integration_tests import __main__ as integration_tests
+from tests.system_tests import __main__ as system_tests
 
-main()
+
+unit_tests()
+integration_tests()
+system_tests()

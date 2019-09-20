@@ -1,3 +1,7 @@
-from .__init__ import main
+from tests.integration_tests.test_balancedview import test_balancedview
+from tests.integration_tests.test_spider import test_source_collection
 
-main()
+
+test_balancedview()
+test_source_collection()
+

@@ -35,6 +35,12 @@ def _test_summa(text):
 
     kwds = summary.get_keywords()
     assert type(kwds) is list
+    assert all(type(kw) is dict for kw in kwds)
+    assert all('keyword' in kw and 'score' in kw for kw in kwds)
+
+    kwds = summary.get_keywords(max_kws=max_kws, scores=False)
+    assert type(kwds) is list
+    assert sum(len(kw.split()) for kw in kwds) <= max_kws
 
     graph = summary.get_graph()
     assert type(graph) is dict and graph
