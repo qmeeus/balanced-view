@@ -1,0 +1,4 @@
+newsapi-python
+logzero
+feedparser
+elasticsearch
