@@ -96,7 +96,6 @@
                     "name": "Economie",
                     "url": "/rss/section/a30afc42-3737-4301-8f8a-5b6833855457"
                 },
-
                 {
                     "name": "Beurs",
                     "url": "/rss/section/74cef9d1-3b28-4b90-943a-ce685bf6ed6e"
@@ -154,6 +153,333 @@
                 {
                     "name": "Headlines",
                     "url": "/nieuws/feed.rss"
+                }
+            ]
+        },
+        {
+            "name": "La Libre Belgique",
+            "id": "lalibre",
+            "url": "https://www.lalibre.be",
+            "country": "be",
+            "lang": "fr",
+            "categories": [
+                {
+                    "name": "Home",
+                    "url": "/rss.xml"
+                },
+                {
+                    "name": "Belgique",
+                    "url": "/rss/section/belgique.xml"
+                },
+                {
+                    "name": "Politique",
+                    "url": "/rss/section/belgique/politique-belge.xml"
+                },
+                {
+                    "name": "Enseignement",
+                    "url": "/rss/section/belgique/enseignement.xml"
+                },
+                {
+                    "name": "Mobilite",
+                    "url": "/rss/section/belgique/mobilite.xml"
+                },
+                {
+                    "name": "Judiciaire",
+                    "url": "/rss/section/belgique/judiciaire.xml"
+                },
+                {
+                    "name": "Societe",
+                    "url": "/rss/section/belgique/societe.xml"
+                },
+                {
+                    "name": "Economie",
+                    "url": "/rss/section/economie.xml"
+                },
+                {
+                    "name": "International",
+                    "url": "/rss/section/international.xml"
+                },
+                {
+                    "name": "Europe",
+                    "url": "/rss/section/international/europe.xml"
+                },
+                {
+                    "name": "Amerique",
+                    "url": "/rss/section/international/amerique.xml"
+                },
+                {
+                    "name": "Asie",
+                    "url": "/rss/section/international/asie.xml"
+                },
+                {
+                    "name": "Afrique",
+                    "url": "/rss/section/international/afrique.xml"
+                },
+                {
+                    "name": "Oceanie",
+                    "url": "/rss/section/international/oceanie.xml"
+                },
+                {
+                    "name": "Les dernieres infos",
+                    "url": "/rss/infos.xml"
+                },
+                {
+                    "name": "AFP",
+                    "url": "/rss/infos/afp.xml"
+                },
+                {
+                    "name": "BELGA",
+                    "url": "/rss/infos/belga.xml"
+                }
+            ]
+        },
+        {
+            "name": "Le Soir",
+            "id": "lesoir",
+            "url": "https://www.lesoir.be",
+            "country": "be",
+            "lang": "fr",
+            "categories": [
+                {
+                    "name": "La une",
+                    "url": "/rss/81853/cible_principale_gratuit"
+                },
+                {
+                    "name": "Fil info",
+                    "url": "/rss/81857/ledirect"
+                },
+                {
+                    "name": "Belgique",
+                    "url": "/rss/81862/cible_principale_gratuit"
+                },
+                {
+                    "name": "Politique",
+                    "url": "/rss/31867/cible_principale"
+                },
+                {
+                    "name": "Societe",
+                    "url": "/rss/31868/cible_principale"
+                },
+                {
+                    "name": "Regions",
+                    "url": "/rss/81864/cible_principale_gratuit"
+                },
+                {
+                    "name": "Bruxelles",
+                    "url": "/rss/81865/cible_principale_gratuit"
+                },
+                {
+                    "name": "Brabant wallon",
+                    "url": "/rss/31871/cible_principale"
+                },
+                {
+                    "name": "Hainaut",
+                    "url": "/rss/31872/cible_principale"
+                },
+                {
+                    "name": "Liege",
+                    "url": "/rss/31873/cible_principale"
+                },
+                {
+                    "name": "Namur-Luxembourg",
+                    "url": "/rss/31874/cible_principale"
+                },
+                {
+                    "name": "Monde",
+                    "url": "/rss/81863/cible_principale_gratuit"
+                },
+                {
+                    "name": "France",
+                    "url": "/rss/31875/cible_principale"
+                },
+                {
+                    "name": "Union europeenne",
+                    "url": "/rss/31876/cible_principale"
+                },
+                {
+                    "name": "Economie",
+                    "url": "/rss/81866/cible_principale_gratuit"
+                },
+                {
+                    "name": "Emploi",
+                    "url": "/rss/81906/cible_principale_gratuit"
+                },
+                {
+                    "name": "Entrepreneuriat",
+                    "url": "/rss/81907/cible_principale_gratuit"
+                }
+            ]
+        },
+        {
+            "name": "L'echo",
+            "id": "lecho",
+            "url": "https://www.lecho.be",
+            "country": "be",
+            "lang": "fr",
+            "categories": [
+                {
+                    "name": "Actualite",
+                    "url": "/rss/actualite.xml"
+                },
+                {
+                    "name": "Top Stories",
+                    "url": "/rss/top_stories.xml"
+                },
+                {
+                    "name": "Entreprises",
+                    "url": "/rss/entreprises.xml"
+                },
+                {
+                    "name": "Automobile",
+                    "url": "/rss/entreprises_automobile.xml"
+                },
+                {
+                    "name": "Banques",
+                    "url": "/rss/entreprises_banques.xml"
+                },
+                {
+                    "name": "Construction",
+                    "url": "/rss/entreprises_construction.xml"
+                },
+                {
+                    "name": "Chimie",
+                    "url": "/rss/entreprises_chimie.xml"
+                },
+                {
+                    "name": "Consommation",
+                    "url": "/rss/entreprises_produits_de_consommation.xml"
+                },
+                {
+                    "name": "Defense et aeronautique",
+                    "url": "/rss/entreprises_defense_et_aeronautique.xml"
+                },
+                {
+                    "name": "Services",
+                    "url": "/rss/entreprises_services.xml"
+                },
+                {
+                    "name": "Private equity",
+                    "url": "/rss/entreprises_private_equity.xml"
+                },
+                {
+                    "name": "Energie",
+                    "url": "/rss/entreprises_energie.xml"
+                },
+                {
+                    "name": "Divertissement",
+                    "url": "/rss/entreprises_divertissement.xml"
+                },
+                {
+                    "name": "Pharma",
+                    "url": "/rss/entreprises_pharma_et_biotechnologie.xml"
+                },
+                {
+                    "name": "Finance",
+                    "url": "/rss/entreprises_services_financiers_et_assurances.xml"
+                },
+                {
+                    "name": "Matieres premieres",
+                    "url": "/rss/entreprises_matieres_premieres.xml"
+                },
+                {
+                    "name": "Semiconducteurs",
+                    "url": "/rss/entreprises_semiconducteurs.xml"
+                },
+                {
+                    "name": "Horeca",
+                    "url": "/rss/entreprises_horeca.xml"
+                },
+                {
+                    "name": "Tic",
+                    "url": "/rss/entreprises_tic.xml"
+                },
+                {
+                    "name": "Logistique",
+                    "url": "/rss/entreprises_logistique.xml"
+                },
+                {
+                    "name": "Aviation",
+                    "url": "/rss/entreprises_aviation.xml"
+                },
+                {
+                    "name": "Management & Expertise",
+                    "url": "/rss/entreprises_management_et_entrepreneuriat.xml"
+                },
+                {
+                    "name": "Media et marketing",
+                    "url": "/rss/entreprises_media_et_marketing.xml"
+                },
+                {
+                    "name": "Resultats",
+                    "url": "/rss/entreprises_resultats.xml"
+                },
+                {
+                    "name": "Grande distribution",
+                    "url": "/rss/entreprises_grande_distribution.xml"
+                },
+                {
+                    "name": "Sport",
+                    "url": "/rss/entreprises_sport.xml"
+                },
+                {
+                    "name": "Tabac",
+                    "url": "/rss/entreprises_tabac.xml"
+                },
+                {
+                    "name": "Telecom",
+                    "url": "/rss/entreprises_telecom.xml"
+                },
+                {
+                    "name": "Textile",
+                    "url": "/rss/entreprises_textile.xml"
+                },
+                {
+                    "name": "Tourisme",
+                    "url": "/rss/entreprises_tourisme.xml"
+                },
+                {
+                    "name": "Transport",
+                    "url": "/rss/entreprises_transport.xml"
+                },
+                {
+                    "name": "Immobilier",
+                    "url": "/rss/entreprises_immobilier.xml"
+                },
+                {
+                    "name": "Alimentation et boisson",
+                    "url": "/rss/entreprises_alimentation_et_boisson.xml"
+                },
+                {
+                    "name": "Industries de base",
+                    "url": "/rss/entreprises_industries_de_base.xml"
+                },
+                {
+                    "name": "Economie & Politique",
+                    "url": "/rss/politique.xml"
+                },
+                {
+                    "name": "Belgique",
+                    "url": "/rss/politique_belgique.xml"
+                },
+                {
+                    "name": "Europe",
+                    "url": "/rss/politique_europe.xml"
+                },
+                {
+                    "name": "Internationale",
+                    "url": "/rss/politique_internationale.xml"
+                },
+                {
+                    "name": "Economie",
+                    "url": "/rss/politique_economie.xml"
+                },
+                {
+                    "name": "Les Marches",
+                    "url": "/rss/les_marches.xml"
+                },
+                {
+                    "name": "Fonds",
+                    "url": "/rss/fonds.xml"
                 }
             ]
         }
