@@ -14,3 +14,5 @@ api = Api(app)
 from . import resources
 api.add_resource(resources.NewsArticles, '/articles')
 api.add_resource(resources.TextAnalysis, '/analyse')
+
+application = app
