@@ -1,0 +1,15 @@
+flask
+flask-restful
+python-dotenv
+numpy
+pandas
+newsapi-python
+ibm-watson
+git+https://github.com/qmeeus/textrank.git
+gunicorn
+logzero
+feedparser
+knapsack
+gevent
+gunicorn[gevent]
+elasticsearch
