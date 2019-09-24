@@ -1,4 +1,7 @@
-from data_provider import __main__ as get_data
+import os
+
+from api.data_provider import __main__ as main
 
 
-get_data()
+def test_data_provider():
+    main()

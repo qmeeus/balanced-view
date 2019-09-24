@@ -5,17 +5,21 @@ from urllib.parse import urljoin
 from copy import deepcopy
 import requests
 import feedparser
+from datetime import datetime as dt
+from time import mktime
 from threading import Thread, Lock
 from queue import Queue
 from typing import Iterator, List, Dict, Union, Optional, Iterable, Tuple, Any
 
-from api.clients.summa_api import Summary
 from api.utils.logger import logger
-from api.utils.functools import member, member, member_item
-from api.utils.patterns import LANGUAGES, Json
 
 
-ResultIterator = Iterator[Tuple[str, str, str, Json]]
+Json = Dict[str,Any]
+Category = Dict[str,str]
+Categories = List[Category]
+ResultIterator = Iterator[Json]
+
+
 
 
 class RssFeed:
@@ -29,7 +33,13 @@ class RssFeed:
 
     N_THREADS = 12
     
-    def __init__(self, name:str, id:str, url:str, country:str, lang:str, categories:List[Dict[str, str]]) -> None:
+    def __init__(self, name:str, 
+                 id:str, 
+                 url:str, 
+                 country:str, 
+                 lang:str, 
+                 categories:List[Dict[str, str]]) -> None:
+
         self.name = name
         self.id = id
         self.url = url
@@ -40,10 +50,10 @@ class RssFeed:
     def __repr__(self) -> str:
         return f"RssFeed({self.name})"
 
-    def __iter__(self) -> Iterable[Dict[str, str]]:
+    def __iter__(self) -> Iterable[Category]:
         return self.categories.__iter__()
 
-    def __getitem__(self, category_name:str) -> Dict[str, str]:
+    def __getitem__(self, category_name:str) -> Category:
         for category in self.categories:
             if category["name"] == category_name:
                 return category
@@ -56,12 +66,12 @@ class RssFeed:
     def available_categories(self) -> List[str]:
         return list(map(itemgetter("name"), self.categories))
 
-    def update_categories(self, selection:list) -> List[Dict[str, str]]:
-        f = member_item(selection, "name")
+    def update_categories(self, selection:Categories) -> Categories:
+        f = lambda x: x["name"] in selection
         self.categories = list(filter(f, self.categories))
         return self.categories
 
-    def get_category(self, category_name:str) -> Dict[str, str]:
+    def get_category(self, category_name:str) -> Category:
         logger.warn(DeprecationWarning("Replace self.get_category(name) to self[name]"))
         for category in self.categories:
             if category["name"] == category_name:
@@ -78,7 +88,7 @@ class RssFeed:
             logger.warn(f"More than one categories with name {category_name}")
         return urljoin(self.url, selected[0]["url"])
 
-    def get_latest(self, categories:list=None) -> ResultIterator:
+    def get_latest(self, categories:Optional[List[str]]=None) -> ResultIterator:
         self._lock = Lock()
         self._queue = Queue()
         self._results = {}
@@ -93,7 +103,7 @@ class RssFeed:
             self._queue.put(category)
 
         self._queue.join()
-        yield from self._get_results()
+        yield from self._parse_results()
 
     def threader(self) -> None:
         while True:
@@ -101,10 +111,10 @@ class RssFeed:
             self.get_category_feed(category)
             self._queue.task_done()
 
-    def get_category_feed(self, category:str) -> None:
-        if category not in self.available_categories:
+    def get_category_feed(self, category_name:str) -> None:
+        if category_name not in self.available_categories:
             return
-        url = self.get_url(category)
+        url = self.get_url(category_name)
         logger.info(f"Request feed from {url}")
         result = feedparser.parse(url)
         if hasattr(result, "status"):
@@ -113,22 +123,12 @@ class RssFeed:
         else:
             logger.warn(result)
         
-        self._results[category] = result
+        self._results[category_name] = result
 
-    def _get_results(self) -> ResultIterator:
+    def _parse_results(self) -> ResultIterator:
         for category, result in self._results.items():
             for entry in result.entries:
-                try:
-                    lang = entry.summary_detail['language'] or result['feed']['language'][:2]
-                    language = LANGUAGES[lang]
-                    summary = Summary(language=language).fit(entry.summary)
-                    keywords = summary.get_keywords(max_kws=10)
-
-                except Exception as e:
-                    logger.exception(e)
-                    keywords = []
-
-                yield self.id, category, keywords, entry
+                yield self.parse_entry(entry, category)
 
     def to_dict(self) -> Dict[str,str]:
         return dict(
@@ -140,6 +140,26 @@ class RssFeed:
     @classmethod
     def from_dict(cls, attributes) -> 'RssFeed':
         return cls(**attributes)
+
+    def parse_entry(self, entry, category):
+        parsed = {}
+        parsed["title"] = self.clean_text(entry["title"])
+        parsed["body"] = self.clean_text(entry["summary"])
+        parsed["publication_date"] = dt.fromtimestamp(mktime(entry["published_parsed"]))
+        parsed["language"] = entry["title_detail"].pop("language", None) or self.lang
+        parsed["source"] = self.to_dict()
+        parsed["category"] = category
+        parsed["url"] = entry["link"]
+            
+        f_img = lambda link: link["type"].startswith("image")
+        urls = list(map(itemgetter("href"), filter(f_img, entry.get("links", []))))
+        parsed["image_url"] = urls[0] if urls else ""
+        return parsed
+
+    @staticmethod
+    def clean_text(text):
+        return text
+
 
 class RssFetcher:
 

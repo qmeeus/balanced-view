@@ -17,7 +17,9 @@ def load_rss_sources():
 
 
 def load_articles():
-    return load_json("articles.json")
+    articles_json = load_json("articles.json")
+    for article_json in articles_json["articles"]:
+        yield article_json["summary"]
 
 
 def load_json(filename):
