@@ -4,7 +4,9 @@ from flask_restful.reqparse import RequestParser
 from datetime import datetime as dt
 from time import mktime
 import json
+from elasticsearch.exceptions import ConnectionError
 
+from api.utils.logger import logger
 from api.utils.patterns import Json
 from api.engine.articles import fetch_articles
 from api.engine.text import analyse
@@ -22,13 +24,20 @@ class NewsArticles(Resource):
         
     def post(self) -> Json:
         params = self.parser.parse_args()
-        articles = fetch_articles(
-            params.query, 
-            params.source_language,
-            params.languages, 
-            params.country, 
-            params.sources
-        )
+        try:
+            articles = fetch_articles(
+                params.query, 
+                params.source_language,
+                params.languages, 
+                params.country, 
+                params.sources
+            )
+
+        except ConnectionError as err:
+            
+            logger.error(err)
+            return jsonify({"message": "Backend is not available"})
+
         return jsonify(articles)
 
 
