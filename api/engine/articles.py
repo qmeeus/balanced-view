@@ -66,5 +66,5 @@ def fetch_articles(terms:str,
     # if output_language is not None:
     #     results = translate_results(results, output_language)
 
-    return list(map(Article.to_dict, response))
+    return {"articles": list(map(Article.to_dict, response))}
 

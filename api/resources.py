@@ -12,7 +12,7 @@ from api.engine.text import analyse
 
 class NewsArticles(Resource):
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.parser = RequestParser()
         self.parser.add_argument('query', type=str, required=True)
         self.parser.add_argument('source_language', type=str)
@@ -20,19 +20,25 @@ class NewsArticles(Resource):
         self.parser.add_argument('country', type=str)
         self.parser.add_argument('sources', type=str)
         
-    def get(self) -> Json:
+    def post(self) -> Json:
         params = self.parser.parse_args()
-        articles = fetch_articles(params.query, params.language, params.country, params.sources)
+        articles = fetch_articles(
+            params.query, 
+            params.source_language,
+            params.languages, 
+            params.country, 
+            params.sources
+        )
         return jsonify(articles)
 
 
 class TextAnalysis(Resource):
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.parser = RequestParser()
         self.parser.add_argument('text', type=str, required=True)
 
-    def get(self) -> Json:
+    def post(self) -> Json:
         params = self.parser.parse_args()
         analysis = analyse(params.text)
         return jsonify(analysis)
