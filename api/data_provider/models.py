@@ -1,4 +1,3 @@
-from hashlib import md5
 from elasticsearch_dsl import InnerDoc, Document, Date, Integer, Keyword, Text, Nested, analyzer
 
 from api.data_provider.__init__ import index_name
@@ -31,3 +30,7 @@ class Article(Document):
           "number_of_shards": 2,
         }
 
+try:
+    Article.init()
+except:
+    pass

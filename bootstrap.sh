@@ -11,12 +11,13 @@ function get_nginx_port {
 APP=balancedview
 API_PORT=$(get_env api FLASK_RUN_PORT)
 UI_PORT=$(get_env ui FLASK_RUN_PORT)
+ES_PORT=$(get_env api ES_PORT)
 NGINX_PORT1=$(get_nginx_port ui)
 NGINX_PORT2=$(get_nginx_port api)
 IMAGE_REPO=docker.io/qmeeus
 DEFAULT_IMAGE=$IMAGE_REPO/$APP
 IMAGES="nginx api ui"
-CONTAINERS="db nginx api ui"
+CONTAINERS="es nginx api ui"
 
 function is_running {
   if ! [ $1 ]; then
@@ -30,16 +31,23 @@ function is_running {
   fi
 }
 
+function wait_for_processes {
+  while (( "$#" )); do
+    pid=$1
+    shift 1
+    if (kill -s 0 $pid); then
+      echo "Wait for process $pid to finish" && wait $pid
+    fi
+  done
+}
+
+# 0) Parse the script arguments
 while (( "$#" )); do
   case "$1" in
     -u|--update)
       UPDATE=true && shift 1;;
     -r|--restart)
       RESTART=true && shift 1;;
-    -m|--migrate)
-      MIGRATE=true && shift 1;;
-    -c|--create_db)
-      CREATE_DB=true && shift 1;;
     --) # end argument parsing
       shift && break;;
     *) # unsupported flags
@@ -47,6 +55,7 @@ while (( "$#" )); do
   esac
 done
 
+# 1) Stop and remove the containers / pod
 if ! [ $RESTART ] && [ $(is_running) ] ; then
   printf "Pod $APP is already running. Re-create it? y/N >>> " && read input
   case $input in
@@ -60,13 +69,16 @@ if ! [ $RESTART ] && [ $(is_running) ] ; then
   esac
 fi
 
+# 2) Update the images if necessary
 if [ $UPDATE ]; then
   echo "Updating the local containers. Options:"
   printf "\t(1) Build locally\n"
   printf "\t(2) Download from $IMAGE_REPO\n"
   printf "\t(q) Quit\n"
   printf "Choice (Default 1) >>> " && read input
+  
   BACK_PID=""
+  
   case $input in
     2)
       echo "Pull images from online repository"
@@ -86,14 +98,14 @@ if [ $UPDATE ]; then
       ;;
   esac
 
-  for pid in $BACK_PID; do
-    while (kill -0 $BACK_PID 2>/dev/null) ; do
-      echo "Process is still active..."
-      sleep 1
-    done
-  done
+  wait_for_processes $BACK_PID
+
 fi
 
+# 3) Start the different services
+BACK_PID=""
+
+# 3a) Create the pod and stop the running containers if necessary
 if ! [ $(is_running) ]; then
   echo "Create pod with name $APP"
   podman pod create --name $APP -p $NGINX_PORT1 -p $NGINX_PORT2
@@ -102,38 +114,35 @@ else
     printf "Restart $container? y/N >>> " && read input
     case $input in
       y|Y)
-        podman stop $APP-$container || podman rm $APP-$container;;
-      *)
-        : ;;
+        podman stop $APP-$container || podman rm $APP-$container &
+        BACK_PID="$BACK_PID $!"
+        ;;
+      *) : ;;
     esac
   done
+
+  wait_for_processes $BACK_PID
+
 fi
 
-if ! [ $(is_running db) ]; then
-  echo "Run database container"
-  DB_LOCATION=$(pwd)/data/postgres
-  mkdir -p $DB_LOCATION
-  DB_PWD="$(get_env api POSTGRES_PASSWORD)"
+BACK_PID=""
+
+# 3b) Start ElasticSearch
+if ! [ $(is_running es) ]; then
+  echo "Start elasticsearch"
+  DATA_DIR=$(pwd)/data/elasticsearch
+  [ -d $DATA_DIR ] || bash -c "mkdir $DATA_DIR && chmod 777 $DATA_DIR"
   podman run -d \
-    --name $APP-db \
+    --name $APP-es \
     --pod $APP \
     --rm \
-    -v $(pwd)/data/postgres:/var/lib/postgresql/data \
-    postgres
-     # -e POSTGRES_PASSWORD=$DB_PWD \
-  sleep 3
+    -v $DATA_DIR:/usr/share/elasticsearch/data \
+    -e "discovery.type=single-node" \
+    docker.elastic.co/elasticsearch/elasticsearch:7.3.2 &
+    BACK_PID="$BACK_PID $!"
 fi
 
-if [ $CREATE_DB ]; then
-  DB_USER=$(get_env api SQLALCHEMY_DATABASE_USER)
-  DB_NAME=$(get_env api SQLALCHEMY_DATABASE_NAME)
-  echo ">>> Waiting for PostgreSQL to start"
-  until podman exec $APP-db psql -U postgres -c '\list'; do
-    echo ">>>>>> PostgreSQL is not ready yet" && sleep 1
-  done
-  podman exec -u postgres $APP-db sh -c "createuser -wdrs $DB_USER && createdb $DB_NAME"
-fi
-
+# 3c) Start the web server
 if ! [ $(is_running nginx) ]; then
   echo "Run nginx server listening on ports $NGINX_PORT1 and $NGINX_PORT2"
   podman run -d \
@@ -141,8 +150,10 @@ if ! [ $(is_running nginx) ]; then
     --pod $APP \
     --rm \
     $DEFAULT_IMAGE:nginx &
+    BACK_PID="$BACK_PID $!"
 fi
 
+# 3d) Start the API
 if ! [ $(is_running api) ]; then
   echo "Run api service on port $API_PORT with name $APP-api"
   podman run -d \
@@ -150,21 +161,22 @@ if ! [ $(is_running api) ]; then
     --pod $APP \
     --rm \
     -v $(pwd)/api:/api \
-    $DEFAULT_IMAGE:api
-        # -v $(pwd)/data:/var/lib/sqlite \
+    $DEFAULT_IMAGE:api &
+    BACK_PID="$BACK_PID $!"
 fi
 
-if [ $MIGRATE ]; then
-  podman exec -it $APP-api bash init_db.sh
-fi
-
+# 3e) Start the UI
 if ! [ $(is_running ui) ]; then
   echo "Run ui service on port $UI_PORT with name $APP-ui"
   podman run -d \
     --name $APP-ui \
     --pod $APP \
     --rm \
-    $DEFAULT_IMAGE:ui
+    $DEFAULT_IMAGE:ui &
+    BACK_PID="$BACK_PID $!"
 fi
+
+# 4) Wait for the last processes to finish
+wait_for_processes $BACK_PID
 
 podman ps
