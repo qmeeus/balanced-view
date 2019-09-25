@@ -9,7 +9,7 @@ from elasticsearch.exceptions import ConnectionError
 from api.utils.logger import logger
 from api.utils.patterns import Json
 from api.engine.articles import fetch_articles
-from api.engine.text import analyse
+from api.engine.text import TextAnalyser
 
 
 class NewsArticles(Resource):
@@ -25,6 +25,7 @@ class NewsArticles(Resource):
     def post(self) -> Json:
         params = self.parser.parse_args()
         try:
+            
             articles = fetch_articles(
                 params.query, 
                 params.source_language,
@@ -36,7 +37,7 @@ class NewsArticles(Resource):
         except ConnectionError as err:
             
             logger.error(err)
-            return jsonify({"message": "Backend is not available"})
+            return jsonify({"error": "Backend is not available"})
 
         return jsonify(articles)
 
@@ -46,8 +47,19 @@ class TextAnalysis(Resource):
     def __init__(self) -> None:
         self.parser = RequestParser()
         self.parser.add_argument('text', type=str, required=True)
+        self.parser.add_argument('output_language', type=str)
+        self.parser.add_argument('article_languages', type=str)
+
 
     def post(self) -> Json:
         params = self.parser.parse_args()
-        analysis = analyse(params.text)
+        
+        analysis = (
+            TextAnalyser(
+                output_language=params.output_language, 
+                article_languages=params.article_languages)
+            .fit(params.text)
+            .to_dict()
+        )
+
         return jsonify(analysis)

@@ -20,8 +20,6 @@ Categories = List[Category]
 ResultIterator = Iterator[Json]
 
 
-
-
 class RssFeed:
 
     """

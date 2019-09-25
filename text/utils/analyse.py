@@ -8,8 +8,6 @@ from spacy_langdetect import LanguageDetector
 from gensim.parsing import preprocessing, preprocess_string
 from typing import List, Optional, Any
 
-from text.utils.logger import logger
-
 
 SPACY_LANG_MODELS = {
     "nl": "nl_core_news_sm",
@@ -28,10 +26,14 @@ ENTITIES = {
     'LOC': 'Place',
 }
 
-def load_model(lang:str) -> Any:
-    if lang not in SPACY_LANG_MODELS:
-        raise KeyError(f"Model not available for {lang}")
-    nlp = spacy.load(find_model(SPACY_LANG_MODELS[lang]))
+def load_model(lang:Optional[str]=None, path:Optional[str]=None) -> Any:
+    if path is None:
+        if not lang:
+            raise ValueError("Must provide one of language or path to model")
+        elif lang not in SPACY_LANG_MODELS:
+            raise KeyError(f"Model not available for {lang}")
+        path = find_model(SPACY_LANG_MODELS[lang])
+    nlp = spacy.load(path)
     return nlp
 
 
@@ -74,7 +76,7 @@ def identify_language(text:str) -> str:
 
     document = model(text)
     prediction = document._.language
-    logger.debug("Language identified: {language}, confidence: {score:.2%}".format(**prediction))
+    print("Language identified: {language}, confidence: {score:.2%}".format(**prediction))
     lang = prediction["language"]
     return lang
 
