@@ -7,6 +7,10 @@ RUN apt-get update \
 COPY requirements.txt /
 RUN pip install --no-cache-dir -r /requirements.txt
 
+COPY install_nlp_models.sh ./
+RUN chmod +x install_nlp_models.sh
+RUN bash install_nlp_models.sh
+
 ENV USER=api
 # ARG UID
 WORKDIR "/$USER"
@@ -25,7 +29,7 @@ ENV LANG=C.UTF-8
 
 COPY . .
 
-RUN chmod 744 docker-entrypoint.sh
+RUN chmod +x docker-entrypoint.sh
 
 # CMD [ "gunicorn", "--chdir", "..", "-w3", "-k", "gevent", "--bind=0.0.0.0:5000", "api.wsgi" ]
 CMD [ "./docker-entrypoint.sh" ]
