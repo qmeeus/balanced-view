@@ -35,7 +35,7 @@ function wait_for_processes {
   while (( "$#" )); do
     pid=$1
     shift 1
-    if (kill -s 0 $pid); then
+    if (kill -s 0 $pid 2>/dev/null); then
       echo "Wait for process $pid to finish" && wait $pid
     fi
   done
