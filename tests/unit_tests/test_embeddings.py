@@ -2,8 +2,8 @@ import os.path as p
 import numpy as np
 
 from text.utils.analyse import preprocess_text, preprocess_many, load_model
-from text.utils.embeddings import load_word_vectors, train_word2vec, get_embeddings_file
-from tests.utils import load_texts
+from text.utils.embeddings import load_word_vectors, train_word2vec, get_embeddings_file, load_pretrained_model
+from tests.utils import load_texts, load_articles
 
 
 NL_STOPWORDS = load_model("nl").Defaults.stop_words
@@ -45,9 +45,23 @@ def test_retrain():
     print(wv.most_similar("president"))
 
 
-if __name__ == '__main__':
+def test_text_embedding():
+    articles = load_articles()
+    nlp = load_pretrained_model("nl_core_news_lg")
+    documents = [nlp(article) for article in articles]
+    similarities = np.zeros((len(documents),) * 2)
+    for i in range(len(documents)):
+        for j in range(i + 1, len(documents)):
+         similarities[i, j] = documents[i].similarity(documents[j])
+
+    print(similarities)
     import ipdb; ipdb.set_trace()
-    test_preprocessing()
-    test_loading()
-    test_train()
-    test_retrain()
+    print()
+
+if __name__ == '__main__':
+    # import ipdb; ipdb.set_trace()
+    # test_preprocessing()
+    # test_loading()
+    # test_train()
+    # test_retrain()
+    test_text_embedding()
