@@ -43,7 +43,7 @@ If you find this tool or the publication useful for your research project, pleas
      - Journalist Interface (adapted to the specific needs of news reporters)
    - Questions:
      - ~~Hosting? (a.t.m. Heroku with the advantages and disadvantages, possible @KUL? AWS?)~~
-        - ~~To KU Leuven using Podman instead of Docker ~~
+        - ~~To KU Leuven using Podman instead of Docker~~
      - ~~What about domain name?~~
      - ~~How to make the site faster? Is it slow because of Heroku?~~ YES
  - ~~Check dutch parsing (and improve if needed)~~
@@ -52,10 +52,10 @@ If you find this tool or the publication useful for your research project, pleas
    - RSS Feeds -- preferred medium for media providers
      - Any issues from a legal perspective?
    - ~~Categories of news provider - do the current categories still make sense?~~
-   - ~~Which news provider provides a developer API? ~~
-     - ~~[GoPress](http://api-staging.gopress.be/): ~~
+   - ~~Which news provider provides a developer API?~~
+     - ~~[GoPress](http://api-staging.gopress.be/):~~
        - ~~General API (not KUL): XML, No documentation, needs a licenseKey~~
-       - ~~academic = free access for articles > 2days old but no API (that I know of) + only browser based (need heavy intergration work) ~~
+       - ~~academic = free access for articles > 2days old but no API (that I know of) + only browser based (need heavy intergration work)~~
      - ~~[NexisLexis](https://www.lexisnexis.com/communities/academic/w/wiki/111.url-api-specifications.aspx)~~
        - ~~academic: Not recommended, authenticate twice with KUL account + only browser based (need heavy intergration work)~~
        - ~~General API: authentication & access not clear~~
