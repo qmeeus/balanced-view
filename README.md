@@ -2,9 +2,9 @@
 
 The app is deployed [here](http://cardia.cs.kuleuven.be:8080).
 
-Authors: [Quentin Meeus](https://github.com/qmeeus) & [Calum Thornhill](https://github.com/cjthornhill) 
-
 Active developer: [Quentin Meeus](https://github.com/qmeeus)
+
+Initiators: [Quentin Meeus](https://github.com/qmeeus) & [Calum Thornhill](https://github.com/cjthornhill) 
 
 This tool started as a project for the course Knowledge and the Web of the Master in Artificial Intelligence of KU Leuven. It is now part of the DIAMOND (Diversity and Information Media: New Tools for a Multifaceted Public Debate) workgroup in collaboration with the universities of Leuven, Antwerpen and Brussels. 
 
@@ -42,38 +42,42 @@ If you find this tool or the publication useful for your research project, pleas
      - ~~Translate API (provided by IBM)~~
      - Journalist Interface (adapted to the specific needs of news reporters)
    - Questions:
-     - Hosting? (a.t.m. Heroku with the advantages and disadvantages, possible @KUL? AWS?)
-        - To KU Leuven using Podman instead of Docker 
-     - What about domain name?
+     - ~~Hosting? (a.t.m. Heroku with the advantages and disadvantages, possible @KUL? AWS?)~~
+        - ~~To KU Leuven using Podman instead of Docker ~~
+     - ~~What about domain name?~~
      - ~~How to make the site faster? Is it slow because of Heroku?~~ YES
  - ~~Check dutch parsing (and improve if needed)~~
  - Translate the website and option to switch languages
  - Connect to belgian (nl-fr) news providers
-   - Categories of news provider - do the current categories still make sense?
-   - Which news provider provides a developer API? 
-     - [GoPress](http://api-staging.gopress.be/): 
-       - General API (not KUL): XML, No documentation, needs a licenseKey
-       - academic = free access for articles > 2days old but no API (that I know of) + only browser based (need heavy intergration work) 
-     - [NexisLexis](https://www.lexisnexis.com/communities/academic/w/wiki/111.url-api-specifications.aspx)
-       - academic: Not recommended, authenticate twice with KUL account + only browser based (need heavy intergration work)
-       - General API: authentication & access not clear
- - Translation service: IBM vs Google Translate
+   - RSS Feeds -- preferred medium for media providers
+     - Any issues from a legal perspective?
+   - ~~Categories of news provider - do the current categories still make sense?~~
+   - ~~Which news provider provides a developer API? ~~
+     - ~~[GoPress](http://api-staging.gopress.be/): ~~
+       - ~~General API (not KUL): XML, No documentation, needs a licenseKey~~
+       - ~~academic = free access for articles > 2days old but no API (that I know of) + only browser based (need heavy intergration work) ~~
+     - ~~[NexisLexis](https://www.lexisnexis.com/communities/academic/w/wiki/111.url-api-specifications.aspx)~~
+       - ~~academic: Not recommended, authenticate twice with KUL account + only browser based (need heavy intergration work)~~
+       - ~~General API: authentication & access not clear~~
+ - Translation service: IBM vs ~~Google Translate~~ DeepL
    - IBM: not always stable 
-   - Google: more expensive & need billing information even for free API calls
+   - ~~Google: more expensive & need billing information even for free API calls~~
  - Multilingual support (provide translated articles from other languages)
  - Matching algorithm:
    - ~~Move from TextRank to Deep Learning? (Graph Convolutional Nets, Bi-LSTM?)~~ NOT PRIORITY
      - ~~Is it necessary since with the modifications, the summarisation works fine?~~
    - ~~Latest developments in NLP (Attention is all you need)~~
    - ~~Strategy: training data / unsupervised learning / train and host vs continuous learning~~
- - Connect DB and store searches?
-   - If yes: requirements > GDPR?
+ - ~~Connect DB and store searches?~~ Elasticsearch for storage
+   - ~~If yes: requirements > GDPR?~~
  - Develop journalist interface (needs input from the concerned parties)
 
 ![Building blocks](misc/appview.jpg)
 
 ## Notes for developers
 **Please note that this project is under the GNU General Public License, which authorises you to do pretty much anything with the code except changing the license. In other words, feel free to clone it, transform it or improve it as much as you want, but you can't make it private: it has to remain open source.**
+
+**I do not guarantee that the information below is up to date (the directory structure certainly isn't)**
 
 The repository is organised as follow:
  - `/` all the files that have to do with deploying the website, including docker configuration files and various scripts to launch and deploy the app
@@ -84,32 +88,26 @@ The repository is organised as follow:
  - `/app/static` static files including css and js libraries used in the webpages
 
 ## Requirements
-- docker or podman (the rest is automatically included when builing in the containers)
+- a computer (preferably running linux) with an internet connection and either docker or podman installed (the rest is automatically included when builing in the containers)
+- the docker daemon must be running if docker is the preferred option
 
 ## How to build and deploy locally?
-1. For one container running both the api and ui, from the project root:<br/>
-```
-docker build -t balancedview:full --build-arg UID=$(id -u) .
-docker run -d --name balancedview-full -p 8080:8080 balancedview:full
-# LOGS
-docker logs -f balancedview-full
-# RUN SHELL IN CONTAINER
-docker exec -it balancedview-full bash
-```
-2. For multi-containers run this:
-```
-cd api
-docker build -t balancedview:api --build-arg UID=$(id -u) .
-cd ../ui
-docker build -t balancedview:ui --build-arg UID=$(id -u) .
-cd ..
-docker run -d --name balancedview-api -p 5000:5000 -v $(pwd)/api:/api -v $(pwd)/data:/var/lib/sqlite balancedview:api
-docker run -d --name balancedview-ui -p 8080:8080 balancedview:ui
-```
-3. Bootstrap script with podman (after building and pushing the repositories to docker hub)
-```
-./bootstrap.sh
-```
+There are (currently) 4 services required to run the full app:
+    1. web server: nginx
+    2. data storage: elasticsearch
+    3. the API
+    4. the UI
+   
+The easiest option to start everything is to use the `bootstrap.sh` script. Since `podman` takes more time to build containers than `docker`, I prefer to build the containers manually with docker and push them to the docker hub, using the following syntax:
+```bash
+docker build -t <image-tag> <context-dir>
+docker login
+docker push <image-tag>
+``` 
+
+The `bootstrap.sh` script will automatically download the containers or build them if the flag `-u` is provided. It will also automatically restart the containers if the flag `-r` is provided.
+
+If the preferred option is to use `docker`, you have to notice that some containers run as root. To fix this security issue, it is advised to modify the `Dockerfile` to run as a user.
 
 **NB**: Tested on Linux, should be similar on all UNIX-like systems equiped with Docker. For Windows 
 you probably need to replace `$(id -u)` 
