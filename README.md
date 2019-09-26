@@ -93,6 +93,7 @@ The repository is organised as follow:
 
 ## How to build and deploy locally?
 There are (currently) 4 services required to run the full app:
+
     1. web server: nginx
     2. data storage: elasticsearch
     3. the API
@@ -109,6 +110,3 @@ The `bootstrap.sh` script will automatically download the containers or build th
 
 If the preferred option is to use `docker`, you have to notice that some containers run as root. To fix this security issue, it is advised to modify the `Dockerfile` to run as a user.
 
-**NB**: Tested on Linux, should be similar on all UNIX-like systems equiped with Docker. For Windows 
-you probably need to replace `$(id -u)` 
-with any number >= 1000. Also, if like me you're using fish shell you probably want to remove the `$` sign in front of the variables<br/><br/>
