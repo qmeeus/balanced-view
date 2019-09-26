@@ -1,2 +1,0 @@
-@reboot sleep 300 && cd / && python -m api.data_provider
-0 6 * * * cd / && python -m api.data_provider

@@ -25,10 +25,6 @@ ENV LANG=C.UTF-8
 
 COPY . .
 
-COPY data_provider/cronjob /etc/cron.d/cronjob
-RUN chmod 0644 /etc/cron.d/cronjob
-RUN crontab /etc/cron.d/cronjob
-
 RUN chmod 744 docker-entrypoint.sh
 
 # CMD [ "gunicorn", "--chdir", "..", "-w3", "-k", "gevent", "--bind=0.0.0.0:5000", "api.wsgi" ]

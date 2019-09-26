@@ -16,24 +16,18 @@ Json = Dict[str,Any]
 
 def save_resource(resource:Json, counts:Dict[str,int]):
     try:
-
+        if not resource["body"]:
+            raise ValueError("Empty body")
         article_id = md5(resource["body"].encode()).hexdigest()
         article = Article(meta={"id": article_id}, **resource)
         article.save()
-        # result = client.index(
-        #     index=index_name, 
-        #     doc_type="article", 
-        #     body=resource, 
-        #     id=resource_id
-        # )
-
-        # for key, value in result["_shards"].items():
-        #     counts[key] += value
+        counts["successful"] += 1
 
     except Exception as err:
         logger.error(err)
         counts["failed"] += 1
-        raise err
+
+    counts["total"] += 1
     return counts
 
 def fetch_rss():

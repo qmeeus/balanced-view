@@ -6,7 +6,7 @@ numpy
 pandas
 newsapi-python
 ibm-watson
-git+https://github.com/qmeeus/textrank.git
+spacy
 gunicorn
 logzero
 feedparser

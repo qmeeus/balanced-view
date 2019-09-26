@@ -34,8 +34,8 @@ class NewsAPIClient(NewsApiClient):
         "the-telegraph",
     ]
 
-    def __init__(self, sources:Optional[List[str]]=None, 
-                 start_date:Optional[dt.date]=None, end_date:Optional[dt.date]=None, 
+    def __init__(self, start_date:Optional[dt.date]=None, 
+                 end_date:Optional[dt.date]=None, 
                  language:Optional[str]=None) -> None:
 
         self.available_sources = self.load_sources()
