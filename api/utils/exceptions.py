@@ -1,0 +1,21 @@
+from typing import Callable, Any
+
+
+def hijack(exc:Exception) -> Callable:
+    def _hijack(func:Callable) -> Callable:
+        def wrapper(*args, **kwargs) -> Any:
+            try:
+                return func(*args, **kwargs)
+            except Exception as e:
+                raise exc(str(e))
+        return wrapper
+    return _hijack
+
+
+class NLPModelNotFound(Exception): pass
+
+class TextRankError(Exception): pass
+
+class BackendError(Exception): pass
+
+class TranslationError(Exception): pass

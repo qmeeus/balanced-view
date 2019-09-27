@@ -7,7 +7,7 @@ from api.data_provider import index_name
 from api.data_provider.models import Article
 from api.utils.patterns import Json
 from api.utils.logger import logger
-
+from api.utils.exceptions import hijack, BackendError
 
 def translate(txt, src, target):
     try:
@@ -27,6 +27,7 @@ def translate(txt, src, target):
 
 #     return results
 
+@hijack(BackendError)
 def fetch_articles(terms:str, 
                    source_language:str,
                    search_languages:Optional[str]="en", 

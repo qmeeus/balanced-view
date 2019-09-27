@@ -12,6 +12,7 @@ from api.engine.ibm_api import translator
 from api.engine.articles import fetch_articles
 from api.utils.logger import logger
 from api.utils.patterns import Json
+from api.utils.exceptions import hijack, NLPModelNotFound, TextRankError, TranslationError, BackendError
 
 
 SPACY_LANG_MODELS = {
@@ -25,7 +26,7 @@ def load_model(lang:Optional[str]=None, path:Optional[str]=None) -> Any:
         if not lang:
             raise ValueError("Must provide one of language or path to model")
         elif lang not in SPACY_LANG_MODELS:
-            raise KeyError(f"Model not available for {lang}")
+            raise NLPModelNotFound(f"Model not available for {lang}")
         path = find_model(SPACY_LANG_MODELS[lang])
     nlp = spacy.load(path)
     return nlp
@@ -39,13 +40,13 @@ def find_model(model_name:str) -> str:
     model_dir = [d for d in os.listdir(path_to_model) if d.startswith(model_name)][0]
     return p.join(path_to_model, model_dir)
 
-
 class TextRank:
 
     '''textrank graph'''
     
-    INCLUDE_PART_OF_SPEECH = ['PROPN', 'NOUN', 'VERB']
+    INCLUDE_PART_OF_SPEECH = ['PROPN', 'NOUN']
     BOOST_ENTITIES = ["LOC", "PER", "ORG", "GPE", "PERSON", "EVENT", "PRODUCT"]
+    NER_BOOST_FACTOR = 2
     MINIMUM_WORD_LENGTH = 1
     LOOKUP_WINDOW = 5
 
@@ -98,18 +99,35 @@ class TextRank:
         
     def reconstruct_phrases(self, keyword_scores:Dict[str,float], sentences:Iterator[Any]) -> Dict[str,float]:
         
-        def weighted_score(chunk):
-            return sum([
-                keyword_scores[token.text] * (2 if token.ent_type_ in self.BOOST_ENTITIES else 1)
-                for token in chunk 
-                if token.text in keyword_scores
-            ]) / len(chunk)
+        candidate_entity = lambda ent: ent.label_ in self.BOOST_ENTITIES
 
-        return {
-            chunk.text: weighted_score(chunk)
-            for sent in sentences for chunk in sent.noun_chunks 
-            if chunk.root.text in keyword_scores and len(chunk) > 1
-        }
+        def weighted_score(chunk):
+                boost = (
+                    self.NER_BOOST_FACTOR * sum(map(candidate_entity, chunk.ents)) / len(chunk)
+                    if len(chunk.ents) 
+                    and any(candidate_entity(ent) for ent in chunk.ents)
+                    else 1.
+                )
+
+                return sum([
+                    keyword_scores[token.text] 
+                    for token in chunk 
+                    if token.text in keyword_scores
+                ]) / len(chunk) * boost
+
+        for sentence in sentences:
+            for chunk in sentence.noun_chunks:
+                import ipdb; ipdb.set_trace()
+                if chunk.root.text in keyword_scores:
+                    keyword_scores[chunk.text] = weighted_score(chunk)                
+
+        return keyword_scores
+
+        # return {
+        #     chunk.text: weighted_score(chunk)
+        #     for sent in sentences for chunk in sent.noun_chunks 
+        #     if chunk.root.text in keyword_scores and len(chunk) > 1
+        # }
 
     def fit_transform(self, tokens:List[Tuple[str,str,str]], 
             sentences:Iterator[Any], 
@@ -118,6 +136,7 @@ class TextRank:
         self.fit(tokens, sentences)
         return self.get_keywords(num_keywords)
 
+    @hijack(TextRankError)
     def fit(self, tokens:List[Tuple[str,str,str]], sentences:Iterator[Any]) -> 'TextRank':
 
         pos_filter = lambda token: token[2] in self.INCLUDE_PART_OF_SPEECH
@@ -129,8 +148,8 @@ class TextRank:
         self._lemma2word = l2w = {lemma: word for word, lemma, _ in tokens}
         word2scores = {l2w[lemma]: score for lemma, score in lemma2scores.items()}
 
-        noun_chunks = self.reconstruct_phrases(word2scores, sentences)
-        phrase2scores = dict(**word2scores, **noun_chunks)
+        import ipdb; ipdb.set_trace()
+        phrase2scores = self.reconstruct_phrases(word2scores, sentences)
 
         # Normalise and apply sigmoid function to the resulting scores
         weights = list(phrase2scores.values())
@@ -142,6 +161,7 @@ class TextRank:
 
         self.keywords_ = pd.DataFrame(normalised_scores.items(), columns=["keyword", "score"])
         self.keywords_.sort_values("score", ascending=False, inplace=True)
+        import ipdb; ipdb.set_trace()
         return self
 
     def get_keywords(self, max_kws:Optional[int]=None, scores:Optional[bool]=True) -> Union[List[Json],List[str]]:
@@ -211,22 +231,27 @@ class TextAnalyser:
         pos_tags = map(attrgetter('pos_'), document)
         remove_stopwords = self.remove_stopwords(model, itemgetter(0))
         features = list(filter(remove_stopwords, zip(tokens, lemmas, pos_tags)))
-        
-        self.textrank = TextRank()
-        self.textrank.fit(features, document.sents)
+
+        self.textrank_ = TextRank()
+
+        self.textrank_.fit(features, document.sents)
+
+        self.articles_ = {}
 
         if self.related_articles:
             
-            self.articles_ = fetch_articles(
-                terms=self.textrank.get_keywords(self.MAX_KEYWORDS_TO_GET), 
+            query_terms = self.textrank_.get_keywords(
+                self.MAX_KEYWORDS_TO_GET, scores=False)
+                
+            options = dict(
+                terms=",".join(query_terms), 
                 source_language=self.detected_language_, 
                 search_languages=self.article_languages, 
                 output_language=self.output_language
                 # TODO: groupby language & max results per category
             )
 
-        else:
-            self.articles_ = {}
+            self.articles_ = fetch_articles(**options)
 
         # dependencies = map(attrgetter('dep_'), document)
         # iob_labels = map(attrgetter('ent_iob_'), document)
@@ -237,7 +262,7 @@ class TextAnalyser:
     def to_dict(self):
         return {
             "articles": self.articles_,
-            "graph": self.textrank.get_graph(),
+            "graph": self.textrank_.get_graph(),
         }
 
     @staticmethod

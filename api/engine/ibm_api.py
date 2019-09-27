@@ -3,6 +3,7 @@ import os.path as p
 from ibm_watson import LanguageTranslatorV3
 from typing import Callable, Any, Union, Dict, List
 from api.utils.logger import logger
+from api.utils.exceptions import hijack, TranslationError
 
 Json = Dict[str, Any]
 
@@ -12,6 +13,7 @@ def index(items, key, value):
             return i
     raise KeyError(f"{key}={value}")   
 
+@hijack(TranslationError)
 def parse_result(json_key:str) -> Callable:
     def parse_result_decorator(func:Callable) -> Callable:
         def wrapper(*args:Any, **kwargs:Any) -> Union[Json, List[Json]]:
