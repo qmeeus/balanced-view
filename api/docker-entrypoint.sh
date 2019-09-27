@@ -10,11 +10,13 @@ python_path=$(which python)
 
 echo "SHELL=/bin/bash
 BASH_ENV=/api/.env
+LC_ALL=C.UTF-8
+LANG=C.UTF-8
 @reboot sleep 300 && cd / && $python_path -m api.data_provider >> /var/log/cron.log 2>&1
 0 6,12,18 * * * cd / && $python_path -m api.data_provider >> /var/log/cron.log 2>&1
 # This extra line makes it a valid cron" > /tmp/scheduler.txt
 
-crontab /tmp/scheduler.txt
+crontab /tmp/scheduler.txt  
 
 printf "Start cron... " 
 bash -c cron
