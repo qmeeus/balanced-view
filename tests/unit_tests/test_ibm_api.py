@@ -1,7 +1,7 @@
 import operator
 
 from tests.utils import safe
-from api.clients import IBMTranslator
+from api.engine.ibm_api import IBMTranslator
 
 @safe
 def test_ibm_translate():
@@ -10,7 +10,7 @@ def test_ibm_translate():
     assert target == "nl"
 
     translated = translator.translate("The parrot is in the cage.", source="en", target=target, return_all=False)
-    assert translated == "De papegaai is in de kooi."
+    assert translated == "De papegaai is in de kooi.", translated
 
     text = """Zaak-Epstein: Amerikaanse Justitie richt pijlen nu op Epsteins medewerkers
     De dood van Jeffrey Epstein, de van misbruik verdachte Amerikaanse miljardair die afgelopen weekend zelfmoord pleegde in zijn cel, betekent niet het einde van het onderzoek. Justitie belooft nu haar pijlen te richten op mogelijke medeplichtingen. Ook is een grondig onderzoek bevolen naar de zelfdoding van Epstein. Minister van Justitie William Barr zegt dat er "ernstige onregelmatigheden" zijn gebeurd in de gevangenis."""

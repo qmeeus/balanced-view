@@ -1,50 +1,51 @@
+import datetime as dt
 from time import time
-from api.engine.spider import Source
+from api.data_provider.sources.rss_spider import RssFeed
+from api.utils.logger import logger
 from tests.utils import load_rss_sources
 
 def _test_output(output, print_output=False):
-    assert len(output) == 4
-    id, category, keywords, article = output
-    assert type(id) is str
-    assert type(category) is str
-    assert type(keywords) is list
-    assert all(type(kw) is dict for kw in keywords)
-    assert isinstance(article, dict)
+    assert type(output) is dict
+    expected = [("source", dict), ("category", str), ("title", str), ("body", str), ("publication_date", dt.datetime)]
+    for key, typ in expected:
+        assert key in output, key
+        assert type(output[key]) == typ, output[key]
+
     if print_output:
-        print(article.summary)
-        print("Keywords:", ", ".join(["{keyword} ({score:.2f})".format(**kw) for kw in keywords]))
+        logger.debug(output["title"])
+        logger.debug(output["body"])
 
 
 def test_source():
 
     example = load_rss_sources()['sources'][0]
 
-    source = Source.from_dict(example)
-    assert isinstance(source, Source)
+    feed = RssFeed.from_dict(example)
+    assert isinstance(feed, RssFeed)
 
-    assert all(type(c) is dict for c in source)
+    assert all(type(c) is dict for c in feed)
 
-    cats = source.available_categories
+    cats = feed.available_categories
     assert type(cats) is list
 
-    obj = source.to_dict()
+    obj = feed.to_dict()
     assert type(obj) is dict
 
-    for result in source.get_latest(["Headlines"]):
+    for result in feed.get_latest(["Headlines"]):
         _test_output(result, print_output=True)
 
 
     start = time()
-    source.N_THREADS = 1
-    for result in source.get_latest():
+    feed.N_THREADS = 1
+    for result in feed.get_latest():
         _test_output(result)
-    print(f"Job took {time() - start:.2f} s")
+    logger.debug(f"Job took {time() - start:.2f} s")
 
     start = time()
-    source.N_THREADS = 12
-    for result in source.get_latest():
+    feed.N_THREADS = 12
+    for result in feed.get_latest():
         _test_output(result)
-    print(f"Job took {time() - start:.2f} s")
+    logger.debug(f"Job took {time() - start:.2f} s")
 
 
 if __name__ == "__main__":
