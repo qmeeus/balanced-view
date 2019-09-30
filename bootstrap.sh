@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 function get_env {
   echo "$(cat $1/.env | grep $2 | cut -d'=' -f2)"
 }
@@ -59,11 +61,11 @@ done
 if ! [ $RESTART ] && [ $(is_running) ] ; then
   printf "Pod $APP is already running. Re-create it? y/N >>> " && read input
   case $input in
-    y|Y) 
+    y|Y)
       echo "Deleting pod $APP"
       podman ps -a | grep $APP | cut -d" " -f1 \
         | xargs -I "{}" bash -c 'podman stop {} || podman rm {}' \
-        && podman pod rm $APP 
+        && podman pod rm $APP
       ;;
     *) : ;; # echo "Exiting..." && exit 0
   esac
@@ -76,9 +78,9 @@ if [ $UPDATE ]; then
   printf "\t(2) Download from $IMAGE_REPO\n"
   printf "\t(q) Quit\n"
   printf "Choice (Default 1) >>> " && read input
-  
+
   BACK_PID=""
-  
+
   case $input in
     2)
       echo "Pull images from online repository"
@@ -114,7 +116,7 @@ else
     printf "Restart $container? y/N >>> " && read input
     case $input in
       y|Y)
-        podman stop $APP-$container || podman rm $APP-$container &
+        podman stop $APP-$container 2>/dev/null || podman rm $APP-$container 2>/dev/null || true &
         BACK_PID="$BACK_PID $!"
         ;;
       *) : ;;
