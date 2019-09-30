@@ -24,7 +24,7 @@ def test_articles():
 def test_analyse():
     url = API_LOCATION + "/analyse"
     for _, text in load_texts():
-        resp = post(url)(**{"text": text, "related": True})
+        resp = post(url)(**{"input_text": text, "related": True})
         import ipdb; ipdb.set_trace()
         print(resp.keys())
 

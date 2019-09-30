@@ -6,7 +6,7 @@ from tests.utils import load_texts
 
 
 def test_analyser():
-    analyser = TextAnalyser(related_articles=False)
+    analyser = TextAnalyser(related=False)
     assert isinstance(analyser, TextAnalyser)
     
     for _, text in load_texts():
