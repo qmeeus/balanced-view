@@ -1,5 +1,7 @@
 from typing import Callable, Any
 
+from api.utils.logger import logger
+
 
 def hijack(exc:Exception) -> Callable:
     def _hijack(func:Callable) -> Callable:
@@ -7,6 +9,7 @@ def hijack(exc:Exception) -> Callable:
             try:
                 return func(*args, **kwargs)
             except Exception as e:
+                logger.exception(e)
                 raise exc(str(e))
         return wrapper
     return _hijack
