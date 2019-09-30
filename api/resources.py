@@ -4,63 +4,79 @@ from flask_restful.reqparse import RequestParser
 from datetime import datetime as dt
 from time import mktime
 import json
-from elasticsearch.exceptions import ConnectionError
 
-from api.utils.logger import logger
-from api.utils.patterns import Json
 from api.engine.articles import fetch_articles
 from api.engine.text import TextAnalyser
+from api.utils.schemas import AnalysisOptions, ArticlesOptions
+from api.utils.logger import logger
+from api.utils.patterns import Json
+from api.utils.exceptions import NLPModelNotFound, BackendError, TextRankError, TranslationError
 
 
-class NewsArticles(Resource):
+class Meta(Resource):
 
     def __init__(self) -> None:
-        self.parser = RequestParser()
-        self.parser.add_argument('query', type=str, required=True)
-        self.parser.add_argument('source_language', type=str)
-        self.parser.add_argument('languages', type=str)
-        self.parser.add_argument('country', type=str)
-        self.parser.add_argument('sources', type=str)
-        
-    def post(self) -> Json:
-        params = self.parser.parse_args()
+        self.schema = None
+        raise NotImplementedError
+
+    def get_opts(self):
+        json_data = request.get_json(force=True)
+        if not json_data:
+            raise ValueError
         try:
-            
-            articles = fetch_articles(
-                params.query, 
-                params.source_language,
-                params.languages, 
-                params.country, 
-                params.sources
-            )
+            return self.schema.load(json_data)
+        except Exception as err:
+            logger.exception(err)
+            raise TypeError
 
-        except ConnectionError as err:
-            
-            logger.error(err)
-            return jsonify({"error": "Backend is not available"})
+    @staticmethod
+    def _get_message(exception):
 
-        return jsonify(articles)
+        if isinstance(exception, ValueError):
+            message = "No input data provided"
+        elif isinstance(exception, TypeError):
+            message = "Malformed JSON"
+        elif isinstance(exception, BackendError):
+            message = "Backend is not available"
+        elif isinstance(exception, TranslationError):
+            message = "The text could not be translated"
+        elif isinstance(exception, TextRankError):
+            message = "No keywords extracted for searching"
+        elif isinstance(exception, NLPModelNotFound):
+            message = "This language is not supported at the moment"
+        else:
+            message = "An unexpected error occured"
+        return jsonify({"message": message})
 
 
-class TextAnalysis(Resource):
+class NewsArticles(Meta):
 
     def __init__(self) -> None:
-        self.parser = RequestParser()
-        self.parser.add_argument('text', type=str, required=True)
-        self.parser.add_argument("related", type=bool)
-        self.parser.add_argument('output_language', type=str)
-        self.parser.add_argument('article_languages', type=str)
+        self.schema = ArticlesOptions()
+        
+    def post(self) -> Json:
+        try:
+            options = self.get_opts()
+            return jsonify(fetch_articles(**self.schema.dump(options)))
+
+        except Exception as err:
+            logger.exception(err)
+            return self._get_message(err)
+
+
+class TextAnalysis(Meta):
+
+    def __init__(self) -> None:
+        self.schema = AnalysisOptions()
 
     def post(self) -> Json:
-        params = self.parser.parse_args()
-        
-        analysis = (
-            TextAnalyser(
-                related_articles=params.related,
-                output_language=params.output_language, 
-                article_languages=params.article_languages)
-            .fit(params.text)
-            .to_dict()
-        )
 
-        return jsonify(analysis)
+        try:
+            options_dict = self.schema.dump(self.get_opts())
+            input_text = options_dict.pop("input_text")
+            return jsonify(TextAnalyser(**options_dict).fit(input_text).to_dict())
+
+        except Exception as err:
+            logger.exception(err)
+            return self._get_message(err)
+

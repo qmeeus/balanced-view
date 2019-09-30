@@ -1,6 +1,8 @@
 import os
+from collections import defaultdict
+from operator import itemgetter
 from elasticsearch_dsl import Search, MultiSearch, Q
-from typing import Optional, List
+from typing import Optional, List, Dict, Callable
 
 from api.engine.ibm_api import translator
 from api.data_provider import index_name
@@ -28,25 +30,28 @@ def translate(txt, src, target):
 #     return results
 
 @hijack(BackendError)
-def fetch_articles(terms:str, 
+def fetch_articles(terms:List[str], 
                    source_language:str,
-                   search_languages:Optional[str]="en", 
+                   search_languages:Optional[List[str]]=None, 
                    output_language:Optional[str]=None,  # TODO: Unused
                    country:Optional[str]=None,          # TODO: Unused
-                   sources:Optional[str]=None           # TODO: Unused
+                   sources:Optional[str]=None,          # TODO: Unused
+                   groups:Optional[Json]=None
     ) -> List[Json]:
 
     translations = {}
+    terms = ",".join(terms)
+    search_languages = search_languages or ["en"]
 
-    # Translate terms in english to minimise risk of missing IBM model    
+    # Translate terms in english to minimise risk of missing IBM model
     if source_language != 'en':
         translations[source_language] = terms
         terms = translate(terms, source_language, 'en')
-        
+
     translations['en'] = terms
     logger.debug(terms)
 
-    for lang in search_languages.split(','):
+    for lang in search_languages:
         if lang not in translations:
             translated = translate(terms, 'en', lang)
             if not translated:
@@ -70,8 +75,24 @@ def fetch_articles(terms:str,
     for hit in response:
         print(hit.meta.score, hit.title)
 
+    articles = list(map(Article.to_dict, response))
+
+    if groups:
+        return {"articles": groupby_category(articles, **groups)}
+
     # if output_language is not None:
     #     results = translate_results(results, output_language)
 
-    return {"articles": list(map(Article.to_dict, response))}
+    return {"articles": articles}
 
+def groupby_category(results:List[Json], key:str, groups:List[Json], default:Optional[str]=None):
+    rgroups = {g['value']: g['name'] for g in groups}
+    output = defaultdict(list)
+    fget = itemgetter(key)
+    for result in results:
+        value = fget(results)
+        if value in rgroups:
+            output[rgroups[value]].append(result)
+        elif default:
+            output[default].append(result)
+    return output

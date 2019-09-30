@@ -2,6 +2,7 @@ elasticsearch>=7.0.0,<8.0.0
 elasticsearch-dsl>=7.0.0,<8.0.0
 feedparser
 flask
+flask-marshmallow
 flask-restful
 gevent
 gunicorn
@@ -9,6 +10,7 @@ gunicorn[gevent]
 ibm-watson
 knapsack
 logzero
+marshmallow
 newsapi-python
 numpy
 pandas

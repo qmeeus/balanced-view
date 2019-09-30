@@ -208,13 +208,15 @@ class TextAnalyser:
 
     MAX_KEYWORDS_TO_GET = 5
 
-    def __init__(self, related_articles:Optional[bool]=False,
-                 article_languages:Optional[str]=None,
-                 output_language:Optional[str]=None,) -> None:
+    def __init__(self, related:Optional[bool]=False,
+                 search_languages:Optional[List[str]]=None,
+                 output_language:Optional[str]=None, 
+                 groups:Optional[Json]=None) -> None:
 
-        self.related_articles = related_articles
-        self.article_languages = article_languages or 'en,fr,nl'
+        self.related_articles = related
+        self.article_languages = search_languages or ["en","fr", "nl"]
         self.output_language = output_language
+        self.group_options = groups
 
     def fit(self, text:str) -> 'TextAnalyser':
 
@@ -241,7 +243,8 @@ class TextAnalyser:
                 terms=",".join(query_terms), 
                 source_language=self.detected_language_, 
                 search_languages=self.article_languages, 
-                output_language=self.output_language
+                output_language=self.output_language,
+                groups=self.group_options,
                 # TODO: groupby language & max results per category
             )
 
