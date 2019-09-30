@@ -7,10 +7,25 @@ import json
 DATA_DIR = p.join(p.dirname(__file__), "test_data")
 
 
+def load_keywords():
+    with open(p.join(DATA_DIR, "keywords.txt")) as f:
+        lines = list(filter(bool, map(str.strip, f.readlines())))
+        yield from map(str.split, lines)
+
+
 def load_texts(filename="texts.txt"):
+
+    def fmap(text):
+        text = text.strip()
+        if not text:
+            return None
+        lang, text = text.split("\n", maxsplit=1)
+        return lang, text
+
     with open(p.join(DATA_DIR, filename)) as f:
         raw = f.read()
-    yield from filter(lambda txt: len(txt) > 0, map(str.strip, raw.split("\n\n")))
+
+    yield from filter(bool, map(fmap, raw.split("\n\n")))
 
 def load_rss_sources():
     return load_json("rss_sources.json")

@@ -3,14 +3,14 @@ from operator import itemgetter, attrgetter
 import json
 from time import time
 
-from api.engine.spider import Source, SourceCollection
+from api.data_provider.sources.rss_spider import RssFeed, RssFetcher
 from tests.unit_tests.test_fetch_rss import _test_output
 from tests.utils import load_rss_sources
 
 
 def get_more_data():
     
-    collection = SourceCollection.from_file()
+    collection = RssFetcher.from_file()
 
     all_results = list(zip(*collection.fetch_all()))[-1]
     with open(p.join(p.dirname(__file__), "../test_data/articles.json"), 'w') as f:
@@ -18,12 +18,12 @@ def get_more_data():
 
 
 def test_source_collection():
-    collection = SourceCollection.from_file()
-    assert isinstance(collection, SourceCollection)
-    assert all(isinstance(s, Source) for s in collection)
+    collection = RssFetcher.from_file()
+    assert isinstance(collection, RssFetcher)
+    assert all(isinstance(s, RssFeed) for s in collection)
 
     item = collection["vrt"]
-    assert isinstance(item, Source)
+    assert isinstance(item, RssFeed)
 
     assert "vrt" in collection
 
@@ -31,17 +31,17 @@ def test_source_collection():
 
     filters = {"lang": "nl", "country": "be"}
     sources = collection.find_all(**filters)
-    assert all(isinstance(s, Source) for s in sources)
+    assert all(isinstance(s, RssFeed) for s in sources)
     assert len(sources)
 
     filters = dict(id=["vrt", "standaard"], **filters)
     sources = collection.find_all(**filters)
-    assert all(isinstance(s, Source) for s in sources)
+    assert all(isinstance(s, RssFeed) for s in sources)
     assert len(sources)
 
     categories = ["Headlines", "Latest", "Buitenland"]
     sources = collection.find_all(categories=categories)
-    assert all(isinstance(s, Source) for s in sources)
+    assert all(isinstance(s, RssFeed) for s in sources)
     assert all(
         all(
             c in categories for c in s.available_categories
@@ -51,7 +51,7 @@ def test_source_collection():
     filters = dict(categories=categories, **filters)
     sources = collection.find_all(**filters)
     assert len(sources)
-    assert all(isinstance(s, Source) for s in sources)
+    assert all(isinstance(s, RssFeed) for s in sources)
 
     # start = time()
     # for result in collection.fetch_all(**filters):

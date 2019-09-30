@@ -28,7 +28,7 @@ def test_ui():
     csrf_token = soup.find("input", {"id": "csrf_token"}).get("value")
     assert bool(csrf_token)
 
-    for i, text in enumerate(load_texts()):
+    for i, (_, text) in enumerate(load_texts()):
         title = text.strip().split('\n')[0]
         print(f"Text #{i}: {title[:50]}...", end=" ")
         _test_post_request(text, csrf_token)

@@ -5,7 +5,7 @@ from tests.utils import load_texts, safe
 
 @safe
 def test_summa():
-    for text in load_texts():
+    for _, text in load_texts():
         try:
             _test_summa(text)
         except ValueError as e:

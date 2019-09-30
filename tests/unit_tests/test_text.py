@@ -9,7 +9,7 @@ def test_analyser():
     analyser = TextAnalyser(related_articles=False)
     assert isinstance(analyser, TextAnalyser)
     
-    for text in load_texts():
+    for _, text in load_texts():
 
         try:
 

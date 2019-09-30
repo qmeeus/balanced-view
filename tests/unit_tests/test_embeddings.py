@@ -11,7 +11,7 @@ NL_STOPWORDS = load_model("nl").Defaults.stop_words
 
 def test_preprocessing():
     texts = load_texts("dutch_texts.txt")
-    first_example = list(texts)[0]
+    _, first_example = list(texts)[0]
     preprocessed_first = preprocess_text(first_example)
     print(first_example)
     print(preprocessed_first)

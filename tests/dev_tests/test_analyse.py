@@ -11,7 +11,7 @@ print(spacy.__file__)
 nlp = load_model('nl')
 
 def test_spacy():
-    for text in load_texts("texts.txt"):
+    for _, text in load_texts("texts.txt"):
         document = nlp(text)
         import ipdb; ipdb.set_trace()
         for sentence in document.sents:
@@ -26,7 +26,7 @@ def test_pos_identifier():
         print(token.text, token.pos_, token.dep_)
 
 def test_textrank():
-    for text in load_texts("dutch_texts.txt"):
+    for _, text in load_texts("dutch_texts.txt"):
         document = nlp(text)
         tokens = map(attrgetter('text'), document)
         lemmas = map(lambda token: token.lemma_.lower(), document)
