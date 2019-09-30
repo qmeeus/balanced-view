@@ -47,15 +47,16 @@ class TextAnalysis(Resource):
     def __init__(self) -> None:
         self.parser = RequestParser()
         self.parser.add_argument('text', type=str, required=True)
+        self.parser.add_argument("related", type=bool)
         self.parser.add_argument('output_language', type=str)
         self.parser.add_argument('article_languages', type=str)
-
 
     def post(self) -> Json:
         params = self.parser.parse_args()
         
         analysis = (
             TextAnalyser(
+                related_articles=params.related,
                 output_language=params.output_language, 
                 article_languages=params.article_languages)
             .fit(params.text)

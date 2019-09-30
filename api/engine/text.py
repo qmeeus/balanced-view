@@ -117,7 +117,6 @@ class TextRank:
 
         for sentence in sentences:
             for chunk in sentence.noun_chunks:
-                import ipdb; ipdb.set_trace()
                 if chunk.root.text in keyword_scores:
                     keyword_scores[chunk.text] = weighted_score(chunk)                
 
@@ -148,7 +147,6 @@ class TextRank:
         self._lemma2word = l2w = {lemma: word for word, lemma, _ in tokens}
         word2scores = {l2w[lemma]: score for lemma, score in lemma2scores.items()}
 
-        import ipdb; ipdb.set_trace()
         phrase2scores = self.reconstruct_phrases(word2scores, sentences)
 
         # Normalise and apply sigmoid function to the resulting scores
@@ -161,7 +159,6 @@ class TextRank:
 
         self.keywords_ = pd.DataFrame(normalised_scores.items(), columns=["keyword", "score"])
         self.keywords_.sort_values("score", ascending=False, inplace=True)
-        import ipdb; ipdb.set_trace()
         return self
 
     def get_keywords(self, max_kws:Optional[int]=None, scores:Optional[bool]=True) -> Union[List[Json],List[str]]:
@@ -232,12 +229,9 @@ class TextAnalyser:
         remove_stopwords = self.remove_stopwords(model, itemgetter(0))
         features = list(filter(remove_stopwords, zip(tokens, lemmas, pos_tags)))
 
-        self.textrank_ = TextRank()
+        self.textrank_ = TextRank().fit(features, document.sents)
 
-        self.textrank_.fit(features, document.sents)
-
-        self.articles_ = {}
-
+        self.articles_ = {"articles": []}
         if self.related_articles:
             
             query_terms = self.textrank_.get_keywords(
@@ -260,10 +254,7 @@ class TextAnalyser:
         return self
 
     def to_dict(self):
-        return {
-            "articles": self.articles_,
-            "graph": self.textrank_.get_graph(),
-        }
+        return dict(graph=self.textrank_.get_graph(), **self.articles_)
 
     @staticmethod
     def remove_stopwords(model:Any, fget:Callable) -> Callable:
