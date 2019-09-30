@@ -35,24 +35,30 @@ def fetch_articles(terms:str,
                    country:Optional[str]=None,          # TODO: Unused
                    sources:Optional[str]=None           # TODO: Unused
     ) -> List[Json]:
-    
+
     translations = {}
-    for lang in search_languages.split(","):
-        if lang != source_language:
-            translated = translate(terms, source_language, lang)
+
+    # Translate terms in english to minimise risk of missing IBM model    
+    if source_language != 'en':
+        translations[source_language] = terms
+        terms = translate(terms, source_language, 'en')
+        
+    translations['en'] = terms
+    logger.debug(terms)
+
+    for lang in search_languages.split(','):
+        if lang not in translations:
+            translated = translate(terms, 'en', lang)
             if not translated:
                 continue
-        else:
-            translated = terms
-
-        translations[lang] = list(map(str.strip, translated.split(",")))
-        logger.debug(translated)
-
+            translations[lang] = translated
+            logger.debug(translated)
+    
     query = Q('bool', should=[
         Q('bool', must=Q("match", language=lang), minimum_should_match=2, should=[
-            Q("match_phrase", **{attr: term}) 
+            Q("match_phrase", **{attr: term.strip()}) 
             for attr in ('body', 'title')
-            for term in translated
+            for term in translated.split(',')
         ]) for lang, translated in translations.items()
     ])
 
