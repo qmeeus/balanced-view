@@ -1,6 +1,6 @@
 import os
 import requests
-from flask import request, render_template, Blueprint
+from flask import request, render_template, Blueprint, flash
 from flask_csp.csp import csp_header
 
 from .forms import TextForm
@@ -22,13 +22,42 @@ def index():
     form = TextForm()
     if form.validate_on_submit():
         text = form.text.data
+
         try:
-            url = os.environ["API_URL"]
-            resp = requests.post(url, json={'text': text})
+
+            url = os.environ["API_URL"] + "/analyse"
+            opts = {
+                'input_text': text, 
+                'related': True,
+                'search_languages': ['en', 'fr', 'nl'],
+                'groupby_options': {
+                    'key': 'language',
+                    'default': 'International',
+                    'groups': [
+                        {'name': 'Dutch', 'value': 'nl'},
+                        {'name': 'French', 'value': 'fr'}
+                    ],
+                    'orderby': 'publication_date',
+                    'reverse': True,
+                    'max_results_per_group': 5
+                }
+            }
+            resp = requests.post(url, json=opts)
             data = resp.json()
             logger.debug(data)
+            error_message = ""
+
+            if "message" in data:
+                error_message = data["message"]
+
         except Exception as err:
-            error = {"error": {"text": "Houston we have a problem!", "reason": "API is unreachable"}}
-            data = {"articles": error, "graph": error}
-        return render_template('results.html', form=form, search_results=data["articles"], data=data["graph"])
+            logger.exception(err)
+            error_message = "The backend server is unreachable"
+
+        if not error_message:
+            articles, graph = data["articles"], data["graph"]
+            return render_template('results.html', form=form, articles=articles, graph=graph)
+
+        flash(error_message, "error")
+
     return render_template('index.html', form=form)
