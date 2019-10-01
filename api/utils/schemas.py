@@ -11,6 +11,9 @@ class GroupByOptions(ma.Schema):
     key = fields.String(required=True)
     default = fields.String(required=False)
     groups = fields.List(fields.Nested(GroupSchema), required=True)
+    orderby = fields.String(required=False)
+    reverse = fields.Boolean(required=False)
+    max_results_per_group = fields.Integer(required=False)
 
 
 class SourceOptions(ma.Schema):

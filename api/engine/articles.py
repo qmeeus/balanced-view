@@ -1,5 +1,5 @@
 import os
-from collections import defaultdict
+from collections import OrderedDict
 from operator import itemgetter
 from elasticsearch_dsl import Search, MultiSearch, Q
 from typing import Optional, List, Dict, Callable
@@ -85,9 +85,19 @@ def fetch_articles(terms:List[str],
 
     return {"articles": articles}
 
-def groupby_category(results:List[Json], key:str, groups:List[Json], default:Optional[str]=None):
+def groupby_category(
+    results:List[Json], 
+    key:str, 
+    groups:List[Json], 
+    default:Optional[str]=None, 
+    orderby:Optional[str]=None,
+    reverse:Optional[bool]=False, 
+    max_results_per_group:Optional[int]=None) -> Json:
+
     rgroups = {g['value']: g['name'] for g in groups}
-    output = defaultdict(list)
+    output = OrderedDict({g['name']: [] for g in groups})
+    if default:
+        output[default] = []
     fget = itemgetter(key)
     for result in results:
         value = fget(result)
@@ -95,4 +105,14 @@ def groupby_category(results:List[Json], key:str, groups:List[Json], default:Opt
             output[rgroups[value]].append(result)
         elif default:
             output[default].append(result)
+
+    if orderby:
+        sortkey = itemgetter(orderby)
+        for unsorted in output.values():
+            unsorted.sort(key=sortkey, reverse=reverse)
+
+    if max_results_per_group:
+        for group in output:
+            output[group] = output[group][:max_results_per_group]
+
     return output
