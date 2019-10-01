@@ -162,7 +162,6 @@ if ! [ $(is_running api) ]; then
     --name $APP-api \
     --pod $APP \
     --rm \
-    -v $(pwd)/api:/api \
     $DEFAULT_IMAGE:api &
     BACK_PID="$BACK_PID $!"
 fi
