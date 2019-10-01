@@ -482,6 +482,79 @@
                     "url": "/rss/fonds.xml"
                 }
             ]
+        },
+        {
+            "name": "BBC News",
+            "id": "bbc",
+            "url": "http://feeds.bbci.co.uk",
+            "country": "uk",
+            "lang": "en",
+            "categories": [
+                {
+                    "name": "Top Stories",
+                    "url": "news/rss.xml"
+                },
+                {
+                    "name": "World",
+                    "url": "news/world/rss.xml"
+                },
+                {
+                    "name": "UK",
+                    "url": "news/uk/rss.xml"
+                },
+                {
+                    "name": "Business",
+                    "url": "news/business/rss.xml"
+                },
+                {
+                    "name": "Politics",
+                    "url": "news/politics/rss.xml"
+                },
+                {
+                    "name": "Health",
+                    "url": "news/health/rss.xml"
+                },
+                {
+                    "name": "Education & Family",
+                    "url": "news/education/rss.xml"
+                },
+                {
+                    "name": "Science & Environment",
+                    "url": "news/science_and_environment/rss.xml"
+                },
+                {
+                    "name": "Technology",
+                    "url": "news/technology/rss.xml"
+                },
+                {
+                    "name": "Entertainment & Arts",
+                    "url": "news/entertainment_and_arts/rss.xml"
+                },
+                {
+                    "name": "Africa",
+                    "url": "news/world/africa/rss.xml"
+                },
+                {
+                    "name": "Asia",
+                    "url": "news/world/asia/rss.xml"
+                },
+                {
+                    "name": "Europe",
+                    "url": "news/world/europe/rss.xml"
+                },
+                {
+                    "name": "Latin America",
+                    "url": "news/world/latin_america/rss.xml"
+                },
+                {
+                    "name": "Middle East",
+                    "url": "news/world/middle_east/rss.xml"
+                },
+                {
+                    "name": "US & Canada",
+                    "url": "news/world/us_and_canada/rss.xml"
+                }
+            ]
         }
     ]
 }
