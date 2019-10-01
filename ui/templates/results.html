@@ -4,46 +4,35 @@
 
     <div class="container my-2">
 
-        {% if not "error" in data %}
-            <div class="row w-100" id="graph-container">
-                {% include 'graph.html' %}
-            </div>
-        {% endif %}
+        <div class="row w-100" id="graph-container">
+            {% include 'graph.html' %}
+        </div>
 
         <div class="row my-5 py-2 w-100" >
-            {% if "error" in search_results %}
 
-                <h2 class="col-*-12 w-100 text-center" title="{{ search_results['error']['reason'] }}">
-                    {{ search_results["error"]["text"] }}
-                </h2>
+            {% for group, results in articles.items() %}
 
-            {% else %}
+                <div class="col-xs-12 col-md-4">
+                    <h5 class="text-center border-secondary border-bottom mt-1">
+                        {{ group.title() }}
+                    </h5>
 
-                {% for political_leaning, results in search_results.items() %}
-
-                    <div class="col-xs-12 col-md-4">
-                        <h5 class="text-center border-secondary border-bottom mt-1">
-                            {{ political_leaning.title() }}
-                        </h5>
-
-                        {% for article in results %}
-                            <div class="thumbnail article">
-                                <h3>{{ article["source"]["name"] }}</h3>
-                                <h5 class="article-title">{{ article["title"] }}</h5>
-                                <a href="{{ article['url'] }}">
-                                    <img class="article-image img-fluid float-left"  src="{{ article['urlToImage'] }}"></a>
-                                <div class="caption">
-                                    <p class="description">{{ article["description"] }}</p>
-                                    <p>{{ article["publishedAt"].replace("T", " ").replace("Z", "") }}</p>
-                                </div>
+                    {% for article in results %}
+                        <div class="thumbnail article">
+                            <h3><a href="{{ article['source']['url'] }}">{{ article["source"]["name"] }}</a></h3>
+                            <h5 class="article-title">{{ article["title"] }}</h5>
+                            <a href="{{ article['url'] }}">
+                                <img class="article-image img-fluid float-left"  src="{{ article['image_url'] }}"></a>
+                            <div class="caption">
+                                <p class="description">{{ article["body"] }}</p>
+                                <p>{{ article["publication_date"] }}</p>
                             </div>
-                        {% endfor %}
+                        </div>
+                    {% endfor %}
 
-                    </div>
+                </div>
 
-                {% endfor %}
-
-            {% endif %}
+            {% endfor %}
 
         </div>
     </div>
