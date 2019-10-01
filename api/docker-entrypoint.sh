@@ -28,4 +28,4 @@ bash -c cron
 printf "$(service cron status)\n"
 
 echo "Starting API server"
-gunicorn --chdir .. -w3 -k gevent --bind=0.0.0.0:5000 api.wsgi
+gunicorn --chdir .. -w3 -k gevent --timeout 120 --bind=0.0.0.0:5000 api.wsgi
