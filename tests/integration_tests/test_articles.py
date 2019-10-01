@@ -9,7 +9,7 @@ def _test_articles(func):
         import ipdb; ipdb.set_trace()
         assert type(response) is dict
         assert "articles" in response
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
         for article in response["articles"]:
             assert type(article) is dict
             expected = ("category", "body", "title", "language", "image_url", "url", "source")
@@ -29,7 +29,7 @@ def _test_articles(func):
         # else:
         #     print("; ".join([
         #         "{}: {}".format(orientation, str(len(articles))) for orientation, articles in response["articles"].items()]))
-        
+
 
 def test_articles():
     from api.engine.articles import fetch_articles
