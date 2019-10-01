@@ -10,7 +10,10 @@ from api.engine.text import TextAnalyser
 from api.utils.schemas import AnalysisOptions, ArticlesOptions
 from api.utils.logger import logger
 from api.utils.patterns import Json
-from api.utils.exceptions import NLPModelNotFound, BackendError, TextRankError, TranslationError
+from api.utils.exceptions import (
+    NLPModelNotFound, BackendError, TextRankError, TranslationError, 
+    MalformedJSONException, EmptyJSONException
+)
 
 
 class Meta(Resource):
@@ -22,19 +25,19 @@ class Meta(Resource):
     def get_opts(self):
         json_data = request.get_json(force=True)
         if not json_data:
-            raise ValueError
+            raise EmptyJSONException("No data provided")
         try:
             return self.schema.load(json_data)
         except Exception as err:
             logger.exception(err)
-            raise TypeError
+            raise MalformedJSONException("Wrong parameters passed")
 
     @staticmethod
     def _get_message(exception):
 
-        if isinstance(exception, ValueError):
+        if isinstance(exception, EmptyJSONException):
             message = "No input data provided"
-        elif isinstance(exception, TypeError):
+        elif isinstance(exception, MalformedJSONException):
             message = "Malformed JSON"
         elif isinstance(exception, BackendError):
             message = "Backend is not available"

@@ -22,3 +22,7 @@ class TextRankError(Exception): pass
 class BackendError(Exception): pass
 
 class TranslationError(Exception): pass
+
+class MalformedJSONException(Exception): pass
+
+class EmptyJSONException(Exception): pass
