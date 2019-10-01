@@ -34,6 +34,10 @@ h2 {
   font-weight: bold;
 }
 
+p.description {
+  text-align: justify;
+}
+
 @media all and (min-width: 520px) {
   h1 {
     font-size: 5vw;
