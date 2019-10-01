@@ -211,12 +211,12 @@ class TextAnalyser:
     def __init__(self, related:Optional[bool]=False,
                  search_languages:Optional[List[str]]=None,
                  output_language:Optional[str]=None, 
-                 groups:Optional[Json]=None) -> None:
+                 groupby_options:Optional[Json]=None) -> None:
 
         self.related_articles = related
         self.article_languages = search_languages or ["en","fr", "nl"]
         self.output_language = output_language
-        self.group_options = groups
+        self.groupby_options = groupby_options
 
     def fit(self, text:str) -> 'TextAnalyser':
 
@@ -244,7 +244,7 @@ class TextAnalyser:
                 source_language=self.detected_language_, 
                 search_languages=self.article_languages, 
                 output_language=self.output_language,
-                groupby_options=self.group_options,
+                groupby_options=self.groupby_options,
                 # TODO: groupby language & max results per category
             )
 
