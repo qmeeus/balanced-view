@@ -74,7 +74,7 @@ def fetch_articles(terms:List[str],
 
     articles = []
     for hit in response:
-        logger.info(hit.meta.score, hit.title)
+        logger.info(f"{hit.meta.score}: {hit.title}")
         article = Article.to_dict(hit)
         article["relevance"] = hit.meta.score
         articles.append(article)
