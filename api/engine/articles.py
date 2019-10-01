@@ -36,7 +36,7 @@ def fetch_articles(terms:List[str],
                    output_language:Optional[str]=None,  # TODO: Unused
                    country:Optional[str]=None,          # TODO: Unused
                    sources:Optional[str]=None,          # TODO: Unused
-                   groups:Optional[Json]=None
+                   groupby_options:Optional[Json]=None
     ) -> List[Json]:
 
     translations = {}
@@ -77,8 +77,8 @@ def fetch_articles(terms:List[str],
 
     articles = list(map(Article.to_dict, response))
 
-    if groups:
-        return {"articles": groupby_category(articles, **groups)}
+    if groupby_options:
+        return {"articles": groupby_category(articles, **groupby_options)}
 
     # if output_language is not None:
     #     results = translate_results(results, output_language)
@@ -90,7 +90,7 @@ def groupby_category(results:List[Json], key:str, groups:List[Json], default:Opt
     output = defaultdict(list)
     fget = itemgetter(key)
     for result in results:
-        value = fget(results)
+        value = fget(result)
         if value in rgroups:
             output[rgroups[value]].append(result)
         elif default:

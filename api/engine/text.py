@@ -240,11 +240,11 @@ class TextAnalyser:
                 self.MAX_KEYWORDS_TO_GET, scores=False)
                 
             options = dict(
-                terms=",".join(query_terms), 
+                terms=query_terms, 
                 source_language=self.detected_language_, 
                 search_languages=self.article_languages, 
                 output_language=self.output_language,
-                groups=self.group_options,
+                groupby_options=self.group_options,
                 # TODO: groupby language & max results per category
             )
 

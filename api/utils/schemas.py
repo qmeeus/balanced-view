@@ -22,7 +22,7 @@ class SourceOptions(ma.Schema):
 class DefaultOptions(ma.Schema):
     output_language = fields.String(required=False)
     search_languages = fields.List(fields.String(), required=False)
-    categories = fields.Nested(GroupByOptions, required=False)
+    groupby_options = fields.Nested(GroupByOptions, required=False)
 
 class AnalysisOptions(DefaultOptions):
     input_text = fields.String(required=True)
