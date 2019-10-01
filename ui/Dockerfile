@@ -5,19 +5,19 @@ COPY requirements.txt /
 RUN pip install -r /requirements.txt
 
 ENV USER=ui
-ENV UID=27328
+#ENV UID=27328
 WORKDIR "/$USER"
 
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "$(pwd)" \
-    --no-create-home \
-    --uid "$UID" \
-    "$USER" \
- && chown $USER:$USER .
+#RUN adduser \
+#    --disabled-password \
+#    --gecos "" \
+#    --home "$(pwd)" \
+#    --no-create-home \
+#    --uid "$UID" \
+#    "$USER" \
+# && chown $USER:$USER .
 
-USER $USER
+# USER $USER
 
 COPY . .
 
