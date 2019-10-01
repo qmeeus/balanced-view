@@ -34,8 +34,18 @@ h2 {
   font-weight: bold;
 }
 
+h3.no-results {
+    text-align: center;
+}
+
 p.description {
   text-align: justify;
+}
+
+div.alert>p {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 @media all and (min-width: 520px) {
@@ -43,7 +53,7 @@ p.description {
     font-size: 5vw;
   }
 
-  h2{
+  h2 {
     font-size: 2vw;
   }
 }

@@ -25,8 +25,20 @@
         </div>
     </div>
 
-{% include 'form.html' %}
+    {% include 'form.html' %}
 
-{% block results %}{% endblock %}
+    {% with errors = get_flashed_messages(category_filter=["error"]) %}
+        {% if errors %}
+            <div class="container mx-auto">
+                <div class="row h-30">
+                    <div class="alert alert-danger col-xs-12 col-sm-12 col-md-12 col-lg-12 my-auto" role="alert">
+                        <p>{{ errors[-1] }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% block results %}{% endblock %}
 
 {% endblock %}

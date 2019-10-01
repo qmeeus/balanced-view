@@ -16,20 +16,24 @@
                     <h5 class="text-center border-secondary border-bottom mt-1">
                         {{ group.title() }}
                     </h5>
-
-                    {% for article in results %}
-                        <div class="thumbnail article">
-                            <h3><a href="{{ article['source']['url'] }}">{{ article["source"]["name"] }}</a></h3>
-                            <h5 class="article-title">{{ article["title"] }}</h5>
-                            <a href="{{ article['url'] }}">
-                                <img class="article-image img-fluid float-left"  src="{{ article['image_url'] }}"></a>
-                            <div class="caption">
-                                <p class="description">{{ article["body"] }}</p>
-                                <p>{{ article["publication_date"] }}</p>
+                    {% if results %}
+                        {% for article in results %}
+                            <div class="thumbnail article">
+                                <h3>
+                                    <a href="{{ article['source']['url'] }}">{{ article["source"]["name"] }}</a>
+                                </h3>
+                                <h5 class="article-title">{{ article["title"] }}</h5>
+                                <a href="{{ article['url'] }}">
+                                    <img class="article-image img-fluid float-left"  src="{{ article['image_url'] }}"></a>
+                                <div class="caption">
+                                    <p class="description">{{ article["body"] }}</p>
+                                    <p>{{ article["publication_date"] }}</p>
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
-
+                        {% endfor %}
+                    {% else %}
+                        <h3 class="no-results">No Results Here!</h3>
+                    {% endif %}
                 </div>
 
             {% endfor %}
