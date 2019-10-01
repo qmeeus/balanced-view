@@ -28,7 +28,9 @@ def load_model(lang:Optional[str]=None, path:Optional[str]=None) -> Any:
         elif lang not in SPACY_LANG_MODELS:
             raise NLPModelNotFound(f"Model not available for {lang}")
         path = find_model(SPACY_LANG_MODELS[lang])
+    logger.debug(f"Loading model {path}")
     nlp = spacy.load(path)
+    logger.debug("Model loaded")
     return nlp
 
 def find_model(model_name:str) -> str:
@@ -138,6 +140,7 @@ class TextRank:
     @hijack(TextRankError)
     def fit(self, tokens:List[Tuple[str,str,str]], sentences:Iterator[Any]) -> 'TextRank':
 
+        logger.debug("Start TextRank analysis")
         pos_filter = lambda token: token[2] in self.INCLUDE_PART_OF_SPEECH
         tokens = list(filter(pos_filter, tokens))
         self.build_graph(tokens)
@@ -219,7 +222,8 @@ class TextAnalyser:
         self.groupby_options = groupby_options
 
     def fit(self, text:str) -> 'TextAnalyser':
-
+        
+        logger.debug("Start text analysis")
         self.detected_language_ = translator.identify(text, return_all=False)
 
         model = load_model(self.detected_language_)
@@ -239,13 +243,13 @@ class TextAnalyser:
             query_terms = self.textrank_.get_keywords(
                 self.MAX_KEYWORDS_TO_GET, scores=False)
                 
+            logger.debug(f"Find articles related to {query_terms}")
             options = dict(
                 terms=query_terms, 
                 source_language=self.detected_language_, 
                 search_languages=self.article_languages, 
                 output_language=self.output_language,
                 groupby_options=self.groupby_options,
-                # TODO: groupby language & max results per category
             )
 
             self.articles_ = fetch_articles(**options)
