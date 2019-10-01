@@ -1,5 +1,6 @@
 import os, os.path as p
 import json
+import re
 from operator import itemgetter, attrgetter
 from urllib.parse import urljoin
 from copy import deepcopy
@@ -148,14 +149,24 @@ class RssFeed:
         parsed["source"] = self.to_dict()
         parsed["category"] = category
         parsed["url"] = entry["link"]
-            
-        f_img = lambda link: link["type"].startswith("image")
-        urls = list(map(itemgetter("href"), filter(f_img, entry.get("links", []))))
-        parsed["image_url"] = urls[0] if urls else ""
+        parsed["image_url"] = self.parse_image_url(entry)
         return parsed
 
     @staticmethod
+    def parse_image_url(entry):
+        f_img = lambda link: link["type"].startswith("image")
+        urls = list(map(itemgetter("href"), filter(f_img, entry.get("links", []))))
+        if urls:
+            return urls[0]
+        img_tag = re.search(r"<img\s+src\=[\"\'](http.*?)[\"\']\s*(?:.*?)?\/>", entry["summary"])
+        if img_tag:
+            return img_tag.group(1)
+        return ""
+
+    @staticmethod
     def clean_text(text):
+        # Remove html tags
+        text = re.sub('<.*?>', '', text)
         return text
 
 
