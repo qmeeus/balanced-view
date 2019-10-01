@@ -1,6 +1,6 @@
 import os
 from collections import OrderedDict
-from operator import itemgetter
+from operator import itemgetter, attrgetter
 from elasticsearch_dsl import Search, MultiSearch, Q
 from typing import Optional, List, Dict, Callable
 
@@ -72,10 +72,16 @@ def fetch_articles(terms:List[str],
 
     response = search.execute()
 
+    articles = []
     for hit in response:
-        print(hit.meta.score, hit.title)
+        logger.info(hit.meta.score, hit.title)
+        article = Article.to_dict(hit)
+        article["relevance"] = hit.meta.score
+        articles.append(article)
 
-    articles = list(map(Article.to_dict, response))
+    # articles = list(map(Article.to_dict, response))
+    # for article in articles:
+    #     article["relevance"] = list(map(attrgetter("meta.score"), response))
 
     if groupby_options:
         return {"articles": groupby_category(articles, **groupby_options)}
@@ -86,7 +92,7 @@ def fetch_articles(terms:List[str],
     return {"articles": articles}
 
 def groupby_category(
-    results:List[Json], 
+    results:List[Json],
     key:str, 
     groups:List[Json], 
     default:Optional[str]=None, 
