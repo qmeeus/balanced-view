@@ -12,12 +12,15 @@ html_strip = analyzer('html_strip',
 class Source(InnerDoc):
     name = Keyword()
     url = Text()
+    language = Text()
+    country = Text()
 
 class Article(Document):
     title = Text(analyzer='snowball', fields={'raw': Keyword()})
     body = Text(analyzer=html_strip)
     tags = Keyword()
     language = Text()
+    country = Text()
     publication_date = Date()
     source = Nested(Source)
     category = Keyword()
@@ -30,6 +33,8 @@ class Article(Document):
           "number_of_shards": 2,
         }
 
+# When elasticsearch is empty, we need to create the index 
+# but this will throw an error if the index was already created
 try:
     Article.init()
 except:
