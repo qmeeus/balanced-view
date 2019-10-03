@@ -21,7 +21,7 @@ DEFAULT_IMAGE=$IMAGE_REPO/$APP
 IMAGES="nginx api ui"
 CONTAINERS="es nginx api ui"
 
-function is_running {
+function exists {
   if ! [ $1 ]; then
     if [ "$(podman pod ps | grep $APP | wc -l)" != "0" ]; then
       echo 1
@@ -58,7 +58,7 @@ while (( "$#" )); do
 done
 
 # 1) Stop and remove the containers / pod
-if ! [ $RESTART ] && [ $(is_running) ] ; then
+if ! [ $RESTART ] && [ $(podman pod exists $APP) ] ; then
   printf "Pod $APP is already running. Re-create it? y/N >>> " && read input
   case $input in
     y|Y)
@@ -108,7 +108,7 @@ fi
 BACK_PID=""
 
 # 3a) Create the pod and stop the running containers if necessary
-if ! [ $(is_running) ]; then
+if ! $(podman pod exists $APP); then
   echo "Create pod with name $APP"
   podman pod create --name $APP -p $NGINX_PORT1 -p $NGINX_PORT2
 else
@@ -116,6 +116,7 @@ else
     printf "Restart $container? y/N >>> " && read input
     case $input in
       y|Y)
+        #podman container exists $APP-container && (podman stop $APP-$container || podman rm $APP-$container) &
         podman stop $APP-$container 2>/dev/null || podman rm $APP-$container 2>/dev/null || true &
         BACK_PID="$BACK_PID $!"
         ;;
@@ -130,7 +131,7 @@ fi
 BACK_PID=""
 
 # 3b) Start ElasticSearch
-if ! [ $(is_running es) ]; then
+if ! $(podman container exists $APP-es); then
   echo "Start elasticsearch"
   DATA_DIR=$(pwd)/data/elasticsearch
   [ -d $DATA_DIR ] || bash -c "mkdir $DATA_DIR && chmod 777 $DATA_DIR"
@@ -144,41 +145,22 @@ if ! [ $(is_running es) ]; then
     BACK_PID="$BACK_PID $!"
 fi
 
-# 3c) Start the web server
-if ! [ $(is_running nginx) ]; then
-  echo "Run nginx server listening on ports $NGINX_PORT1 and $NGINX_PORT2"
-  podman run -d \
-    --name $APP-nginx \
-    --pod $APP \
-    --rm \
-    $DEFAULT_IMAGE:nginx &
-    BACK_PID="$BACK_PID $!"
-fi
+# 3c) Start the web server, api and ui
+for service in $IMAGES; do
+    if ! $(podman container exists $APP-$service); then
+        echo "Start $service service"
+        podman run -d \
+            --name $APP-$service \
+            --pod $APP \
+            --rm \
+            $DEFAULT_IMAGE:$service &
+        BACK_PID="$BACK_PID $!"
+    fi
+done
 
-# 3d) Start the API
-if ! [ $(is_running api) ]; then
-  echo "Run api service on port $API_PORT with name $APP-api"
-  podman run -d \
-    --name $APP-api \
-    --pod $APP \
-    --rm \
-    -v $(pwd)/api:/api \
-    $DEFAULT_IMAGE:api &
-    BACK_PID="$BACK_PID $!"
-fi
-
-# 3e) Start the UI
-if ! [ $(is_running ui) ]; then
-  echo "Run ui service on port $UI_PORT with name $APP-ui"
-  podman run -d \
-    --name $APP-ui \
-    --pod $APP \
-    --rm \
-    $DEFAULT_IMAGE:ui &
-    BACK_PID="$BACK_PID $!"
-fi
-
-# 4) Wait for the last processes to finish
+# 3d) Wait for the last processes to finish
 wait_for_processes $BACK_PID
 
+# 4) Display the running containers and exit
 podman ps
+
