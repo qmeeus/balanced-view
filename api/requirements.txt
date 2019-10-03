@@ -17,4 +17,8 @@ pandas
 python-dotenv
 requests==2.21.0
 spacy
+<<<<<<< HEAD
 urllib3<1.25,>1.24.2
+=======
+urllib3<1.25,>=1.24.2
+>>>>>>> 6cb6a93d6474842f1bcd4e3a618c420f9aa6a8db
