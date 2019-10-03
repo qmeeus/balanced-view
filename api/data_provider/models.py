@@ -12,12 +12,15 @@ html_strip = analyzer('html_strip',
 class Source(InnerDoc):
     name = Keyword()
     url = Text()
+    language = Text()
+    country = Text()
 
 class Article(Document):
     title = Text(analyzer='snowball', fields={'raw': Keyword()})
     body = Text(analyzer=html_strip)
     tags = Keyword()
     language = Text()
+    country = Text()
     publication_date = Date()
     source = Nested(Source)
     category = Keyword()

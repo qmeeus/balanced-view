@@ -43,7 +43,7 @@ class RssFeed:
         self.id = id
         self.url = url
         self.country = country
-        self.lang = lang
+        self.language = lang
         self.categories = categories
 
     def __repr__(self) -> str:
@@ -134,7 +134,7 @@ class RssFeed:
             name=self.name, 
             id=self.id, 
             url=self.url, 
-            lang=self.lang)
+            language=self.language)
 
     @classmethod
     def from_dict(cls, attributes) -> 'RssFeed':
@@ -145,12 +145,19 @@ class RssFeed:
         parsed["title"] = self.clean_text(entry["title"])
         parsed["body"] = self.clean_text(entry["summary"])
         parsed["publication_date"] = dt.fromtimestamp(mktime(entry["published_parsed"]))
-        parsed["language"] = entry["title_detail"].pop("language", None) or self.lang
+        parsed["language"], parsed["country"] = self.parse_locale(entry)
         parsed["source"] = self.to_dict()
         parsed["category"] = category
         parsed["url"] = entry["link"]
         parsed["image_url"] = self.parse_image_url(entry)
         return parsed
+
+    def parse_locale(self, entry):
+        lang, country = self.language, self.country
+        lang = entry["title_detail"].pop("language", None) or lang
+        if "-" in lang:
+            lang, country = lang.split("-")
+        return lang, country
 
     @staticmethod
     def parse_image_url(entry):
