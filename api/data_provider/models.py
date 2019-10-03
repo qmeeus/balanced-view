@@ -33,6 +33,8 @@ class Article(Document):
           "number_of_shards": 2,
         }
 
+# When elasticsearch is empty, we need to create the index 
+# but this will throw an error if the index was already created
 try:
     Article.init()
 except:
