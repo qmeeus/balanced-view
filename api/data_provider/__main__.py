@@ -14,7 +14,7 @@ from api.utils.logger import logger
 Json = Dict[str,Any]
 
 
-def save_resource(resource:Json, counts:Dict[str,int]):
+def save_resource(resource:Json, counts:Dict[str,int]) -> Dict[str,int]:
     try:
         if not resource["body"]:
             raise ValueError("Empty body")
@@ -30,7 +30,7 @@ def save_resource(resource:Json, counts:Dict[str,int]):
     counts["total"] += 1
     return counts
 
-def fetch_rss():
+def fetch_rss() -> Dict[str,int]:
 
     collection = RssFetcher.from_file()
     logger.info(f"Fetch RSS feeds from {len(collection.sources)} sources")
@@ -42,7 +42,7 @@ def fetch_rss():
     logger.info(f"Added {rss_results['successful']} resources, {rss_results['failed']} errors")
     return rss_results
 
-def fetch_newsapi():
+def fetch_newsapi() -> Dict[str,int]:
     newsapi = NewsAPIClient()
     logger.info(f"Getting articles from {len(newsapi.DEFAULT_SOURCES)} sources")
 

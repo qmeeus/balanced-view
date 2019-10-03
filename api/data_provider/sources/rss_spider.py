@@ -137,10 +137,15 @@ class RssFeed:
             language=self.language)
 
     @classmethod
-    def from_dict(cls, attributes) -> 'RssFeed':
+    def from_dict(cls, attributes:Json) -> 'RssFeed':
         return cls(**attributes)
 
-    def parse_entry(self, entry, category):
+    def parse_entry(self, entry:Json, category:str) -> Json:
+        """
+        Parse the entries gotten from feedparser to the format expected by elasticsearch
+        See models.py for information about the expected schema
+        The category is required since it is not included in the entry
+        """
         parsed = {}
         parsed["title"] = self.clean_text(entry["title"])
         parsed["body"] = self.clean_text(entry["summary"])
@@ -152,7 +157,7 @@ class RssFeed:
         parsed["image_url"] = self.parse_image_url(entry)
         return parsed
 
-    def parse_locale(self, entry):
+    def parse_locale(self, entry:Json) -> Tuple[str, str]:
         lang, country = self.language, self.country
         lang = entry["title_detail"].pop("language", None) or lang
         if "-" in lang:
@@ -160,7 +165,7 @@ class RssFeed:
         return lang, country
 
     @staticmethod
-    def parse_image_url(entry):
+    def parse_image_url(entry:Json) -> str:
         f_img = lambda link: link["type"].startswith("image")
         urls = list(map(itemgetter("href"), filter(f_img, entry.get("links", []))))
         if urls:
@@ -171,7 +176,7 @@ class RssFeed:
         return ""
 
     @staticmethod
-    def clean_text(text):
+    def clean_text(text:str) -> str:
         # Remove html tags
         text = re.sub('<.*?>', '', text)
         return text
