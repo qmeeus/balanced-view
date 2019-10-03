@@ -160,8 +160,12 @@ class TextRank:
         scale = lambda weight: sigmoid(norm(weight))
         normalised_scores = {node: scale(weight) for node, weight in phrase2scores.items()}
 
+        if not normalised_scores:
+            raise ValueError("No keyword found! There might be something wrong with the input features.")
+        
         self.keywords_ = pd.DataFrame(normalised_scores.items(), columns=["keyword", "score"])
         self.keywords_.sort_values("score", ascending=False, inplace=True)
+        logger.debug(f"Top 5 keywords: {' '.join(self.keywords_.head(5)['keyword'].values)}")
         return self
 
     def get_keywords(self, max_kws:Optional[int]=None, scores:Optional[bool]=True) -> Union[List[Json],List[str]]:
@@ -226,13 +230,13 @@ class TextAnalyser:
         logger.debug("Start text analysis")
         self.detected_language_ = translator.identify(text, return_all=False)
 
-        model = load_model(self.detected_language_)
-        document = model(text)
+        self.model_ = load_model(self.detected_language_)
+        document = self.model_(text)
 
         tokens = map(attrgetter('text'), document)
         lemmas = map(lambda token: token.lemma_.lower(), document)
         pos_tags = map(attrgetter('pos_'), document)
-        remove_stopwords = self.remove_stopwords(model, itemgetter(0))
+        remove_stopwords = self.remove_stopwords(self.model_, itemgetter(0))
         features = list(filter(remove_stopwords, zip(tokens, lemmas, pos_tags)))
 
         self.textrank_ = TextRank().fit(features, document.sents)
