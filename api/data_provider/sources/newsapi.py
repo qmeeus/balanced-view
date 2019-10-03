@@ -98,7 +98,7 @@ class NewsAPIClient(NewsApiClient):
 
         yield from self.pager(super(NewsAPIClient, self).get_top_headlines, **options)
 
-    def load_sources(self):
+    def load_sources(self) -> Json:
         with open(abspath(self.SOURCEFILE)) as f:
             sources = json.load(f)["sources"]
         return {source["id"]: source for source in sources}
