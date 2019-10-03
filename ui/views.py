@@ -37,8 +37,8 @@ def index():
                         {'name': 'Dutch', 'value': 'nl'},
                         {'name': 'French', 'value': 'fr'}
                     ],
-                    'orderby': 'publication_date',
-                    'reverse': True,
+                    'orderby': 'relevance',
+                    'reverse': False,
                     'max_results_per_group': 5
                 }
             }
