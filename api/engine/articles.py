@@ -61,8 +61,7 @@ def fetch_articles(terms:List[str],
     
     query = Q('bool', should=[
         Q('bool', must=Q("match", language=lang), minimum_should_match=2, should=[
-            Q("match_phrase", **{attr: term.strip()}) 
-            for attr in ('body', 'title')
+            Q("multi_match", fields=['body', 'title'], type='phrase', query=term.strip()) 
             for term in translated.split(',')
         ]) for lang, translated in translations.items()
     ])
