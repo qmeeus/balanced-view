@@ -22,7 +22,9 @@
                                 <h3>
                                     <a href="{{ article['source']['url'] }}">{{ article["source"]["name"] }}</a>
                                 </h3>
-                                <h5 class="article-title">{{ article["title"] }}</h5>
+                                <a href="{{ article['url'] }}">
+                                    <h5 class="article-title">{{ article["title"] }}</h5>
+                                </a>
                                 <a href="{{ article['url'] }}">
                                     <img class="article-image img-fluid float-left"  src="{{ article['image_url'] }}"></a>
                                 <div class="caption">
