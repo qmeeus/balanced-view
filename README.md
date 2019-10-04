@@ -59,7 +59,7 @@ If you find this tool or the publication useful for your research project, pleas
      - ~~[NexisLexis](https://www.lexisnexis.com/communities/academic/w/wiki/111.url-api-specifications.aspx)~~
        - ~~academic: Not recommended, authenticate twice with KUL account + only browser based (need heavy intergration work)~~
        - ~~General API: authentication & access not clear~~
- - Translation service: IBM vs ~~Google Translate~~ DeepL
+ - Translation service: IBM vs ~~Google Translate DeepL~~
    - IBM: not always stable 
    - ~~Google: more expensive & need billing information even for free API calls~~
  - Multilingual support (provide translated articles from other languages)
@@ -75,17 +75,20 @@ If you find this tool or the publication useful for your research project, pleas
 ![Building blocks](misc/appview.jpg)
 
 ## Notes for developers
-**Please note that this project is under the GNU General Public License, which authorises you to do pretty much anything with the code except changing the license. In other words, feel free to clone it, transform it or improve it as much as you want, but you can't make it private: it has to remain open source.**
+**Please note that this project is under the GNU General Public License, which authorises you to do pretty much anything with the code except changing the license. In other words, feel free to clone it, transform it or improve it as much as you want, but you can't make it private, it has to remain open source.**
 
-**I do not guarantee that the information below is up to date (the directory structure certainly isn't)**
+The project is organised as follow:
+ - Data storage: [Elasticsearch](https://www.elastic.co/products/elasticsearch) is a "distributed, RESTful search and analytics engine capable of addressing a growing number of use cases". It is simple of use and particularly well suited for storing and accessing unstructured data such as text. Its growing adoption in the dev community and the integration of other tools such as Kibana and Logstash makes it particularly interesting for our usecase.
+ - Spiders: To populate the database, one script is available that gathers information from RSS Feeds and from the NewsAPI. The sources are then sent to ElasticSearch server.
+ - Backend: Flask API written in Python. It uses the [elasticsearch-dsl](https://elasticsearch-dsl.readthedocs.io/en/latest/) to communicate with Elasticsearch and [spacy](https://spacy.io/) to perform NLP tasks. The API performs 2 main functions: (1) Analyse an input text and identifies part of speech tags, named entities and the main keywords; and (2) Build queries and parse responses of Elasticsearch to find relevant articles in multiple languages. To translate the texts and keywords used in the queries, we rely on [IBM Watson's Translate API](https://cloud.ibm.com/apidocs/language-translator).
+ - User interface: Flask website written in Python. Its main function is to receive a text input from the user, send it to the API and display the result in a webpage. Some visualisations are also provided to analyse the text. Currently, the only visualisation available is the graph produced by Textrank algorithm, used in the keyword extraction phase. In the future, other visualisation might include detected topic probabilities, identified actors, etc.
+ - Webserver: [Nginx](https://www.nginx.com/) is an open source webserver which can also be used as a reverse proxy load balancer. It takes care of dispatching the incoming connections as well as some key security aspects. 
 
-The repository is organised as follow:
- - `/` all the files that have to do with deploying the website, including docker configuration files and various scripts to launch and deploy the app
- - `/app` the code of the website
- - `/app/index.py` the website logic which formulates the logic behind user interactions
- - `/app/api` the code to summarise text and query the news api + the data used for the sources
- - `/app/templates` the various templates of the static webpages
- - `/app/static` static files including css and js libraries used in the webpages
+Each component is self-contained in its own environment in the form of an [OCI container](https://www.opencontainers.org/), except for the spiders (data providers) which are part of the API. These run at regular intervals as [cronjobs](https://en.wikipedia.org/wiki/Cron). The containers making up the software are thus: (1) Elasticsearch; (2) API; (3) UI; and (4) Nginx. We are using [podman](https://podman.io/) containers instead of docker because they do not require a daemon running as root. Podman containers can be run in rootless mode and use user namespaces and UID/GID maps to map the users in the containers with the users on the host. 
+
+Additionally, a script (`bootstrap.sh`) is provided to simplify the building and starting of the software. The user can refer to this script to understand how each component fit with each other. To download the containers from the docker hub (with the `-u` flag, see below for more), the user must have logged in and have access to my private repository.
+
+*NB*: For the API to work, it requires multiple accesses to third party services such as NewsAPI and IBM Cloud, as well as `.env` files containing flask configuration, including the secret key used by the app.
 
 ## Requirements
 - a computer (preferably running linux) with an internet connection and either docker or podman installed (the rest is automatically included when builing in the containers)
@@ -99,7 +102,7 @@ There are (currently) 4 services required to run the full app:
     3. the API
     4. the UI
    
-The easiest option to start everything is to use the `bootstrap.sh` script. Since `podman` takes more time to build containers than `docker`, I prefer to build the containers manually with docker and push them to the docker hub, using the following syntax:
+The easiest option to start everything is to use the `bootstrap.sh` script. Since `podman` takes more time and resources to build containers than `docker`, I prefer to build the containers manually with docker and push them to the docker hub, using the following syntax:
 ```bash
 docker build -t <image-tag> <context-dir>
 docker login
@@ -109,4 +112,3 @@ docker push <image-tag>
 The `bootstrap.sh` script will automatically download the containers or build them if the flag `-u` is provided. It will also automatically restart the containers if the flag `-r` is provided.
 
 If the preferred option is to use `docker`, you have to notice that some containers run as root. To fix this security issue, it is advised to modify the `Dockerfile` to run as a user.
-
