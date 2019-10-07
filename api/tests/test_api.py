@@ -2,13 +2,14 @@ import unittest
 import requests
 import json
 from operator import itemgetter
+import os
 
 from api.tests.test_articles import Meta
 from api.tests.utils import load_texts, load_keywords
 from api.utils.logger import logger
 
 
-API_LOCATION = "http://localhost:32597"
+API_LOCATION = f"http://localhost:{os.environ['FLASK_PORT']}"
 
 
 class TestArticleEndpoint(unittest.TestCase, Meta):
