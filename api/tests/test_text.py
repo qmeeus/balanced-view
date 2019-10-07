@@ -34,5 +34,6 @@ class TestTextAnalyser(unittest.TestCase):
             except NLPModelNotFound as e:
                 logger.error(e)
 
+
 if __name__ == "__main__":
     unittest.main()
