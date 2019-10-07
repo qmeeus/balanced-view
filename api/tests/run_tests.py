@@ -2,8 +2,11 @@ import unittest
 from api.tests.test_ibm_api import TestIBMAPI
 from api.tests.test_news_api import TestNewsAPI
 from api.tests.test_rss_feeds import TestRssFeed, TestRssFetcher
+from api.tests.test_data_provider import TestDataProvider
 from api.tests.test_text import TestTextAnalyser
 from api.tests.test_articles import TestArticles
+from api.tests.test_ui import TestUI
+from api.tests.test_server import TestServer
 
 def make_suite(*TestCases):
     suite = unittest.TestSuite()
@@ -17,13 +20,22 @@ def test_api():
     
 
 def test_data_provider():
-    return make_suite(TestNewsAPI, TestRssFeed, TestRssFetcher)
+    return make_suite(TestNewsAPI, TestRssFeed, TestRssFetcher, TestDataProvider)
+
+def test_ui():
+    return make_suite(TestUI)
+
+def test_server():
+    return make_suite(TestServer)
+
 
 
 def all_tests():
     suite = unittest.TestSuite()
     suite.addTests(test_api())
     suite.addTests(test_data_provider())
+    suite.addTests(test_ui())
+    suite.addTests(test_server())
     return suite
 
 
