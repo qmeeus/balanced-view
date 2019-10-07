@@ -4,6 +4,7 @@ import sys
 import spacy
 import numpy as np
 import pandas as pd
+from time import time
 from knapsack import knapsack
 from operator import itemgetter, attrgetter
 from typing import List, Dict, Optional, Any, Union, Tuple, Callable, Iterator
@@ -29,8 +30,9 @@ def load_model(lang:Optional[str]=None, path:Optional[str]=None) -> Any:
             raise NLPModelNotFound(f"Model not available for {lang}")
         path = find_model(SPACY_LANG_MODELS[lang])
     logger.debug(f"Loading model {path}")
+    t0 = time()
     nlp = spacy.load(path)
-    logger.debug("Model loaded")
+    logger.debug(f"Model loaded in {time() - t0:.2f}s")
     return nlp
 
 def find_model(model_name:str) -> str:
