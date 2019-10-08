@@ -50,6 +50,8 @@ while (( "$#" )); do
       UPDATE=true && shift 1;;
     -r|--restart)
       RESTART=true && shift 1;;
+    -t|--test)
+      RUN_TEST=true && shift 1;;
     --) # end argument parsing
       shift && break;;
     *) # unsupported flags
@@ -161,6 +163,12 @@ done
 # 3d) Wait for the last processes to finish
 wait_for_processes $BACK_PID
 
-# 4) Display the running containers and exit
+# 4) Run tests
+if [ $RUN_TEST ]; then
+  echo "Run tests. This might take a while..."
+  podman exec -it balancedview-api bash -c "cd / && python -m api.tests.run_tests"
+fi
+
+# 5) Display the running containers and exit
 podman ps
 
