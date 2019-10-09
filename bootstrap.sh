@@ -14,7 +14,7 @@ APP=balancedview
 API_PORT=$(get_env api FLASK_RUN_PORT)
 UI_PORT=$(get_env ui FLASK_RUN_PORT)
 ES_PORT=$(get_env api ES_PORT)
-ES_USER=$(get_env ui ES_USER)
+ES_USER=$(get_env api ES_USER)
 ES_PWD=$(get_env api ES_PWD)
 NGINX_PORT1=$(get_nginx_port ui)
 NGINX_PORT2=$(get_nginx_port api)
@@ -146,7 +146,7 @@ if ! $(podman container exists $APP-es); then
     -v $DATA_DIR:/usr/share/elasticsearch/data \
     -e "discovery.type=single-node" \
     -e "ELASTICSEARCH_USERNAME=$ES_USER" \
-    -e "ELASTIC_PASSWORD=$ES_PWD" \
+    -e "ELASTICSEARCH_PASSWORD=$ES_PWD" \
     $DEFAULT_IMAGE:es &
     BACK_PID="$BACK_PID $!"
 fi
