@@ -37,12 +37,12 @@ def fetch_articles(terms:List[str],
                    country:Optional[str]=None,          # TODO: Unused
                    sources:Optional[str]=None,          # TODO: Unused
                    groupby_options:Optional[Json]=None
-    ) -> List[Json]:
+    ) -> Json:
 
     if not type(terms) is list:
         raise TypeError("terms must be a list of keywords eg: ['Donald Trump', 'Elections']")
     
-    terms = ",".join(terms)
+    query_terms = ",".join(terms)
     search_languages = search_languages or ["en"]
     if not type(search_languages) is list:
         raise TypeError("search_languages must be a list of language codes eg: ['en', 'nl']")
@@ -51,15 +51,15 @@ def fetch_articles(terms:List[str],
     
     # Translate terms in english to minimise risk of missing IBM model
     if source_language != 'en':
-        translations[source_language] = terms
-        terms = translate(terms, source_language, 'en')
+        translations[source_language] = query_terms
+        query_terms = translate(query_terms, source_language, 'en')
 
-    translations['en'] = terms
-    logger.debug(terms)
+    translations['en'] = query_terms
+    logger.debug(query_terms)
 
     for lang in search_languages:
         if lang not in translations:
-            translated = translate(terms, 'en', lang)
+            translated = translate(query_terms, 'en', lang)
             if not translated:
                 continue
             translations[lang] = translated
