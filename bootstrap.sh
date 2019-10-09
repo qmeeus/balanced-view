@@ -14,12 +14,14 @@ APP=balancedview
 API_PORT=$(get_env api FLASK_RUN_PORT)
 UI_PORT=$(get_env ui FLASK_RUN_PORT)
 ES_PORT=$(get_env api ES_PORT)
+ES_USER=$(get_env ui ES_USER)
+ES_PWD=$(get_env api ES_PWD)
 NGINX_PORT1=$(get_nginx_port ui)
 NGINX_PORT2=$(get_nginx_port api)
 IMAGE_REPO=docker.io/qmeeus
 DEFAULT_IMAGE=$IMAGE_REPO/$APP
 IMAGES="nginx api ui"
-CONTAINERS="es nginx api ui"
+CONTAINERS="es vis nginx api ui"
 
 function exists {
   if ! [ $1 ]; then
@@ -112,7 +114,7 @@ BACK_PID=""
 # 3a) Create the pod and stop the running containers if necessary
 if ! $(podman pod exists $APP); then
   echo "Create pod with name $APP"
-  podman pod create --name $APP -p $NGINX_PORT1 -p $NGINX_PORT2
+  podman pod create --name $APP -p $NGINX_PORT1 -p $NGINX_PORT2 -p 5601
 else
   for container in $CONTAINERS; do
     printf "Restart $container? y/N >>> " && read input
@@ -143,7 +145,21 @@ if ! $(podman container exists $APP-es); then
     --rm \
     -v $DATA_DIR:/usr/share/elasticsearch/data \
     -e "discovery.type=single-node" \
-    docker.elastic.co/elasticsearch/elasticsearch:7.3.2 &
+    -e "ELASTICSEARCH_USERNAME=$ES_USER" \
+    -e "ELASTIC_PASSWORD=$ES_PWD" \
+    $DEFAULT_IMAGE:es &
+    BACK_PID="$BACK_PID $!"
+fi
+
+if ! $(podman container exists $APP-vis); then
+  echo "Start kibana"
+  podman run -d \
+    --name $APP-vis \
+    --pod $APP \
+    --rm \
+    -e "ELASTICSEARCH_USERNAME=$ES_USER" \
+    -e "ELASTICSEARCH_PASSWORD=$ES_PWD" \
+    $DEFAULT_IMAGE:vis &
     BACK_PID="$BACK_PID $!"
 fi
 
