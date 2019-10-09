@@ -3,7 +3,9 @@
 ## https://github.com/elastic/kibana/blob/master/src/dev/build/tasks/os_packages/docker_generator/templates/kibana_yml.template.js
 #
 server.name: kibana
+# server.basePath: /kibana-6352840
 server.host: "0"
+csp.strict: true
 elasticsearch.hosts: [ "http://localhost:9200" ]
 xpack.monitoring.ui.container.elasticsearch.enabled: true
 
