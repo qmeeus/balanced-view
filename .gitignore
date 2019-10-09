@@ -7,6 +7,7 @@ logs/
 data/
 text/embeddings/*/*
 !text/embeddings/*/*.sh
+.auth
 
 # MacOSX files
 .DS_Store
