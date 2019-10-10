@@ -9,7 +9,7 @@ source config.sh
 CONTAINER=$1
 TAG=$REPO/$APP:$CONTAINER
 
-if ! [ "$(podman login --get-login $REGISTRY ])" = "$REGISTRY_USER" ]; then
+if ! [ "$(podman login --get-login $REGISTRY)" = "$REGISTRY_USER" ]; then
     podman login -u $REGISTRY_USER $REGISTRY
 fi
 
