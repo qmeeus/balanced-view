@@ -1,5 +1,6 @@
 import shutil
 import os.path as p
+import os
 from ibm_watson import LanguageTranslatorV3
 from typing import Callable, Any, Union, Dict, List
 from api.utils.logger import logger
@@ -43,14 +44,8 @@ class IBMTranslator(LanguageTranslatorV3):
     version = "2018-05-01"
 
     def __init__(self):
-        # Make sure that the credentials file is located in the home directory
-        home_dir = p.expanduser("~")
-        if not p.exists(p.join(home_dir, self.cred_file)):
-            full_path = p.join(p.dirname(__file__), self.cred_file)
-            if not p.exists(full_path):
-                raise FileNotFoundError(full_path)
-            shutil.copy(full_path, home_dir)
-
+        # Make sure that the credentials file location is known
+        os.environ["IBM_CREDENTIALS_FILE"] = p.join(p.dirname(__file__), self.cred_file)
         super(IBMTranslator, self).__init__(version=self.version)
 
     @parse_result(json_key="language")

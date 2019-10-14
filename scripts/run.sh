@@ -9,12 +9,18 @@ source config.sh
 
 CONTAINER=$1
 TAG=$REPO/$APP:$CONTAINER
+CONTEXT="$(get_context $CONTAINER)"
 
 ES_USER=elastic
 EXPR="(?<=PASSWORD\s$ES_USER\s=\s)\w+"
 ES_PSW="$(grep -oP $EXPR $PROJECT_ROOT/.auth)"
 
 OPTIONS="-d --rm --name $APP-$CONTAINER --pod $APP"
+
+if [ -f "$CONTEXT/.env" ]; then
+  OPTIONS="$OPTIONS --env-file $CONTEXT/.env"
+fi
+
 case $CONTAINER in
   es)
     DATA_DIR=$PROJECT_ROOT/data/elasticsearch

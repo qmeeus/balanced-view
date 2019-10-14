@@ -1,31 +1,27 @@
 #!/bin/sh
 
-. ./.env
+#. ./.env
 
 if [ -z "$FLASK_RUN_PORT" ]; then
-    FLASK_RUN_PORT=5000;
+    echo "FLASK_RUN_PORT undefined."
+    exit 1
 fi
 
 python_path=$(which python)
 
-echo "SHELL=/bin/bash
-BASH_ENV=/api/.env
-LC_ALL=C.UTF-8
-LANG=C.UTF-8" > /tmp/scheduler.txt
+cat <<EOF > /tmp/scheduler.txt
+$(env | sed 's:HOME=.*:HOME=/api:')
+SHELL=/bin/bash
+@reboot sleep 60 && $python_path -m api.data_provider >> /var/log/cron.log 2>&1
+0 6,12,18 * * * $python_path -m api.data_provider >> /var/log/cron.log 2>&1
+# This extra line makes it a valid cron"
+EOF
 
-for proxy in $(env | grep proxy); do
-    echo $proxy >> /tmp/scheduler.txt
-done
+crontab /tmp/scheduler.txt
 
-echo "@reboot sleep 60 && cd / && $python_path -m api.data_provider >> /var/log/cron.log 2>&1
-0 6,12,18 * * * cd / && $python_path -m api.data_provider >> /var/log/cron.log 2>&1
-# This extra line makes it a valid cron" >> /tmp/scheduler.txt
-
-crontab /tmp/scheduler.txt  
-
-printf "Start cron... " 
+printf "Start cron... "
 bash -c cron
 printf "$(service cron status)\n"
 
 echo "Starting API server"
-gunicorn --chdir .. -w3 -k gevent --timeout 120 --bind=0.0.0.0:5000 api.wsgi
+gunicorn -w3 -k gevent --timeout 120 --bind=0.0.0.0:5000 api.wsgi

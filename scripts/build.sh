@@ -5,11 +5,13 @@ set -e
 ! [ $1 ] && echo "Missing argument" && exit 1
 
 source config.sh
-
+LOGDIR=$LOGDIR/build
 CONTAINER=$1
+LOGFILE=$LOGDIR/$CONTAINER.log
 TAG=$REPO/$APP:$CONTAINER
-CONTEXT=$PROJECT_ROOT/$CONTAINER
+CONTEXT="$(get_context $CONTAINER)"
 
+mkdir -p $LOGDIR
 
 case $CONTAINER in
   es)
@@ -21,4 +23,4 @@ esac
 
 COMMAND="podman build -t $TAG $CONTEXT"
 echo $COMMAND
-bash -c "$COMMAND" && echo "Container $TAG is built!"
+bash -c "$COMMAND" > $LOGFILE 2>&1 && echo "Container $TAG is built!"

@@ -10,6 +10,7 @@ APP=balancedview
 UI_PORT_EXT="$(grep listen $PROJECT_ROOT/nginx/services/ui.conf | cut -d':' -f2 | tr -d ';')"
 API_PORT_EXT="$(grep listen $PROJECT_ROOT/nginx/services/api.conf | cut -d':' -f2 | tr -d ';')"
 EXTERNAL_PORTS="$UI_PORT_EXT $API_PORT_EXT 5601"
+LOGDIR=$PROJECT_ROOT/logs
 
 function is_running {
   # Usage: is_running CONTAINER
@@ -26,4 +27,15 @@ function user_input {
   esac
 }
 
-
+function get_context {
+  # Usage: get_context api
+  CONTEXT=$PROJECT_ROOT/$1
+  case $1 in
+    es)
+      CONTEXT=$PROJECT_ROOT/elasticsearch ;;
+    vis)
+      CONTEXT=$PROJECT_ROOT/kibana ;;
+    *) : ;;
+  esac
+  echo $CONTEXT
+}

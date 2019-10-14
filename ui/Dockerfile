@@ -19,9 +19,9 @@ WORKDIR "/$USER"
 
 # USER $USER
 
-COPY . .
+COPY ./ui ./ui
 
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-CMD [ "gunicorn", "--chdir", "..", "-w3", "-k", "gevent", "--bind=0.0.0.0:9999", "ui.wsgi" ]
+CMD [ "gunicorn", "-w3", "-k", "gevent", "--bind=0.0.0.0:9999", "ui.wsgi" ]

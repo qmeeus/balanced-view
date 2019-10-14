@@ -12,6 +12,7 @@ RUN chmod +x install_nlp_models.sh
 RUN bash install_nlp_models.sh
 
 ENV USER=api
+ENV UID=1000
 # ARG UID
 WORKDIR "/$USER"
 
@@ -27,9 +28,10 @@ WORKDIR "/$USER"
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 
-COPY . .
+COPY ./api ./api
+COPY ./tests ./tests
+COPY docker-entrypoint.sh .
+RUN chmod 744 docker-entrypoint.sh
 
-RUN chmod +x docker-entrypoint.sh
-
-# CMD [ "gunicorn", "--chdir", "..", "-w3", "-k", "gevent", "--bind=0.0.0.0:5000", "api.wsgi" ]
+# CMD [ "gunicorn", "-w3", "-k", "gevent", "--bind=0.0.0.0:5000", "api.wsgi" ]
 CMD [ "./docker-entrypoint.sh" ]
