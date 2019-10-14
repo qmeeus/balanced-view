@@ -3,7 +3,7 @@ import unittest
 from api.engine.text import TextAnalyser, TextRank
 from api.utils.exceptions import NLPModelNotFound
 from api.utils.logger import logger
-from api.tests.utils import load_texts
+from tests.utils import load_texts
 
 
 class TestTextAnalyser(unittest.TestCase):

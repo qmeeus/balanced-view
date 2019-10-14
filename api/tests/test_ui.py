@@ -3,7 +3,7 @@ import unittest
 import warnings
 import os
 
-from api.tests.utils import load_texts
+from tests.utils import load_texts
 from api.utils.logger import logger
 
 try:

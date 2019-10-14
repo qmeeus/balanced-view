@@ -1,12 +1,12 @@
 import unittest
-from api.tests.test_ibm_api import TestIBMAPI
-from api.tests.test_news_api import TestNewsAPI
-from api.tests.test_rss_feeds import TestRssFeed, TestRssFetcher
-from api.tests.test_data_provider import TestDataProvider
-from api.tests.test_text import TestTextAnalyser
-from api.tests.test_articles import TestArticles
-from api.tests.test_ui import TestUI
-from api.tests.test_server import TestServer
+from tests.test_ibm_api import TestIBMAPI
+from tests.test_news_api import TestNewsAPI
+from tests.test_rss_feeds import TestRssFeed, TestRssFetcher
+from tests.test_data_provider import TestDataProvider
+from tests.test_text import TestTextAnalyser
+from tests.test_articles import TestArticles
+from tests.test_ui import TestUI
+from tests.test_server import TestServer
 
 def make_suite(*TestCases):
     suite = unittest.TestSuite()

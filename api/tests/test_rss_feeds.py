@@ -6,7 +6,7 @@ import json
 from time import time
 
 from api.data_provider.sources.rss_spider import RssFeed, RssFetcher
-from api.tests.utils import load_rss_sources
+from tests.utils import load_rss_sources
 from api.utils.logger import logger
 
 

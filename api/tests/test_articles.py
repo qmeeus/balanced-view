@@ -3,7 +3,7 @@ import os
 import requests
 from operator import itemgetter
 from api.utils.exceptions import BackendError
-from api.tests.utils import load_keywords
+from tests.utils import load_keywords
 from api.engine.articles import fetch_articles
 from api.utils.logger import logger
 
