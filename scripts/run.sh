@@ -28,5 +28,6 @@ case $CONTAINER in
   *) : ;;
 esac
 
-podman run $OPTIONS $TAG
-echo "Container $APP-$CONTAINER is started"
+COMMAND="podman run $OPTIONS $TAG"
+echo $COMMAND
+bash -c "$COMMAND" && echo "Container $APP-$CONTAINER is started"

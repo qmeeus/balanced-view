@@ -19,5 +19,6 @@ case $CONTAINER in
   *) : ;;
 esac
 
-podman build -t $TAG $CONTEXT
-echo "Container $TAG is built!"
+COMMAND="podman build -t $TAG $CONTEXT"
+echo $COMMAND
+bash -c "$COMMAND" && echo "Container $TAG is built!"

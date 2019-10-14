@@ -9,11 +9,15 @@ CONTAINER=$1
 
 if (( $(is_running $APP-$1) )); then
   echo "Stop container $APP-$1"
-  podman stop $APP-$1
+  COMMAND="podman stop $APP-$1"
+  echo $COMMAND
+  bash -c "$COMMAND"
 fi
 
-if (( $(podman ps | grep $APP-$1 | wc -l) )); then
+if (( $(podman ps -a | grep $APP-$1 | wc -l) )); then
   echo "Remove container $APP-$1"
-  podman rm $APP-$1
+  COMMAND="podman rm $APP-$1"
+  echo $COMMAND
+  bash -c "$COMMAND"
 fi
 

@@ -13,5 +13,6 @@ if ! [ "$(podman login --get-login $REGISTRY)" = "$REGISTRY_USER" ]; then
     podman login -u $REGISTRY_USER $REGISTRY
 fi
 
-podman pull $TAG
-echo "Image $TAG was downloaded!"
+COMMAND="podman pull $TAG"
+echo $COMMAND
+bash -c "$COMMAND" && echo "Image $TAG was downloaded!"

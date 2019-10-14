@@ -68,30 +68,10 @@ if { [ $UPDATE ] && [ $BUILD ] ;} || { [ $UPDATE ] && [ $RESTART ] ;} || { [ $RE
   exit 1
 fi
 
+[ $UPDATE ] && { ACTION=Update; COMMAND=./update.sh ;} || { [ $BUILD ] && { ACTION=Build; COMMAND=./build.sh ;} || { [ $RESTART ] && ACTION=Restart ;} ;}
 SERVICES="es vis api ui nginx"
-for SERVICE in $SERVICES; do
-  if [ $UPDATE ]; then
 
-    if [[ $(user_input "Update $SERVICE") = 1 ]]; then
-      ./update.sh $SERVICE & BACKPID=( "${BACKPID[@]}" "$!" )
-      RESTART_SERVICE=true
-    fi
-  elif [ $BUILD ]; then
-    if [[ $(user_input "Build $SERVICE") = 1 ]]; then
-      ./build.sh $SERVICE & BACKPID=( "${BACKPID[@]}" "$!" )
-      RESTART_SERVICE=true
-    fi
-  elif [ $RESTART ]; then
-    if [[ $(user_input "Restart $SERVICE") = 1 ]]; then
-      RESTART_SERVICE=true
-    fi
-  fi
-  if [ $RESTART_SERVICE ]; then
-    ./stop_and_remove.sh $SERVICE & BACKPID=( "${BACKPID[@]}" "$!" )
-  fi
-done
-
-if (( $(podman pod ps  | grep $APP | wc -l) )); then
+if ! [ "$ACTION" = "Restart" ] && (( $(podman pod ps | grep balancedview | wc -l) )); then
   if [[ $(user_input "Pod $APP already exists. Re-create it") = 1 ]]; then
     for SERVICE in $SERVICES; do
       ./stop_and_remove.sh $SERVICE & BACKPID=( "${BACKPID[@]}" "$!" )
@@ -99,6 +79,19 @@ if (( $(podman pod ps  | grep $APP | wc -l) )); then
     wait_for_processes
     podman pod rm $APP
   fi
+fi
+
+if [ $ACTION ]; then
+  for SERVICE in $SERVICES; do
+    unset RESTART_SERVICE
+    if [[ $(user_input "$ACTION $SERVICE") = 1 ]]; then
+      RESTART_SERVICE=1
+    fi
+    if [ $RESTART_SERVICE ]; then
+      [ $COMMAND ] && { bash -c "$COMMAND $SERVICE" & BACKPID=( "${BACKPID[@]}" "$!" ) ;}
+      ./stop_and_remove.sh $SERVICE
+    fi
+  done
 fi
 
 ./create_pod.sh
