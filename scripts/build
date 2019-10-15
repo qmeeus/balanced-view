@@ -4,7 +4,7 @@ set -e
 
 ! [ $1 ] && echo "Missing argument" && exit 1
 
-source config.sh
+source config
 LOGDIR=$LOGDIR/build
 CONTAINER=$1
 LOGFILE=$LOGDIR/$CONTAINER.log

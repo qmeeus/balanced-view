@@ -2,7 +2,7 @@
 
 set -e
 
-source config.sh
+source config
 LOGFILE=$LOGDIR/tests.log
 
 echo "Run tests. This might take a while..."

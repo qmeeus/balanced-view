@@ -2,7 +2,7 @@
 
 set -e
 
-source config.sh
+source config
 
 ! [ $1 ] && echo "Missing argument" && exit 1
 ! [ -f $PROJECT_ROOT/.auth ] && echo "Credentials not available" && exit 1

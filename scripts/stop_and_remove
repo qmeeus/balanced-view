@@ -3,7 +3,7 @@
 set -e
 
 ! [ $1 ] && echo "Missing argument" && exit 1
-source config.sh
+source config
 
 CONTAINER=$1
 
