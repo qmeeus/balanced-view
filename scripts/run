@@ -21,6 +21,10 @@ if [ -f "$CONTEXT/.env" ]; then
   OPTIONS="$OPTIONS --env-file $CONTEXT/.env"
 fi
 
+if [ "$2" = "--dev" ] && { [ $CONTAINER = "api" ] || [ $CONTAINER = "ui" ] ;}; then
+  OPTIONS="$OPTIONS -v $CONTEXT/$CONTAINER:/$CONTAINER/$CONTAINER"
+fi
+
 case $CONTAINER in
   es)
     DATA_DIR=$PROJECT_ROOT/data/elasticsearch

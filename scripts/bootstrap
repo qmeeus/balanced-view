@@ -71,7 +71,8 @@ fi
 [ $UPDATE ] && { ACTION=Update; COMMAND=./update ;} || { [ $BUILD ] && { ACTION=Build; COMMAND=./build ;} || { [ $RESTART ] && ACTION=Restart ;} ;}
 SERVICES="es vis api ui nginx"
 
-if ! [ "$ACTION" = "Restart" ] && (( $(podman pod ps | grep balancedview | wc -l) )); then
+# 1) If the pod is already running and no action, ask whether restart everything from scratch 
+if ! [ "$ACTION" ] && (( $(podman pod ps | grep balancedview | wc -l) )); then
   if [[ $(user_input "Pod $APP already exists. Re-create it") = 1 ]]; then
     for SERVICE in $SERVICES; do
       ./stop_and_remove $SERVICE & BACKPID=( "${BACKPID[@]}" "$!" )
@@ -81,6 +82,7 @@ if ! [ "$ACTION" = "Restart" ] && (( $(podman pod ps | grep balancedview | wc -l
   fi
 fi
 
+# 2) If an action has been chosen, then for each service, ask whether to perform this action and stop the service
 if [ $ACTION ]; then
   for SERVICE in $SERVICES; do
     unset RESTART_SERVICE
@@ -94,9 +96,11 @@ if [ $ACTION ]; then
   done
 fi
 
+# 3) Create the pod
 ./create_pod
 wait_for_processes
 
+# 4) For each service not running, start it and perform necessary follow up operations
 for SERVICE in $SERVICES; do
   if ! (( $(is_running $SERVICE) )); then
     ./run $SERVICE & BACKPID=( "${BACKPID[@]}" "$!" )
@@ -109,8 +113,9 @@ done
 
 wait_for_processes
 
+# 5) If necessary, run the tests
 if [ $RUN_TESTS ]; then
   ./run_tests
 fi
 
-podman ps
+./status
