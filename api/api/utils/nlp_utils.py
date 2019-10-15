@@ -15,11 +15,11 @@ SPACY_LANG_MODELS = {
     "fr": "fr_core_news_md",
 }
 
-# def get_model(lang:str):
-#     try:
-#         return NLP_MODELS[lang]
-#     except KeyError:
-#         raise NLPModelNotFound(f"Model not available for {lang}")
+def get_model(lang:str):
+    try:
+        return NLP_MODELS[lang] if NLP_MODELS else load_model(lang)
+    except KeyError:
+        raise NLPModelNotFound(f"Model not available for {lang}")
 
 
 def load_model(lang:Optional[str]=None, path:Optional[str]=None) -> Any:
@@ -46,6 +46,10 @@ def find_model(model_name:str) -> str:
     return p.join(path_to_model, model_dir)
 
 
-# NLP_MODELS = {
-#     lang: load_model(lang) for lang in SPACY_LANG_MODELS
-# }
+if os.environ.get("LOAD_MODELS_AT_START", False) == "yes":
+    NLP_MODELS = {
+        lang: load_model(lang) for lang in SPACY_LANG_MODELS
+    }
+else:
+    NLP_MODELS = {}
+

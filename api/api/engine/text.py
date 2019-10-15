@@ -11,7 +11,7 @@ from typing import List, Dict, Optional, Any, Union, Tuple, Callable, Iterator
 from api.engine.ibm_api import translator
 from api.engine.articles import fetch_articles
 from api.data_provider.models import InputText
-from api.utils.nlp_utils import load_model
+from api.utils.nlp_utils import get_model
 from api.utils.logger import logger
 from api.utils.patterns import Json
 from api.utils.exceptions import hijack, TextRankError, TranslationError, BackendError
@@ -205,7 +205,7 @@ class TextAnalyser:
         logger.debug("Start text analysis")
         self.detected_language_ = translator.identify(text, return_all=False)
 
-        model = load_model(self.detected_language_)
+        model = get_model(self.detected_language_)
         document = model(text)
 
         tokens = map(attrgetter('text'), document)
