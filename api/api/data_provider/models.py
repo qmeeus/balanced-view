@@ -1,3 +1,4 @@
+import datetime as dt
 from elasticsearch_dsl import InnerDoc, Document, Date, Integer, Keyword, Text, Nested, analyzer, Float
 
 
@@ -44,12 +45,17 @@ class InputText(Document):
     language = Text()
     keywords = Nested(DetectedKeyword)
     topics = Nested(Topic)
+    request_date = Date()
 
     class Index:
         name = "input-index"
         settings = {
           "number_of_shards": 2,
         }
+
+    def save(self, **kwargs):
+        self.request_date = dt.datetime.now()
+        return super().save(**kwargs)
 
 
 # When elasticsearch is empty, we need to create the index
