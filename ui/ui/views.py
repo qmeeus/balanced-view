@@ -32,7 +32,7 @@ def index():
                 'search_languages': ['en', 'fr', 'nl'],
                 'groupby_options': {
                     'key': 'language',
-                    'default': 'International',
+                    'default': 'Other languages',
                     'groups': [
                         {'name': 'Dutch', 'value': 'nl'},
                         {'name': 'French', 'value': 'fr'}
