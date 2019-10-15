@@ -6,10 +6,5 @@ from api.utils.patterns import Json
 
 hosts = [{"host": os.environ["ES_HOST"], "port": os.environ["ES_PORT"]}]
 auth = (os.environ["ELASTICSEARCH_USERNAME"], os.environ["ELASTICSEARCH_PASSWORD"])
-index_name = os.environ["ES_INDEX"]
 connections.create_connection(hosts=hosts, http_auth=auth)
 
-
-__all__ = [
-    "index_name"
-]

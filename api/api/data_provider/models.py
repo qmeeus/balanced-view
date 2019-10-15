@@ -1,7 +1,5 @@
 from elasticsearch_dsl import InnerDoc, Document, Date, Integer, Keyword, Text, Nested, analyzer, Float
 
-from api.data_provider.__init__ import index_name
-
 
 html_strip = analyzer('html_strip',
     tokenizer="standard",
@@ -28,7 +26,7 @@ class Article(Document):
     image_url = Text()
 
     class Index:
-        name = index_name
+        name = "article-index"
         settings = {
           "number_of_shards": 2,
         }
@@ -48,7 +46,7 @@ class InputText(Document):
     topics = Nested(Topic)
 
     class Index:
-        name = index_name
+        name = "input-index"
         settings = {
           "number_of_shards": 2,
         }

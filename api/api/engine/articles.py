@@ -5,7 +5,6 @@ from elasticsearch_dsl import Search, MultiSearch, Q
 from typing import Optional, List, Dict, Callable
 
 from api.engine.ibm_api import translator
-from api.data_provider import index_name
 from api.data_provider.models import Article
 from api.utils.patterns import Json
 from api.utils.logger import logger
@@ -57,6 +56,9 @@ def fetch_articles(terms:List[str],
     translations['en'] = query_terms
     logger.debug(query_terms)
 
+    search = Article.search()
+
+    articles = []
     for lang in search_languages:
         if lang not in translations:
             translated = translate(query_terms, 'en', lang)
@@ -65,31 +67,27 @@ def fetch_articles(terms:List[str],
             translations[lang] = translated
             logger.debug(translated)
     
-    query = Q('bool', should=[
-        Q('bool', must=Q("match", language=lang), minimum_should_match=2, should=[
-            Q("multi_match", fields=['body', 'title'], type='phrase', query=term.strip()) 
-            for term in translated.split(',')
-        ]) for lang, translated in translations.items()
-    ])
+        query = Q(
+            'bool', must=Q("match", language=lang), minimum_should_match=2, should=[
+                Q("multi_match", fields=['body', 'title'], type='phrase', query=term.strip()) 
+                for term in translations[lang].split(',')
+                ]
+            )
 
-    search = Article.search().query(query)
-    logger.debug(search.to_dict())
+        query = search.query(query)
+        logger.debug(query.to_dict())
 
-    response = search.execute()
+        results = query.execute()
 
-    articles = []
-    for hit in response:
-        logger.info(f"{hit.meta.score}: {hit.title}")
-        article = Article.to_dict(hit)
-        article["relevance"] = hit.meta.score
-        articles.append(article)
-
-    # articles = list(map(Article.to_dict, response))
-    # for article in articles:
-    #     article["relevance"] = list(map(attrgetter("meta.score"), response))
+        logger.info(f"Got {results.hits.total.value} hits")
+        for hit in results:
+            logger.info(f"{hit.meta.score}: {hit.title}")
+            article = hit.to_dict()
+            article["relevance"] = hit.meta.score
+            articles.append(article)
 
     if groupby_options:
-        return {"articles": groupby_category(articles, **groupby_options)}
+        articles = groupby_category(articles, **groupby_options)
 
     # if output_language is not None:
     #     results = translate_results(results, output_language)
@@ -126,4 +124,5 @@ def groupby_category(
         for group in output:
             output[group] = output[group][:max_results_per_group]
 
+    logger.warn(", ".join([f"{k}: {len(v)}" for k, v in output.items()]))
     return output

@@ -4,45 +4,18 @@ import sys
 import spacy
 import numpy as np
 import pandas as pd
-from time import time
 from knapsack import knapsack
 from operator import itemgetter, attrgetter
 from typing import List, Dict, Optional, Any, Union, Tuple, Callable, Iterator
 
 from api.engine.ibm_api import translator
 from api.engine.articles import fetch_articles
+from api.data_provider.models import InputText
+from api.utils.nlp_utils import load_model
 from api.utils.logger import logger
 from api.utils.patterns import Json
-from api.utils.exceptions import hijack, NLPModelNotFound, TextRankError, TranslationError, BackendError
+from api.utils.exceptions import hijack, TextRankError, TranslationError, BackendError
 
-
-SPACY_LANG_MODELS = {
-    "nl": "nl_core_news_sm",
-    "en": "en_core_web_md",
-    "fr": "fr_core_news_md",
-}
-
-def load_model(lang:Optional[str]=None, path:Optional[str]=None) -> Any:
-    if path is None:
-        if not lang:
-            raise ValueError("Must provide one of language or path to model")
-        elif lang not in SPACY_LANG_MODELS:
-            raise NLPModelNotFound(f"Model not available for {lang}")
-        path = find_model(SPACY_LANG_MODELS[lang])
-    logger.debug(f"Loading model {path}")
-    t0 = time()
-    nlp = spacy.load(path)
-    logger.debug(f"Model loaded in {time() - t0:.2f}s")
-    return nlp
-
-def find_model(model_name:str) -> str:
-    env_path = p.abspath(p.join(sys.executable, "../.."))
-    path_to_modules = p.join(env_path, f"lib/python{sys.version[:3]}/site-packages")
-    path_to_model = p.join(path_to_modules, model_name)
-    if not p.exists(path_to_model):
-        raise FileNotFoundError(path_to_model)
-    model_dir = [d for d in os.listdir(path_to_model) if d.startswith(model_name)][0]
-    return p.join(path_to_model, model_dir)
 
 class TextRank:
 
@@ -232,16 +205,24 @@ class TextAnalyser:
         logger.debug("Start text analysis")
         self.detected_language_ = translator.identify(text, return_all=False)
 
-        self.model_ = load_model(self.detected_language_)
-        document = self.model_(text)
+        model = load_model(self.detected_language_)
+        document = model(text)
 
         tokens = map(attrgetter('text'), document)
         lemmas = map(lambda token: token.lemma_.lower(), document)
         pos_tags = map(attrgetter('pos_'), document)
-        remove_stopwords = self.remove_stopwords(self.model_, itemgetter(0))
+        remove_stopwords = self.remove_stopwords(model, itemgetter(0))
         features = list(filter(remove_stopwords, zip(tokens, lemmas, pos_tags)))
-
         self.textrank_ = TextRank().fit(features, document.sents)
+
+        try:
+            input_text = InputText(body=text, language=self.detected_language_)
+            input_text.keywords = self.textrank_.get_keywords(max_kws=10, scores=True)
+            input_text.save()
+            logger.debug("Text saved")
+
+        except Exception as err:
+            logger.exception(err)
 
         self.articles_ = {"articles": []}
         if self.related_articles:

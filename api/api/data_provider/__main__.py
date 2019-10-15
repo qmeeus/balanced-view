@@ -5,7 +5,6 @@ from hashlib import md5
 from collections import OrderedDict
 from typing import Dict, Any
 
-from api.data_provider.__init__ import index_name
 from api.data_provider.models import Article
 from api.data_provider.sources.rss_spider import RssFetcher
 from api.data_provider.sources.newsapi import NewsAPIClient
