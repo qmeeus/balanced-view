@@ -2,6 +2,8 @@ import requests
 import unittest
 import warnings
 import os
+from time import sleep
+import random
 from queue import Queue
 from threading import Thread
 
@@ -20,7 +22,8 @@ UI_LOCATION = "http://cardia.cs.kuleuven.be:8080"
 
 class TestUI(unittest.TestCase):
 
-    N_WORKERS = 12
+    N_WORKERS = 28
+    MAX_REQUESTS = 100
 
     def __init__(self, *args, **kwargs):
         r = requests.get(UI_LOCATION)
@@ -34,12 +37,10 @@ class TestUI(unittest.TestCase):
         assert bool(csrf_token)
 
         for i, (_, text) in enumerate(load_texts()):
-            title = text.strip().split('\n')[0]
-            msg = f"Text #{i}: {title[:50]}... "
-            n_results = self._test_post_request(text, csrf_token)
-            logger.debug(msg + str(n_results) + " results")
+            self._test_post_request(text, csrf_token)
 
     def test_ui_under_pressure(self):
+        logger.debug("Start hammering the server")
         queue = Queue()
         csrf_token = self._get_csrf_token()
 
@@ -47,6 +48,7 @@ class TestUI(unittest.TestCase):
             while True:
                 text = queue.get()
                 self._test_post_request(text, csrf_token)
+                sleep(.5)
                 queue.task_done()
 
         for _ in range(self.N_WORKERS):
@@ -54,7 +56,12 @@ class TestUI(unittest.TestCase):
             t.daemon = True
             t.start()
 
-        for _, text in load_texts():
+        texts = list(load_texts("articles.txt"))
+
+        i = 0
+        while i < self.MAX_REQUESTS:
+            i += 1
+            _, text = random.choice(texts)
             queue.put(text)
 
         queue.join()
@@ -75,7 +82,8 @@ class TestUI(unittest.TestCase):
         if not graph_container:
             warnings.warn("No graph found")
         articles = soup.find_all("div", {"class": "thumbnail article"})
-        return len(articles)
+        title = text.strip().split('\n')[0]
+        logger.debug(f"{title[:50]}... {len(articles)} results")
 
 
 if __name__ == '__main__':
