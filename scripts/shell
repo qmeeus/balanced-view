@@ -2,9 +2,12 @@
 
 set -e
 
-! [ $1 ] && echo "Missing argument" && exit 1
+! [ "$1" ] && echo "Missing argument" && exit 1
 
 source config
 
-COMMAND="[ -f /bin/bash ] && /bin/bash || sh"
-podman exec -it $APP-$1 sh -c "$COMMAND"
+[ "$2" ] && COMMAND="$2" || COMMAND="[ -f /bin/bash ] && /bin/bash || sh"
+COMMAND="podman exec -it $APP-$1 sh -c \"$COMMAND\""
+echo "$COMMAND"
+bash -c "$COMMAND"
+
