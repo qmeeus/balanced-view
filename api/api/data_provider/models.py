@@ -58,12 +58,13 @@ class InputText(Document):
 
     def save(self, **kwargs):
         now = dt.datetime.now()
-        if not hasattr(self, 'creation_date'):
-            self.creation_date = self.access_date = now
-            self.access_count = 1
-        else:
+        if hasattr(self, 'creation_date') and self.creation_date:
             self.access_date = now
             self.access_count += 1
+        else:
+            self.creation_date = self.access_date = now
+            self.access_count = 1
+
         return super(InputText, self).save(**kwargs)
 
     def update(self, **kwargs):
