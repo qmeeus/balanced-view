@@ -3,10 +3,13 @@
 set -e
 
 source config
-LOGFILE=$LOGDIR/tests.log
-
+[ "$1" ] && SFX="$1" || SFX="all"
+[ "$1" ] && TEST="test_$1" || TEST="run_tests"
+LOGDIR=$LOGDIR/tests
+LOGFILE=$LOGDIR/$SFX.log
+COMMAND="podman exec -it balancedview-api python -m unittest tests.$TEST" 
+mkdir -p $LOGDIR
 echo "Run tests. This might take a while..."
-COMMAND="podman exec -it balancedview-api python -m tests.run_tests"
 echo $COMMAND
 bash -c "$COMMAND" > $LOGFILE 2>&1
 
