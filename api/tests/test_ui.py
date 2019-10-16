@@ -14,7 +14,8 @@ except:
     os.system('pip install bs4')
     from bs4 import BeautifulSoup
 
-UI_LOCATION = "http://localhost:9999"
+# UI_LOCATION = "http://localhost:9999"
+UI_LOCATION = "http://cardia.cs.kuleuven.be:8080"
 
 
 class TestUI(unittest.TestCase):
