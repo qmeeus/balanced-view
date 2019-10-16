@@ -23,7 +23,9 @@ fi
 
 if [ "$2" = "--dev" ] && { [ $CONTAINER = "api" ] || [ $CONTAINER = "ui" ] ;}; then
   OPTIONS="$OPTIONS -v $CONTEXT/$CONTAINER:/$CONTAINER/$CONTAINER"
-  OPTIONS="$OPTIONS -v $CONTEXT/tests:/$CONTAINER/tests"
+  if [ $CONTAINER = "api" ]; then
+      OPTIONS="$OPTIONS -v $CONTEXT/tests:/$CONTAINER/tests"
+  fi
 fi
 
 case $CONTAINER in

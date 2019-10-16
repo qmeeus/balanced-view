@@ -47,6 +47,8 @@ function cleanup {
 
 trap cleanup EXIT
 
+START="$(date +%s)"
+
 source config
 
 # Parse command line arguments
@@ -118,4 +120,6 @@ if [ $RUN_TESTS ]; then
   ./run_tests
 fi
 
+END="$(date +%s)"
+echo "Script finished in $((END-START)) s."
 ./status
