@@ -41,11 +41,14 @@ class Topic(InnerDoc):
     score = Float()
 
 class InputText(Document):
-    body = Text(analyzer=html_strip)
+    body = Text(analyzer=html_strip, required=True)
+    id = Keyword()
     language = Text()
     keywords = Nested(DetectedKeyword)
     topics = Nested(Topic)
-    request_date = Date()
+    creation_date = Date()
+    access_date = Date()
+    access_count = Integer()
 
     class Index:
         name = "input-index"
@@ -54,11 +57,22 @@ class InputText(Document):
         }
 
     def save(self, **kwargs):
-        self.request_date = dt.datetime.now()
-        return super().save(**kwargs)
+        now = dt.datetime.now()
+        if not hasattr(self, 'creation_date'):
+            self.creation_date = self.access_date = now
+            self.access_count = 1
+        else:
+            self.access_date = now
+            self.access_count += 1
+        return super(InputText, self).save(**kwargs)
+
+    def update(self, **kwargs):
+        self.access_date = dt.datetime.now()
+        self.access_count += 1
+        return super(InputText, self).update(**kwargs)
 
 
-# When elasticsearch is empty, we need to create the index
+# When elasticsearch is started for the first time, we need to create the index
 # but this will throw an error if the index was already created
 for object_type in (Article, InputText):
     try:
