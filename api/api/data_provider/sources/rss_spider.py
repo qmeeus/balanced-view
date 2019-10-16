@@ -46,6 +46,8 @@ class RssFeed:
         self.language = lang
         self.categories = categories
 
+        self._results = {}
+
     def __repr__(self) -> str:
         return f"RssFeed({self.name})"
 
@@ -88,27 +90,25 @@ class RssFeed:
         return urljoin(self.url, selected[0]["url"])
 
     def get_latest(self, categories:Optional[List[str]]=None) -> ResultIterator:
-        self._lock = Lock()
-        self._queue = Queue()
-        self._results = {}
         categories = categories or self.available_categories
-        
+        queue = Queue()
+
+        def threader() -> None:
+            while True:
+                category = queue.get()
+                self.get_category_feed(category)
+                queue.task_done()
+
         for _ in range(self.N_THREADS):
-            thread = Thread(target=self.threader)
+            thread = Thread(target=threader)
             thread.daemon = True
             thread.start()
 
         for category in categories:
-            self._queue.put(category)
+            queue.put(category)
 
-        self._queue.join()
+        queue.join()
         yield from self._parse_results()
-
-    def threader(self) -> None:
-        while True:
-            category = self._queue.get()
-            self.get_category_feed(category)
-            self._queue.task_done()
 
     def get_category_feed(self, category_name:str) -> None:
         if category_name not in self.available_categories:
@@ -122,7 +122,8 @@ class RssFeed:
         else:
             logger.warn(result)
         
-        self._results[category_name] = result
+        with Lock():
+            self._results[category_name] = result
 
     def _parse_results(self) -> ResultIterator:
         for category, result in self._results.items():
