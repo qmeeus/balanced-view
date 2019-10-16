@@ -4,8 +4,10 @@ import sys
 import spacy
 import numpy as np
 import pandas as pd
+from hashlib import md5
 from knapsack import knapsack
 from operator import itemgetter, attrgetter
+from elasticsearch.exceptions import NotFoundError
 from typing import List, Dict, Optional, Any, Union, Tuple, Callable, Iterator
 
 from api.engine.ibm_api import translator
@@ -200,8 +202,8 @@ class TextAnalyser:
         self.output_language = output_language
         self.groupby_options = groupby_options
 
-    def fit(self, text:str) -> 'TextAnalyser':
-        
+    def _fit(self, text:str) -> 'TextAnalyser':
+
         logger.debug("Start text analysis")
         self.detected_language_ = translator.identify(text, return_all=False)
 
@@ -215,31 +217,7 @@ class TextAnalyser:
         features = list(filter(remove_stopwords, zip(tokens, lemmas, pos_tags)))
         self.textrank_ = TextRank().fit(features, document.sents)
 
-        try:
-            input_text = InputText(body=text, language=self.detected_language_)
-            input_text.keywords = self.textrank_.get_keywords(max_kws=10, scores=True)
-            input_text.save()
-            logger.debug("Text saved")
-
-        except Exception as err:
-            logger.exception(err)
-
-        self.articles_ = {"articles": []}
-        if self.related_articles:
-            
-            query_terms = self.textrank_.get_keywords(
-                self.MAX_KEYWORDS_TO_GET, scores=False)
-                
-            logger.debug(f"Find articles related to {query_terms}")
-            options = dict(
-                terms=query_terms, 
-                source_language=self.detected_language_, 
-                search_languages=self.article_languages, 
-                output_language=self.output_language,
-                groupby_options=self.groupby_options,
-            )
-
-            self.articles_ = fetch_articles(**options)
+        self.keywords_ = self.textrank_.get_keywords(max_kws=self.MAX_KEYWORDS_TO_GET, scores=True)
 
         # dependencies = map(attrgetter('dep_'), document)
         # iob_labels = map(attrgetter('ent_iob_'), document)
@@ -247,8 +225,56 @@ class TextAnalyser:
 
         return self
 
+    def fit(self, text:str) -> 'TextAnalyser':
+
+        text = self.clean_text(text)
+        text_hash = md5(text.encode()).hexdigest()
+
+        try:
+            es_text = InputText.get(id=text_hash)
+            es_text.save()
+            self.detected_language_ = es_text.language
+            self.keywords_ = es_text.keywords
+            logger.debug("Text not processed...")
+
+        except NotFoundError:
+            self._fit(text)
+
+            es_text = InputText(
+                meta={"id": text_hash},
+                body=text, 
+                language=self.detected_language_, 
+                keywords=self.keywords_
+            )
+            es_text.save()
+            logger.debug(f"Text saved with id {text_hash}")
+
+        self.articles_ = {"articles": []}
+        if self.related_articles:
+                            
+            logger.debug(f"Find articles related to {self.keywords_}")
+            options = dict(
+                terms=list(map(itemgetter("keyword"),  self.keywords_)), 
+                source_language=self.detected_language_, 
+                search_languages=self.article_languages, 
+                output_language=self.output_language,
+                groupby_options=self.groupby_options,
+            )
+
+            self.articles_ = fetch_articles(**options)
+        
+        return self
+
+    @staticmethod
+    def clean_text(text):
+        text = text.strip()
+        return text
+
     def to_dict(self):
-        return dict(graph=self.textrank_.get_graph(), **self.articles_)
+        return dict(
+            graph=self.textrank_.get_graph() if hasattr(self, "textrank_") else {}, 
+            **self.articles_
+        )
 
     @staticmethod
     def remove_stopwords(model:Any, fget:Callable) -> Callable:
