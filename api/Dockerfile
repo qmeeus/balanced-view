@@ -2,7 +2,7 @@ FROM python:3.6-slim-stretch
 
 RUN apt-get update \
     && apt-get install -y cron python3-pip python3-dev git \
-    && pip install --upgrade --no-cache-dir pip
+    && python -m pip install --upgrade --no-cache-dir pip
 
 COPY requirements.txt /
 RUN pip install --no-cache-dir -r /requirements.txt
