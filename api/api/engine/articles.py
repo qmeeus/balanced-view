@@ -69,7 +69,7 @@ def fetch_articles(terms:List[str],
             logger.debug(translated)
     
         terms = translations[lang].split(",")
-        minimum_should_match = int(0.6 * len(terms))
+        minimum_should_match = int(0.5 * len(terms))
 
         query = Q(
             'bool', must=Q("match", language=lang), minimum_should_match=minimum_should_match, should=[
