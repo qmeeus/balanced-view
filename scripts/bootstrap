@@ -93,7 +93,7 @@ if [ $ACTION ]; then
     fi
     if [ $RESTART_SERVICE ]; then
       [ $COMMAND ] && { bash -c "$COMMAND $SERVICE" & BACKPID=( "${BACKPID[@]}" "$!" ) ;}
-      ./stop_and_remove $SERVICE
+      ./stop_and_remove $SERVICE & BACKPID=( "${BACKPID[@]}" "$!" )
     fi
   done
 fi
