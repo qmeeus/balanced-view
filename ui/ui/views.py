@@ -39,7 +39,7 @@ def index():
                     ],
                     'orderby': 'relevance',
                     'reverse': True,
-                    'max_results_per_group': 5
+                    'max_results_per_group': 3
                 }
             }
             resp = requests.post(url, json=opts)
