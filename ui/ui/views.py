@@ -56,7 +56,7 @@ def index():
 
         if not error_message:
             articles, graph = data["articles"], data["graph"]
-            return render_template('results.html', form=form, articles=articles, graph=graph)
+            return render_template('results.html', form=form, articles=articles)  #, graph=graph)
 
         flash(error_message, "error")
 
