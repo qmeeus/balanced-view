@@ -63,14 +63,18 @@ def fetch_articles(terms:List[str],
         if lang not in translations:
             translated = translate(query_terms, 'en', lang)
             if not translated:
+                logger.error(f"Could not translate {query_terms} in {lang}")
                 continue
             translations[lang] = translated
             logger.debug(translated)
     
+        terms = translations[lang].split(",")
+        minimum_should_match = int(0.6 * len(terms))
+
         query = Q(
-            'bool', must=Q("match", language=lang), minimum_should_match=2, should=[
+            'bool', must=Q("match", language=lang), minimum_should_match=minimum_should_match, should=[
                 Q("multi_match", fields=['body', 'title'], type='phrase', query=term.strip()) 
-                for term in translations[lang].split(',')
+                for term in terms
                 ]
             )
 
