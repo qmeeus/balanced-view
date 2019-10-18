@@ -230,6 +230,38 @@
                 {
                     "name": "BELGA",
                     "url": "/rss/infos/belga.xml"
+                },
+                {
+                    "name": "Sports",
+                    "url": "/rss/section/sports.xml"
+                },
+                {
+                    "name": "Football",
+                    "url": "/rss/section/sports/football.xml"
+                },
+                {
+                    "name": "Tennis",
+                    "url": "/rss/section/sports/tennis.xml"
+                },
+                {
+                    "name": "Golf",
+                    "url": "/rss/section/sports/golf.xml"
+                },
+                {
+                    "name": "Moteurs",
+                    "url": "/rss/section/sports/moteurs.xml"
+                },
+                {
+                    "name": "Cyclisme",
+                    "url": "/rss/section/sports/cyclisme.xml"
+                },
+                {
+                    "name": "Hockey",
+                    "url": "/rss/section/sports/hockey.xml"
+                },
+                {
+                    "name": "Autres sports",
+                    "url": "/rss/section/sports/omnisports.xml"
                 }
             ]
         },
@@ -307,6 +339,46 @@
                 {
                     "name": "Entrepreneuriat",
                     "url": "/rss/81907/cible_principale_gratuit"
+                },
+                {
+                    "name": "Sports",
+                    "url": "/rss/81867/cible_principale_gratuit"
+                },
+                {
+                    "name": "Football",
+                    "url": "/rss/81871/cible_principale_gratuit"
+                },
+                {
+                    "name": "Football belge",
+                    "url": "/rss/81872/cible_principale_gratuit"
+                },
+                {
+                    "name": "Football international",
+                    "url": "/rss/81873/cible_principale_gratuit"
+                },
+                {
+                    "name": "Cyclisme",
+                    "url": "/rss/81874/cible_principale_gratuit"
+                },
+                {
+                    "name": "Tennis",
+                    "url": "/rss/81875/cible_principale_gratuit"
+                },
+                {
+                    "name": "Basket",
+                    "url": "/rss/31887/cible_principale"
+                },
+                {
+                    "name": "Sports moteurs",
+                    "url": "/rss/31885/cible_principale"
+                },
+                {
+                    "name": "Athletisme",
+                    "url": "/rss/42347/cible_principale"
+                },
+                {
+                    "name": "Hockey sur gazon",
+                    "url": "/rss/42348/cible_principale"
                 }
             ]
         },
