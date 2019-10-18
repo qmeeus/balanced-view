@@ -627,6 +627,171 @@
                     "url": "news/world/us_and_canada/rss.xml"
                 }
             ]
+        },
+        {
+            "name": "Reuters",
+            "id": "reuters",
+            "url": "http://feeds.reuters.com",
+            "country": "uk",
+            "lang": "en",
+            "categories": [
+                {
+                    "name": "Arts",
+                    "url": "/news/artsculture"
+                },
+                {
+                    "name": "Business",
+                    "url": "/reuters/businessNews"
+                },
+                {
+                    "name": "Company News",
+                    "url": "/reuters/companyNews"
+                },
+                {
+                    "name": "Entertainment",
+                    "url": "/reuters/entertainment"
+                },
+                {
+                    "name": "Environment",
+                    "url": "/reuters/environment"
+                },
+                {
+                    "name": "Health News",
+                    "url": "/reuters/healthNews"
+                },
+                {
+                    "name": "Lifestyle",
+                    "url": "/reuters/lifestyle"
+                },
+                {
+                    "name": "Money",
+                    "url": "/news/wealth"
+                },
+                {
+                    "name": "Oddly Enough",
+                    "url": "/reuters/oddlyEnoughNews"
+                },
+                {
+                    "name": "Pictures",
+                    "url": "/ReutersPictures"
+                },
+                {
+                    "name": "People",
+                    "url": "/reuters/peopleNews"
+                },
+                {
+                    "name": "Politics",
+                    "url": "/Reuters/PoliticsNews"
+                },
+                {
+                    "name": "Science",
+                    "url": "/reuters/scienceNews"
+                },
+                {
+                    "name": "Sports",
+                    "url": "/reuters/sportsNews"
+                },
+                {
+                    "name": "Technology",
+                    "url": "/reuters/technologyNews"
+                },
+                {
+                    "name": "Top News",
+                    "url": "/reuters/topNews"
+                },
+                {
+                    "name": "US News",
+                    "url": "/Reuters/domesticNews"
+                },
+                {
+                    "name": "World",
+                    "url": "/Reuters/worldNews"
+                },
+                {
+                    "name": "Top News",
+                    "url": "/reuters/UKTopNews"
+                },
+                {
+                    "name": "UK",
+                    "url": "/reuters/UKdomesticNews"
+                },
+                {
+                    "name": "World",
+                    "url": "/reuters/UKWorldNews"
+                },
+                {
+                    "name": "Technology",
+                    "url": "/reuters/technologyNews"
+                },
+                {
+                    "name": "Science",
+                    "url": "/reuters/UKScienceNews"
+                },
+                {
+                    "name": "Health",
+                    "url": "/reuters/UKHealthNews"
+                },
+                {
+                    "name": "Sports",
+                    "url": "/reuters/UKSportsNews"
+                },
+                {
+                    "name": "Cricket",
+                    "url": "/reuters/UKCricketNews"
+                },
+                {
+                    "name": "Rugby Union",
+                    "url": "/reuters/UKRugbyNews"
+                },
+                {
+                    "name": "Golf",
+                    "url": "/reuters/UKGolfNews"
+                },
+                {
+                    "name": "Tennis",
+                    "url": "/reuters/UKTennisNews"
+                },
+                {
+                    "name": "Motor Sports",
+                    "url": "/reuters/UKMotorSportsNews"
+                },
+                {
+                    "name": "Features",
+                    "url": "/reuters/UKFeaturesNews"
+                },
+                {
+                    "name": "Oddly Enough",
+                    "url": "/reuters/UKOddlyEnoughNews"
+                },
+                {
+                    "name": "Entertainment ",
+                    "url": "/reuters/UKEntertainment"
+                },
+                {
+                    "name": "Personal Finance",
+                    "url": "/reuters/UKPersonalFinanceNews"
+                },
+                {
+                    "name": "Funds",
+                    "url": "/reuters/UKFundsNews"
+                },
+                {
+                    "name": "Consumer Products & Retail",
+                    "url": "/reuters/UKConsumerProducts"
+                },
+                {
+                    "name": "Technology Media & Teleco",
+                    "url": "/reuters/UKMedia"
+                },
+                {
+                    "name": "Financial Services",
+                    "url": "/reuters/UKBankingFinancial"
+                },
+                {
+                    "name": "Health & Drugs",
+                    "url": "/reuters/UKHealth"
+                }
+            ]
         }
     ]
 }
