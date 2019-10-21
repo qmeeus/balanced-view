@@ -1,0 +1,3 @@
+[submodule "diversity-checker"]
+	path = diversity-checker
+	url = git@gitlab.com:okaradeniz/diversity-checker-dash.git
