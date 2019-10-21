@@ -144,6 +144,47 @@
             ]
         },
         {
+            "name": "De Morgen",
+            "id": "demorgen",
+            "url": "https://www.demorgen.be",
+            "country": "be",
+            "lang": "nl",
+            "categories": [
+                {
+                    "name": "In het nieuws",
+                    "url": "/in-het-nieuws/rss.xml"
+                },
+                {
+                    "name": "Meningen",
+                    "url": "/meningen/rss.xml"
+                },
+                {
+                    "name": "Politiek",
+                    "url": "/politiek/rss.xml"
+                },
+                {
+                    "name": "TV & Cultuur",
+                    "url": "/tv-cultuur/rss.xml"
+                },
+                {
+                    "name": "Voor u uitgelegd",
+                    "url": "/voor-u-uitgelegd/rss.xml"
+                },
+                {
+                    "name": "Tech & wetenschap",
+                    "url": "/tech-wetenschap/rss.xml"
+                },
+                {
+                    "name": "Leven & Liefde",
+                    "url": "/leven-liefde/rss.xml"
+                },
+                {
+                    "name": "Sport",
+                    "url": "/sport/rss.xml"
+                }
+            ]
+        },
+        {
             "name": "Knack",
             "id": "knack",
             "url": "https://www.knack.be",
@@ -153,6 +194,32 @@
                 {
                     "name": "Headlines",
                     "url": "/nieuws/feed.rss"
+                }
+            ]
+        },
+        {
+            "name": "Metro-nl",
+            "id": "metro-nl",
+            "url": "https://nl.metrotime.be",
+            "country": "be",
+            "lang": "nl",
+            "categories": [
+                {
+                    "name": "Headlines",
+                    "url": "feed"
+                }
+            ]
+        }, 
+        {
+            "name": "Metro-fr",
+            "id": "metro-fr",
+            "url": "https://fr.metrotime.be",
+            "country": "be",
+            "lang": "fr",
+            "categories": [
+                {
+                    "name": "Headlines",
+                    "url": "feed"
                 }
             ]
         },
