@@ -15,7 +15,7 @@ def abspath(relpath):
 
 class NewsAPIClient(NewsApiClient):
 
-    KEYFILE = "resources/news_apikey"
+    KEYFILE = "../../resources/news_apikey"
     DEFAULT_LOOKBACK_IN_DAYS = 30
     SOURCEFILE = "resources/api_sources.json"
     DEFAULT_SOURCES = [
