@@ -13,5 +13,8 @@ echo "Generate passwords for elasticsearch"
 
 COMMAND="podman exec $CONTAINER bin/elasticsearch-setup-passwords auto --batch > $AUTH_FILE"
 echo "$COMMAND"
-bash -c "$COMMAND" && echo "Authentication file is created!"
+while true; do
+  bash -c "$COMMAND" > /dev/null 2>&1 && { echo "Authentication file is created!" && exit 0 ;}
+  echo "ElasticSearch is not ready yet..." && sleep 5
+done
 

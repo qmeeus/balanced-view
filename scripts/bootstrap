@@ -27,7 +27,11 @@ function wait_for_processes {
     while (( "${#BACKPID[@]}" )); do
       PID=${BACKPID[${#BACKPID[@]}-1]}
       if (kill -s 0 $PID 2>/dev/null); then
-        wait $PID && echo "*$PID ended*"
+        wait $PID
+        # STATUS=$?
+        echo "* $PID ended *"
+        # [[ $STATUS != 0 ]] && exit 1
+
       fi
       unset BACKPID[${#BACKPID[@]}-1]
     done
@@ -70,7 +74,18 @@ if { [ $UPDATE ] && [ $BUILD ] ;} || { [ $UPDATE ] && [ $RESTART ] ;} || { [ $RE
   exit 1
 fi
 
-[ $UPDATE ] && { ACTION=Update; COMMAND=./update ;} || { [ $BUILD ] && { ACTION=Build; COMMAND=./build ;} || { [ $RESTART ] && ACTION=Restart ;} ;}
+if [ "$UPDATE" ]; then 
+  ACTION=Update 
+  COMMAND=./update
+elif [ "$BUILD" ]; then
+  ACTION=Build
+  COMMAND=./build 
+elif [ "$RESTART" ]; then
+  ACTION=Restart
+elif [ "$RUN_TESTS" ]; then
+  ACTION=Test
+fi
+
 SERVICES="es vis api ui nginx"
 
 # 1) If the pod is already running and no action, ask whether restart everything from scratch 
@@ -79,15 +94,15 @@ if ! [ "$ACTION" ] && (( $(podman pod ps | grep balancedview | wc -l) )); then
     for SERVICE in $SERVICES; do
       ./stop_and_remove $SERVICE & BACKPID=( "${BACKPID[@]}" "$!" )
     done
-    wait_for_processes
     podman pod rm $APP
   fi
 fi
 
+wait_for_processes
+
 # 2) If an action has been chosen, then for each service, ask whether to perform this action and stop the service
-if [ $ACTION ]; then
+if [ "$ACTION" ] && [ "$ACTION" != "Test" ]; then
   for SERVICE in $SERVICES; do
-    unset RESTART_SERVICE
     if [[ $(user_input "$ACTION $SERVICE") = 1 ]]; then
       RESTART_SERVICE=1
     fi
@@ -95,8 +110,11 @@ if [ $ACTION ]; then
       [ $COMMAND ] && { bash -c "$COMMAND $SERVICE" & BACKPID=( "${BACKPID[@]}" "$!" ) ;}
       ./stop_and_remove $SERVICE & BACKPID=( "${BACKPID[@]}" "$!" )
     fi
+    unset RESTART_SERVICE
   done
 fi
+
+wait_for_processes
 
 # 3) Create the pod
 ./create_pod
@@ -106,10 +124,10 @@ wait_for_processes
 for SERVICE in $SERVICES; do
   if ! (( $(is_running $SERVICE) )); then
     ./run $SERVICE & BACKPID=( "${BACKPID[@]}" "$!" )
-  fi
-  if [ "$SERVICE" = "es" ]; then
-    wait_for_processes
-    ./generate_auth & BACKPID=( "${BACKPID[@]}" "$!" )
+    if [ "$SERVICE" = "es" ]; then
+      wait_for_processes
+      ./generate_auth & BACKPID=( "${BACKPID[@]}" "$!" )
+    fi
   fi
 done
 
