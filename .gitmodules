@@ -1,3 +1,6 @@
 [submodule "api"]
 	path = api
 	url = https://github.com/qmeeus/balancedview-api.git
+[submodule "ui"]
+	path = ui
+	url = git@github.com:qmeeus/balancedview-ui.git
