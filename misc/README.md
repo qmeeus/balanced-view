@@ -43,7 +43,7 @@ Language translation and identification is handled by the [IBM Cloud Language Tr
 
 The database is populated at regular intervals with [RSS feeds](https://en.wikipedia.org/wiki/RSS) of configured media sources ([available here](https://github.com/qmeeus/balancedview-api/blob/master/api/data_provider/sources/resources/rss_sources.json)) and the latest news provided by the [NewsAPI](https://newsapi.org). At the time of writing, the database is updated 3 times a day, at 6:00 AM, 12:00 PM and 6:00 PM using a [cronjobs](https://en.wikipedia.org/wiki/Cron). 
 
-Both the API and the UI are developed using [Python](https://www.python.org) and [Flask web application framework](https://palletsprojects.com/p/flask). Both are easy to learn and allow for fast developments. 
+Both the API and the UI are developed using [Python](https://www.python.org) and [Flask web application framework](https://palletsprojects.com/p/flask). Both are easy to learn and allow for fast developments.  Additionally, the API uses the [elasticsearch-dsl](https://elasticsearch-dsl.readthedocs.io/en/latest/) to communicate with Elasticsearch backend and [spacy](https://spacy.io/) to perform NLP tasks.
 
 Finally, we use [Nginx](https://www.nginx.com/) as webserver. It is an open source webserver which can also be used as a reverse proxy load balancer. It takes care of dispatching the incoming connections as well as some key security aspects. 
 
@@ -54,24 +54,46 @@ The UI is pretty intuitive for anyone with some experience with developing flask
 The API relies on more complex components and deserves a more exhaustive explanation. As mentioned earlier, it currently has two endpoints, one to find relevant articles and one to analyse texts. Each endpoint accepts a number of options that should be provided as a JSON document. Default options that apply to both endpoints include: 
 
 - output_language: the language in which the results should be returned (not implemented); 
-- search_languages: a list of relevant languages to search the database
+- search_languages: a list of relevant languages to search the database;
 - groupby_options: a set of options to organise the results in groups:
-  - key: a string that correspond to the name of the field in the database to group the data
-  - default: a string that correspond to the name of the default group
-  - orderby: a string that correspond to the name of the field used to sort the results
-  - reverse: a boolean field that decides whether the results should be sorted in reverse order
-  - max_results_per_group: an integer to limit the number of results
-  - groups: a list of groups, composed of a name for the group and a value to match each result
+  - key: a string that correspond to the name of the field in the database to group the data;
+  - default: a string that correspond to the name of the default group;
+  - orderby: a string that correspond to the name of the field used to sort the results;
+  - reverse: a boolean field that decides whether the results should be sorted in reverse order;
+  - max_results_per_group: an integer to limit the number of results;
+  - groups: a list of groups, composed of a name for the group and a value to match each result.
 
-The first endpoint is available at <api-url>/articles and has the following options:
-- terms: a list of strings that corresponds to the query terms to be matched against the database
-- source_language: a string corresponding to the language ISO code of the terms 
+The first endpoint is available at \<api-url\>/articles and has the following options:
+- terms: a list of strings that corresponds to the query terms to be matched against the database;
+- source_language: a string corresponding to the language ISO code of the terms.
 
-The second endpoint is available at <api-url>/analysis and has the following options:
+When a request comes in through this endpoint, the terms are translated in each of the requested search languages and a number of queries are built, one for each language, to match against document in the database. An example query is showed below (see [Elasticsearch Query DSL documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-filter-context.html) for background on what this means):
+
+```json
+{
+  'query': {
+    'bool': {
+      'must': [{'match': {'language': 'nl'}}], 
+      'minimum_should_match': 2, 
+      'should': [
+        {'multi_match': {'fields': ['body', 'title'], 'type': 'phrase', 'query': 'Midi'}}, 
+        {'multi_match': {'fields': ['body', 'title'], 'type': 'phrase', 'query': 'Noord'}}, 
+        {'multi_match': {'fields': ['body', 'title'], 'type': 'phrase', 'query': 'kruising'}}, 
+        {'multi_match': {'fields': ['body', 'title'], 'type': 'phrase', 'query': 'werken'}}, 
+        {'multi_match': {'fields': ['body', 'title'], 'type': 'phrase', 'query': 'storingen'}}
+      ]
+    }
+  }
+}
+```
+
+The minimum_should_match argument is calculated according to this rule: `minimum_should_match = int(0.5 * len(terms))`. If matching documents are found, they are formatted according to the groupby options, if provided, and returned to the client. Otherwise, an error message is returned.
+
+The second endpoint is available at \<api-url\>/analysis and has the following options:
   
-- input_text: a string, the text on which the analysis should be performed
-- related: a boolean field that decides whether to include output from the article endpoint or not
+- input_text: a string, the text on which the analysis should be performed;
+- related: a boolean field that decides whether to include output from the article endpoint or not.
   
-
+When a requests comes in, the input text is cleaned (at the moment, the only operation is to redundant spaces) and a hash is calculated on it. We try to match the hash to an existing document id in the database. If it is found, the document is retrieved with the analysis results. Otherwise, 
   
 ## Future developments
