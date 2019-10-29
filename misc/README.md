@@ -29,7 +29,7 @@ At the moment of writing, only the user interface is available publicly ([here](
 
 ## Technical Specifications
 
-### Technological stack
+### Technological stack and architecture
 
 The program relies on a number of software and libraries. First and foremost, the program is designed to work on a Linux system. Although it should work on other operating systems, it has never been tested and expect major issues if you want to make things work with Windows. Next, each component is self-contained in its own environment in the form of an [OCI container](https://www.opencontainers.org/). In particular, the technology used is [podman](https://podman.io). Compared to the better known [docker](https://www.docker.com), it provides the advantage to run rootless, by mapping the uid of the root user in the container to the uid of the current user on the host. Although podman is pretty new at the time of the writing, it is already well developed and uses the same syntax and options as docker (for the most parts). When possible, podman should use overlayfs  as the underlying file system, rather than the default vfs. Indeed, [as docker developers put it](https://docs.docker.com/storage/storagedriver/select-storage-driver):
 
@@ -43,7 +43,15 @@ Language translation and identification is handled by the [IBM Cloud Language Tr
 
 The database is populated at regular intervals with [RSS feeds](https://en.wikipedia.org/wiki/RSS) of configured media sources ([available here](https://github.com/qmeeus/balancedview-api/blob/master/api/data_provider/sources/resources/rss_sources.json)) and the latest news provided by the [NewsAPI](https://newsapi.org). At the time of writing, the database is updated 3 times a day, at 6:00 AM, 12:00 PM and 6:00 PM using a [cronjobs](https://en.wikipedia.org/wiki/Cron). 
 
-Both the API and the UI are developed using [Python](https://www.python.org) and [Flask web application framework](https://palletsprojects.com/p/flask). Both are easy to learn and allow for fast developments. The UI is pretty intuitive for anyone with some experience with developing flask website and we will thus not develop it here. The API relies on more complex components and deserves some explanations. As mentioned earlier, it currently has two endpoints, one to find relevant articles and one to analyse texts. Each endpoint accepts a number of options that should be provided as a JSON document. Default options that apply to both endpoints include: 
+Both the API and the UI are developed using [Python](https://www.python.org) and [Flask web application framework](https://palletsprojects.com/p/flask). Both are easy to learn and allow for fast developments. 
+
+Finally, we use [Nginx](https://www.nginx.com/) as webserver. It is an open source webserver which can also be used as a reverse proxy load balancer. It takes care of dispatching the incoming connections as well as some key security aspects. 
+
+### User and developer documentation
+
+The UI is pretty intuitive for anyone with some experience with developing flask website and we will thus not develop it here. For a general understanding, it suffices to say that the only thing that it does is to capture user input, format it in a JSON document to forward to the API and display the API results in a web page. 
+
+The API relies on more complex components and deserves a more exhaustive explanation. As mentioned earlier, it currently has two endpoints, one to find relevant articles and one to analyse texts. Each endpoint accepts a number of options that should be provided as a JSON document. Default options that apply to both endpoints include: 
 
 - output_language: the language in which the results should be returned (not implemented); 
 - search_languages: a list of relevant languages to search the database
@@ -63,5 +71,7 @@ The second endpoint is available at <api-url>/analysis and has the following opt
   
 - input_text: a string, the text on which the analysis should be performed
 - related: a boolean field that decides whether to include output from the article endpoint or not
+  
+
   
 ## Future developments
