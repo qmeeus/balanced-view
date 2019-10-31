@@ -49,8 +49,28 @@ Finally, we use [`gunicorn`]() as web server gateway interface (WSGI) rather tha
 
 ### User and developer documentation
 
-The UI is pretty intuitive for anyone with some experience with developing flask website and we will thus not develop it here. For a general understanding, it suffices to say that the only thing that it does is to capture user input, format it in a JSON document to forward to the API and display the API results in a web page.
+#### Helper scripts
+I have spent some time developing helper scripts located in `/scripts` to help developers deploy the program. The main script is called `bootstrap`. Although it is not perfect, it gives a good idea of the hassle that one should go through to set everything up. The typical workflow is:
+- build the container images with the script `build`: there are 5 different containers (api, ui, nginx, elasticsearch and kibana), each located in its own folder with its own `Dockerfile`. The script is called with an argument corresponding to a container. Valid argument are `api`, `ui`, `nginx`, `es` for Elasticsearch and `vis` for Kibana. Logs of the building processes are located in `/logs/build/<service>.log`;
+- create the pod with the script `create_pod`: this script creates a pod named `balancedview` with external ports corresponding to external ports from the `nginx` configuration;
+- run each containers with the script `run`: again, 5 containers to run. 
+  - first, run `es` and check whether it started correctly
+  - the `.auth` file containing the authentication parameters for Elasticsearch must be created before running `api` and `vis`. This is done with the script `generate_auth`. It is good practice to verify that the `.auth` file was created and contains the required passwords. If this is not the case, remove the folder `data` and the `.auth` file and start again, potentially after identifying and solving the issue;
+  - run the other containers (in no particular order).
+- run the tests with the script `run_tests` and check the results: the logs of the tests are located in `/logs/tests/<test-id>.log`.
+Additionally, a number of other scripts are available, including: 
+- `logs`: show the logs of a container. Equivalent to `podman logs -f <container>`;
+- `shell`: spawn a shell in a container (no argument) or execute a command in the container. For example, if one would start a python shell in api, one would run from inside the `/script` directory `./shell api python`. If one would like to see the logs of the cron job that fetches data online to store them in Elasticsearch, one can use `./shell api "tail -F /var/log/cron.log"` (note the double quotes surrounding the command). Roughly equivalent to `podman exec -it <container> <command>`;
+- `stop_and_remove`: Stops a container and / or remove it if necessary. Roughly equivalent to `podman stop -a; podman rm -a`;
+- `status`: prints the status of the containers. Equivalent to `podman ps`;
+- `update`: if you have built the images and hosted them online, you can use this script to pull them locally.
 
+#### User interface
+The UI is pretty intuitive for anyone with some experience with developing Flask websites and we will thus not develop it here. For a general understanding, it suffices to say that the only thing that it does is to capture user input, format it in a JSON document to forward to the API and display the API results in a web page. The code is very simple and self-explanatory. I won't go into the trouble of explaining how to add or modify web pages, many tutorials exist that explain this much better than I would.
+
+*A note on security*: We use a CSRF token in the form to prevent [Cross-Site Request Forgery](https://en.wikipedia.org/wiki/Cross-site_request_forgery) attacks. We use the ``flask-csp` library to implement the [Content Security Policy](https://en.wikipedia.org/wiki/Content_Security_Policy) that protects against XSS and other attacks. If you encounter problems displaying content in the web page, badly configured CSP is likely the culprit. Check out how they are implemented versus what is sent by the server. Note that `nginx` might tamper with these so the cause of the problem can be more complex that first meets the eye. Please refer to `flask` documentation (and Google) for more information about these.
+
+#### Application programming interface
 The API relies on more complex components and deserves a more exhaustive explanation. As mentioned earlier, it currently has two endpoints, one to find relevant articles and one to analyse texts. Each endpoint accepts a number of options that should be provided as a JSON document. Default options that apply to both endpoints include:
 
 - `output_language`: the language in which the results should be returned (not implemented);
@@ -96,6 +116,33 @@ The second endpoint is available at \<api-url\>/analysis and has the following o
 
 When a requests comes in, the input text is cleaned (at the moment, the only operation is to redundant spaces) and a hash is calculated on it. We try to match the hash to an existing document id in the database. If it is found, the document is retrieved with the analysis results. This allows to prevent the same expensive operations to be recalculated multiple time and save precious CPU time. If the document was not seen before, we use IBM Language Translator to identify the language and load the corresponding `spacy` model. We filter stop words, extract tokens, part-of-speech tags and named entities from the text and pass them to `TextRank` algorithm which builds a graph that models token co-occurences. The `TextRank` score is calculated based on the centrality of each token in the text. The measure of centrality denotes of how many nodes a node points to and how many nodes points to it. If necessary, we get related articles using the identified language and the top keywords found by `TextRank` as query terms for the `articles` endpoint.
 
-*A note on efficiency:* `Spacy` models can be relatively expensive to load. For this reason, if they were loaded at each request, the website would be very slow, causing timeout errors most of the time. For this reason, the decision was made to load the models when the container starts and store them in a dictionary. This has a considerable impact on memory but relieves a great deal of the pressure on the CPU. Nonetheless, this limits possibilities for adding new languages because that means that each new model have to be stored in memory. For example, if `gunicorn` is using 3 workers and there are 3 language models, 9 models in total are loaded at boot.  
+*A note on efficiency:* `Spacy` models can be relatively expensive to load. For this reason, if they were loaded at each request, the website would be very slow, causing timeout errors most of the time. For this reason, the decision was made to load the models when the container starts and store them in a dictionary. This has a considerable impact on memory but relieves a great deal of the pressure on the CPU. Nonetheless, this limits possibilities for adding new languages because that means that each new model have to be stored in memory. For example, if `gunicorn` is using 3 workers and there are 3 languages models, 9 models in total are loaded at boot. Workarounds exists but might require a lot of changes and expertise. Feel free to do a merge request.
 
-## Future developments
+## User Test and Future Developments
+
+On the October 24th 2019, we organised a workshop with master student in Journalism from the Katholiek Universiteit van Leuven (KUL). The goal was two-fold. On the one hand, we wanted to validate the approach from a conceptual perspective, and on the other hand, we wanted to assess the functionalities of the tool. The workshop was a success and gave us a lot to think about. We focus here on the second objective of the study and we try to compile a plan of future developments from the ideas proposed by the students:
+
+First and foremost, although the purpose of the tool appeared to be relatively clear, it is necessary to add an "about" page that explains who we are and what is the intend of the tool. Second, the students expressed their disappointment when they saw that filtering was not possible. Indeed, the results are not always relevant. I see two approaches to tackle this problem: (1) providing more controls to the user in terms of advanced filtering and (2) improve the keyword extraction / query construction in the API. Third, we made the decision of only including a limited number of articles in the result page. However, the students expressed their desire to read more articles if they want to. In this regard, I see 2 possibilities: either an infinite feed à la Facebook or a "More" button at the end of the result list that displays more articles. Another feedback was the impossibility to search for something else than an article. It would be nice to include more search options as well, for example the ability to search for a topic or specific terms. 
+
+Finally, other feedbacks was collected from family and friends. For example, one proposition was to let the user choose the classification himself. A second desiderata was to include more languages. In terms of sources as well, some improvements can be made. Many fact-checking organisation exist and including sources from there is actually very relevant. Also, including communication from governemental agencies can be also very interesting.
+
+- About page: simple HTML page explaining who we are, what we do and what is the purpose of BalancedView;
+- Filtering control: the API already accepts many options. To achieve this, it probably suffices to implement these controls in the UI. That being said, more custom options might need to develop further the API endpoints (for example, date range selection);
+- Improve relevance of the article:
+  - Improve keyword extraction: 
+    - include named entity recognition and group entities together in the search;
+    - switch from TextRank to more advanced models: this path was abandonned because the costs in terms of development outweighted the benefits. However, if TextRank reveals to be not enough, it might be necessary to consider this again.
+  - Query construction: Elasticsearch provides a very advanced search API that is currently under exploited, we might get very fast gains just by exploring more what it can do;
+  - Feedback loop: in order to identify which documents are relevant, it might be useful to include a feedback loop so that the user can communicate how relevant a document is for the query. This might give us enough data to create a relevance model;
+  - Relevance model: in Information Retrieval, it is common to have a simple model able to search and identify potentially relevant documents and a complex model able to fine-tune the results further by filtering out the least relevant documents.
+- Ability to see more results:
+  - Modify the API to implement pagination rather than limit the number of results included upstream;
+  - Keep the display in the UI as it is but use javascript to show more results and make request to the API for the next page if necessary;
+  - This means that rather than calling /analysis with related set to True, we should set related to False and call /articles with the current page;
+  - See newsapi/elasticsearch-dsl for ideas of how to implement this.
+- More search options: 
+  - For terms: add a field in the UI connected to the /articles endpoint of the API;
+  - For topics: we need a topic classifier ande to store topics as attribute of a document in the database. Currently, the field exists but is empty.
+- User control for classification: again, this is implemented in the groupby options of the API endpoints so the only thing left is to create the controls in the UI and connect them to the right switches;
+- Include more languages: after having read the note on efficiency in the previous section, hope that `spacy` has an existing model for the desired language. You need to install the model in the api container by modifying the files api/api/install_nlp_models.sh and api/api/utils/nlp_utils.py;
+- Add sources: the file api/api/data_provider/sources/resources/rss_sources.json contains links to RSS feeds. This is the file that is used to update the database. If the sources to be included are in the form of RSS feed, just add an item in the right format in this file. If the sources are not available in RSS, you'll have to develop the connector yourself.
