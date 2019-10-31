@@ -11,10 +11,19 @@ UI_PORT_EXT="$(grep listen $PROJECT_ROOT/nginx/services/ui.conf | cut -d':' -f2 
 API_PORT_EXT="$(grep listen $PROJECT_ROOT/nginx/services/api.conf | cut -d':' -f2 | tr -d ';')"
 EXTERNAL_PORTS="$UI_PORT_EXT $API_PORT_EXT 5601"
 LOGDIR=$PROJECT_ROOT/logs
+SERVICES=("api" "ui" "nginx" "es" "vis")
 
 function is_running {
   # Usage: is_running CONTAINER
   echo $(podman ps | grep $1 | wc -l)
+}
+
+function check_service {
+  # Usage: check_service SERVICE_NAME
+  if ! [[ " ${SERVICES[*]} " == *" $1 "* ]]; then 
+    echo "Invalid service name: $1"
+    exit 1 
+  fi
 }
 
 function user_input {

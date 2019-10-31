@@ -6,6 +6,9 @@ set -e
 
 source config
 
+CONTAINER=$1
+check_service $CONTAINER
+
 podman logs -f $APP-$1
 
 

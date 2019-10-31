@@ -11,6 +11,7 @@ LOGFILE=$LOGDIR/$CONTAINER.log
 TAG=$REPO/$APP:$CONTAINER
 CONTEXT="$(get_context $CONTAINER)"
 
+check_service $CONTAINER
 mkdir -p $LOGDIR
 
 case $CONTAINER in

@@ -6,8 +6,11 @@ set -e
 
 source config
 
+CONTAINER=$1
+check_service $CONTAINER
+
 [ "$2" ] && COMMAND="$2" || COMMAND="[ -f /bin/bash ] && /bin/bash || sh"
-COMMAND="podman exec -it $APP-$1 sh -c \"$COMMAND\""
+COMMAND="podman exec -it $APP-$CONTAINER sh -c \"$COMMAND\""
 echo "$COMMAND"
 bash -c "$COMMAND"
 

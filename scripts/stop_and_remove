@@ -6,6 +6,7 @@ set -e
 source config
 
 CONTAINER=$1
+check_service $CONTAINER
 
 if (( $(is_running $APP-$1) )); then
   echo "Stop container $APP-$1"

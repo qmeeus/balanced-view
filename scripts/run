@@ -6,16 +6,32 @@ source config
 
 ! [ $1 ] && echo "Missing argument" && exit 1
 
-CONTAINER=$1
+CONTAINER=$1; shift 1
 TAG=$REPO/$APP:$CONTAINER
 CONTEXT="$(get_context $CONTAINER)"
-OPTIONS="-d --rm --name $APP-$CONTAINER --pod $APP"
+OPTIONS="-d --name $APP-$CONTAINER --pod $APP"
+
+check_service $CONTAINER
+
+# Parse command line arguments
+while (( "$#" )); do
+  case "$1" in
+    --dev) DEV=true && shift 1;;
+    --debug) DEBUG=true && shift 1;;
+    --) shift && break;; # End of arguments
+    *) echo "Error: Unsupported flag $1" >&2 && exit 1;;
+  esac
+done
+
+if ! [ "$DEBUG" ]; then
+  OPTIONS="$OPTIONS --rm"
+fi
 
 if [ -f "$CONTEXT/.env" ]; then
   OPTIONS="$OPTIONS --env-file $CONTEXT/.env"
 fi
 
-if [ "$2" = "--dev" ] && { [ $CONTAINER = "api" ] || [ $CONTAINER = "ui" ] ;}; then
+if [ "$DEV" ] && { [ $CONTAINER = "api" ] || [ $CONTAINER = "ui" ] ;}; then
   OPTIONS="$OPTIONS -v $CONTEXT/$CONTAINER:/$CONTAINER/$CONTAINER"
   if [ $CONTAINER = "api" ]; then
       OPTIONS="$OPTIONS -v $CONTEXT/tests:/$CONTAINER/tests"

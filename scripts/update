@@ -8,6 +8,7 @@ source config
 
 CONTAINER=$1
 TAG=$REPO/$APP:$CONTAINER
+check_service $CONTAINER
 
 if ! [ "$(podman login --get-login $REGISTRY)" = "$REGISTRY_USER" ]; then
     podman login -u $REGISTRY_USER $REGISTRY
